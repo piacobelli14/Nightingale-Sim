@@ -24,17 +24,45 @@ struct StaticSim: View {
                     Image("nslogo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(height: geometry.size.height * 0.8)
-                        .shadow(color: .white.opacity(0.3), radius: 10, x: 0, y: 2)
+                        .frame(height: geometry.size.height * 0.07)
+                        .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                        .padding(.leading, geometry.size.width * 0.01)
                     
                     Text("Nightinagle Sim")
-                        .font(.system(size: geometry.size.height * 0.05, weight: .bold))
+                        .font(.system(size: geometry.size.height * 0.03, weight: .bold))
                         .foregroundColor(.white)
-                        .shadow(color: .white.opacity(0.3), radius: 2, x: 0, y: 0)
+                        .shadow(color: .gray.opacity(0.3), radius: 0, x: 0, y: 2)
+                    
+                    Spacer()
                 }
                 .frame(width: geometry.size.width * 1.0)
+                .padding(.top, geometry.size.height * 0.05)
+                .edgesIgnoringSafeArea(.all)
+                .background(
+                    // Adding a background with a VStack to only draw the border on the bottom
+                    VStack {
+                        Spacer() // Pushes the rectangle to the bottom
+                        Rectangle()
+                            .frame(height: geometry.size.height * 0.001) // Height of the border
+                            .foregroundColor(.gray) // Color of the border
+                    }
+                )
                 
+                Spacer()
                 
+                HStack {
+                }
+                .frame(width: geometry.size.width * 1.0)
+                .edgesIgnoringSafeArea(.all)
+                .background(Color.gray)
+                .background(
+                    VStack {
+                        Rectangle()
+                            .frame(height: geometry.size.height * 0.001)
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                )
                 
             }
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
