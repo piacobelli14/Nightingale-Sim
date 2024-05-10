@@ -39,12 +39,11 @@ struct StaticSim: View {
                 .padding(.top, geometry.size.height * 0.05)
                 .edgesIgnoringSafeArea(.all)
                 .background(
-                    // Adding a background with a VStack to only draw the border on the bottom
                     VStack {
-                        Spacer() // Pushes the rectangle to the bottom
+                        Spacer()
                         Rectangle()
-                            .frame(height: geometry.size.height * 0.001) // Height of the border
-                            .foregroundColor(.gray) // Color of the border
+                            .frame(height: geometry.size.height * 0.001)
+                            .foregroundColor(.gray)
                     }
                 )
                 
