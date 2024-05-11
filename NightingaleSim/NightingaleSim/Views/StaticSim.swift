@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct TemperatureControlView: View {
-    @Binding var temperatureValue: CGFloat
+struct MotionSensorGauge: View {
+    @Binding var motionValue: CGFloat
     @State var angleValue: CGFloat = 0.0
-    var config: Config  // Configuration passed as a variable
+    var configArray: ConfigArray
 
     var body: some View {
         GeometryReader { geometry in
-            let size = min(geometry.size.width, geometry.size.height) * 0.85 // adjust the size to 85% of the smallest dimension
+            let size = min(geometry.size.width, geometry.size.height) * 0.85
             let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.02, size * 0.15])
             let mainStrokeWidth = size * 0.03
             ZStack {
@@ -24,18 +24,18 @@ struct TemperatureControlView: View {
                     .stroke(Color.gray, style: strokeStyle)
                     .frame(width: size, height: size)
                 Circle()
-                    .trim(from: 0.0, to: temperatureValue / config.totalValue)
-                    .stroke(temperatureValue < config.maximumValue / 2 ? Color.blue : Color.red, lineWidth: mainStrokeWidth)
+                    .trim(from: 0.0, to: motionValue / configArray.totalValue)
+                    .stroke(motionValue < configArray.maximumValue / 2 ? Color.blue : Color.red, lineWidth: mainStrokeWidth)
                     .frame(width: size, height: size)
                     .rotationEffect(.degrees(-90))
                 Circle()
-                    .fill(temperatureValue < config.maximumValue / 2 ? Color.blue : Color.red)
-                    .frame(width: size * 0.1, height: size * 0.1) // knob size adjusted based on overall size
-                    .offset(y: -(size / 2 - mainStrokeWidth / 2)) // Correctly positioning the knob on the border
+                    .fill(motionValue < configArray.maximumValue / 2 ? Color.blue : Color.red)
+                    .frame(width: size * 0.1, height: size * 0.1)
+                    .offset(y: -(size / 1.95 - mainStrokeWidth / 1.95))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
                     .gesture(DragGesture(minimumDistance: 0).onChanged({ value in change(location: value.location, in: size) }))
-                Text("\(Int(temperatureValue)) º")
-                    .font(.system(size: size * 0.2)) // font size adjusted
+                Text("\(Int(motionValue)) º")
+                    .font(.system(size: size * 0.2))
                     .foregroundColor(.white)
             }
         }
@@ -45,16 +45,15 @@ struct TemperatureControlView: View {
         let vector = CGVector(dx: location.x - size / 2, dy: location.y - size / 2)
         let angle = atan2(vector.dy, vector.dx) + .pi / 2.0
         let fixedAngle = angle < 0.0 ? angle + 2.0 * .pi : angle
-        let value = fixedAngle / (2.0 * .pi) * config.totalValue
-        if value >= config.minimumValue && value <= config.maximumValue {
-            temperatureValue = value
+        let value = fixedAngle / (2.0 * .pi) * configArray.totalValue
+        if value >= configArray.minimumValue && value <= configArray.maximumValue {
+            motionValue = value
             angleValue = fixedAngle * 180 / .pi
         }
     }
 }
 
-
-struct Config {
+struct ConfigArray {
     let minimumValue: CGFloat
     let maximumValue: CGFloat
     let totalValue: CGFloat
@@ -83,7 +82,7 @@ struct StaticSim: View {
             set: { respirationRate = Double($0) }
         )
     }
-    var configRespirationRate = Config(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configRespirationRate = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
    
     
     var body: some View {
@@ -272,8 +271,8 @@ struct StaticSim: View {
                             .padding(.leading, geometry.size.width * 0.01)
                     }
 
-                    TemperatureControlView(temperatureValue: respirationRateBinding, config: configRespirationRate)
-                                            .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.4)
+                    MotionSensorGauge(motionValue: respirationRateBinding, configArray: configRespirationRate)
+                        .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.4)
                 }
                 .padding()
                 .background(Color.white.opacity(0.2))
