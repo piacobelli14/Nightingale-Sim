@@ -40,7 +40,7 @@ struct MotionSensorGauge: View {
                     .gesture(DragGesture(minimumDistance: 0).onChanged({ value in
                         self.change(location: value.location, in: size)
                     }))
-                Text("\(motionVector): \(Int(motionValue)) \(motionUnit)")
+                Text("\(motionVector): \(motionValue, specifier: "%.1f") \(motionUnit)")
                     .font(.system(size: size * 0.12, weight: .bold))
                     .foregroundColor(.white)
             }
