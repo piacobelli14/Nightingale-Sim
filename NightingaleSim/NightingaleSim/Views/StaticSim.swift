@@ -75,14 +75,27 @@ struct StaticSim: View {
     @State private var respirationRate: Double = 12
     @State private var deviceBattery: Double = 85
     @State private var isConnected: Bool = true
+    @State private var accX: CGFloat = 0.0
+    @State private var accY: CGFloat = 0.0
+    @State private var accZ: CGFloat = 0.0
+    @State private var gyroX: CGFloat = 0.0
+    @State private var gyroY: CGFloat = 0.0
+    @State private var gyroZ: CGFloat = 0.0
+    @State private var magX: CGFloat = 0.0
+    @State private var magY: CGFloat = 0.0
+    @State private var magZ: CGFloat = 0.0
     
-    var respirationRateBinding: Binding<CGFloat> {
-        Binding<CGFloat>(
-            get: { CGFloat(respirationRate) },
-            set: { respirationRate = Double($0) }
-        )
-    }
-    var configRespirationRate = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configAccX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configAccY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configAccZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    
+    var configGyroX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configGyroY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configGyroZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    
+    var configMagX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configMagY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configMagZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
    
     
     var body: some View {
@@ -257,22 +270,27 @@ struct StaticSim: View {
                 .padding(.top, geometry.size.height * 0.02)
                 
                 VStack {
-                    // Your existing code for displaying the respiration rate
                     HStack {
-                        Text("Respiration Rate")
+                        Text("Accelerometer")
                             .font(.system(size: geometry.size.height * 0.024, weight: .bold))
                             .foregroundColor(Color.white)
                             .opacity(0.8)
 
-                        Text("\(Int(respirationRate)) BrPM")
+                        Text("X: \(Int(respirationRate))g")
                             .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
                             .foregroundColor(Color.white)
                             .opacity(0.8)
                             .padding(.leading, geometry.size.width * 0.01)
                     }
-
-                    MotionSensorGauge(motionValue: respirationRateBinding, configArray: configRespirationRate)
-                        .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.4)
+                    
+                    VStack {
+                        MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                            .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.2)
+                        MotionSensorGauge(motionValue: $accY, configArray: configAccX)
+                            .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.2)
+                        MotionSensorGauge(motionValue: $accZ, configArray: configAccX)
+                            .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.2)
+                    }
                 }
                 .padding()
                 .background(Color.white.opacity(0.2))
