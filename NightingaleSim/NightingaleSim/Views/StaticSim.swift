@@ -18,7 +18,7 @@ struct MotionSensorGauge: View {
     var body: some View {
         GeometryReader { geometry in
             let size = min(geometry.size.width, geometry.size.height)
-            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.4, size * 0.15])
+            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.2, size * 0.15])
             let mainStrokeWidth = size * 0.03
             ZStack {
                 Circle()
@@ -29,11 +29,11 @@ struct MotionSensorGauge: View {
                     .frame(width: size, height: size)
                 Circle()
                     .trim(from: 0.0, to: normalizedMotionValue())
-                    .stroke(Color(hex: 0x2A0862), lineWidth: mainStrokeWidth)
+                    .stroke(Color.blue, lineWidth: mainStrokeWidth)
                     .frame(width: size, height: size)
                     .rotationEffect(.degrees(-90))
                 Circle()
-                    .fill(Color(hex: 0x2A0862))
+                    .fill(Color.blue)
                     .frame(width: size * 0.1, height: size * 0.1)
                     .offset(y: -(size / 2 - mainStrokeWidth / 2))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
@@ -102,15 +102,15 @@ struct StaticSim: View {
     @State private var magY: CGFloat = 100.0
     @State private var magZ: CGFloat = 100.0
     
-    let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
-    let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
-    let configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
-    var configGyroX = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 250.0, knobRadius: 15.0, radius: 125.0)
-    var configGyroY = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 250.0, knobRadius: 15.0, radius: 125.0)
-    var configGyroZ = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 250.0, knobRadius: 15.0, radius: 125.0)
-    var configMagX = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 25.0,  knobRadius: 15.0, radius: 125.0)
-    var configMagY = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 25.0,  knobRadius: 15.0, radius: 125.0)
-    var configMagZ = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 25.0,  knobRadius: 15.0, radius: 125.0)
+    let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
+    let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
+    let configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
+    var configGyroX = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 1.0, knobRadius: 15.0, radius: 125.0)
+    var configGyroY = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 1.0, knobRadius: 15.0, radius: 125.0)
+    var configGyroZ = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 1.0, knobRadius: 15.0, radius: 125.0)
+    var configMagX = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
+    var configMagY = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
+    var configMagZ = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
    
     
     var body: some View {
