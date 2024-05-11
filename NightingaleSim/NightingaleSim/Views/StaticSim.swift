@@ -53,26 +53,38 @@ struct StaticSim: View {
                     
                     HStack {
                         Text("Heart Rate")
+                            .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                            .foregroundColor(Color.white)
+                            .opacity(0.8)
+                        
+                        
+                        Text("\(Int(heartRate)) BPM")
+                            .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                            .foregroundColor(Color.white)
+                            .opacity(0.8)
+                        
+                        Spacer()
+                        
+                        Circle()
+                            .background(heartRateColor(heartRate))
+                            .frame(height: geometry.size.height * 0.02)
+                        
+                        Spacer()
                     }
 
                     Slider(value: $heartRate, in: 40...220, step: 1)
                         .accentColor(Color(hex: 0x2A0862))
-                        .padding()
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-
-                    Text("\(Int(heartRate)) BPM")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.green)  // Color of the text displaying the heart rate
-                        .padding()
                 }
                 .padding()
+                .background(Color.white.opacity(0.2))
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .frame(width: geometry.size.width * 0.9)
                 
                 Spacer()
                 
                 HStack {
+                    
                 }
                 .frame(width: geometry.size.width * 1.0)
                 .edgesIgnoringSafeArea(.all)
