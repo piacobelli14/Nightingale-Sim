@@ -174,7 +174,7 @@ struct StaticSim: View {
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
                     .shadow(radius: 5)
-                    .frame(width: geometry.size.width * 0.96)
+                    .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                     
                     VStack {
@@ -214,7 +214,7 @@ struct StaticSim: View {
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
                     .shadow(radius: 5)
-                    .frame(width: geometry.size.width * 0.96)
+                    .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
@@ -275,7 +275,7 @@ struct StaticSim: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                     }
-                    .frame(width: geometry.size.width * 0.96)
+                    .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
@@ -389,7 +389,7 @@ struct StaticSim: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                     }
-                    .frame(width: geometry.size.width * 0.96)
+                    .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                 }
                 .frame(height: geometry.size.height * 0.86)
