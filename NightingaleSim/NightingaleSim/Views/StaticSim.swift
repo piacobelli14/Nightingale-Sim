@@ -35,12 +35,12 @@ struct MotionSensorGauge: View {
                 Circle()
                     .fill(Color.blue)
                     .frame(width: size * 0.1, height: size * 0.1)
-                    .offset(y: -(size / 2 - mainStrokeWidth / 2))
+                    .offset(y: -(size / 1.95 - mainStrokeWidth / 1.95))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
                     .gesture(DragGesture(minimumDistance: 0).onChanged({ value in
                         self.change(location: value.location, in: size)
                     }))
-                Text("\(motionVector): \(motionValue, specifier: "%.1f") \(motionUnit)")
+                Text("\(motionVector): \(motionValue, specifier: "%.1f")\(motionUnit)")
                     .font(.system(size: size * 0.12, weight: .bold))
                     .foregroundColor(.white)
             }
@@ -102,9 +102,9 @@ struct StaticSim: View {
     @State private var magY: CGFloat = 100.0
     @State private var magZ: CGFloat = 100.0
     
-    let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
-    let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
-    let configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
+    let configAccX = ConfigArray(minimumValue: 2.0, maximumValue: -2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
+    let configAccY = ConfigArray(minimumValue: 2.0, maximumValue: -2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
+    let configAccZ = ConfigArray(minimumValue: 2.0, maximumValue: -2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
     var configGyroX = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 1.0, knobRadius: 15.0, radius: 125.0)
     var configGyroY = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 1.0, knobRadius: 15.0, radius: 125.0)
     var configGyroZ = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 1.0, knobRadius: 15.0, radius: 125.0)
