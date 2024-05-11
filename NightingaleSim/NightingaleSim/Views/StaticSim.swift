@@ -18,7 +18,7 @@ struct MotionSensorGauge: View {
     var body: some View {
         GeometryReader { geometry in
             let size = min(geometry.size.width, geometry.size.height)
-            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.2, size * 0.15])
+            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.4, size * 0.15])
             let mainStrokeWidth = size * 0.03
             ZStack {
                 Circle()
@@ -29,11 +29,11 @@ struct MotionSensorGauge: View {
                     .frame(width: size, height: size)
                 Circle()
                     .trim(from: 0.0, to: normalizedMotionValue())
-                    .stroke(Color.blue, lineWidth: mainStrokeWidth)
+                    .stroke(Color(hex: 0x2A0862), lineWidth: mainStrokeWidth)
                     .frame(width: size, height: size)
                     .rotationEffect(.degrees(-90))
                 Circle()
-                    .fill(Color.blue)
+                    .fill(Color(hex: 0x2A0862))
                     .frame(width: size * 0.1, height: size * 0.1)
                     .offset(y: -(size / 2 - mainStrokeWidth / 2))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
@@ -411,6 +411,7 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                 }
                 .frame(height: geometry.size.height * 0.86)
+                .frame(width: geometry.size.width * 1.0)
                 
                
                 Spacer()
