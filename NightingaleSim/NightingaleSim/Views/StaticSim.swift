@@ -351,22 +351,22 @@ struct StaticSim: View {
                             }
                             
                             VStack {
+                                Spacer()
                                 VStack {
-                                    Spacer()
                                     MotionSensorGauge(motionValue: $accX, configArray: configAccX)
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.none)
                                     
                                     Text("X: \(Int(accX))g")
                                         .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                    Spacer()
                                 }
                                 MotionSensorGauge(motionValue: $accY, configArray: configAccY)
                                     .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
                                 MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
                                     .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                Spacer()
                             }
                         }
                         .padding()
