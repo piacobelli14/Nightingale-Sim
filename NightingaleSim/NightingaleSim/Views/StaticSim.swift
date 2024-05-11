@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct MotionSensorGauge: View {
     @Binding var motionValue: CGFloat
     @State var angleValue: CGFloat = 0.0
@@ -22,17 +23,17 @@ struct MotionSensorGauge: View {
             ZStack {
                 Circle()
                     .frame(width: size, height: size)
-                    .foregroundColor(.clear)  // Set the main circle background to transparent
+                    .foregroundColor(.clear)
                 Circle()
                     .stroke(Color.gray, style: strokeStyle)
                     .frame(width: size, height: size)
                 Circle()
-                    .trim(from: 0.0, to: motionValue / configArray.totalValue)
-                    .stroke(motionValue < configArray.maximumValue / 2 ? Color.blue : Color.red, lineWidth: mainStrokeWidth)
+                    .trim(from: 0.0, to: normalizedMotionValue())
+                    .stroke(motionValue < 0 ? Color.blue : Color.red, lineWidth: mainStrokeWidth)
                     .frame(width: size, height: size)
                     .rotationEffect(.degrees(-90))
                 Circle()
-                    .fill(motionValue < configArray.maximumValue / 2 ? Color.blue : Color.red)
+                    .fill(motionValue < 0 ? Color.blue : Color.red)
                     .frame(width: size * 0.1, height: size * 0.1)
                     .offset(y: -(size / 2 - mainStrokeWidth / 2))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
@@ -40,18 +41,24 @@ struct MotionSensorGauge: View {
                         self.change(location: value.location, in: size)
                     }))
                 Text("\(motionVector): \(Int(motionValue)) \(motionUnit)")
-                    .font(.system(size: size * 0.2))
+                    .font(.system(size: size * 0.12))
                     .foregroundColor(.white)
             }
             .background(Color.clear)
         }
     }
 
+    private func normalizedMotionValue() -> CGFloat {
+        let range = configArray.maximumValue - configArray.minimumValue
+        return (motionValue - configArray.minimumValue) / range
+    }
+
     private func change(location: CGPoint, in size: CGFloat) {
         let vector = CGVector(dx: location.x - size / 2, dy: location.y - size / 2)
         let angle = atan2(vector.dy, vector.dx) + .pi / 2.0
         let fixedAngle = angle < 0.0 ? angle + 2.0 * .pi : angle
-        var value = fixedAngle / (2.0 * .pi) * configArray.totalValue
+        let totalRange = configArray.maximumValue - configArray.minimumValue
+        var value = (fixedAngle / (2.0 * .pi)) * totalRange + configArray.minimumValue
         
         value = round(value / configArray.step) * configArray.step
         
@@ -85,15 +92,15 @@ struct StaticSim: View {
     @State private var respirationRate: Double = 12
     @State private var deviceBattery: Double = 85
     @State private var isConnected: Bool = true
-    @State private var accX: CGFloat = 0.0
-    @State private var accY: CGFloat = 0.0
-    @State private var accZ: CGFloat = 0.0
-    @State private var gyroX: CGFloat = 0.0
-    @State private var gyroY: CGFloat = 0.0
-    @State private var gyroZ: CGFloat = 0.0
-    @State private var magX: CGFloat = 0.0
-    @State private var magY: CGFloat = 0.0
-    @State private var magZ: CGFloat = 0.0
+    @State private var accX: CGFloat = -2.0
+    @State private var accY: CGFloat = -2.0
+    @State private var accZ: CGFloat = -2.0
+    @State private var gyroX: CGFloat = -500.0
+    @State private var gyroY: CGFloat = -500.0
+    @State private var gyroZ: CGFloat = -500.0
+    @State private var magX: CGFloat = -100.0
+    @State private var magY: CGFloat = -100.0
+    @State private var magZ: CGFloat = -100.0
     
     let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
     let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
