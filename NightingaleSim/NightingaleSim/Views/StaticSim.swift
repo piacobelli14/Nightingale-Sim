@@ -52,27 +52,35 @@ struct StaticSim: View {
                 VStack {
                     
                     HStack {
-                        Text("Heart Rate")
-                            .font(.system(size: geometry.size.height * 0.024, weight: .bold))
-                            .foregroundColor(Color.white)
-                            .opacity(0.8)
-                        
-                        
-                        Text("\(Int(heartRate)) BPM")
-                            .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                            .foregroundColor(Color.white)
-                            .opacity(0.8)
-                        
-                        Spacer()
-                        
-                        Circle()
-                            .background(heartRateColor(heartRate))
-                            .frame(height: geometry.size.height * 0.02)
+                        HStack {
+                            Text("Heart Rate")
+                                .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.8)
+                            
+                            
+                            Text("\(Int(heartRate)) BPM")
+                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.8)
+                                .padding(.leading, geometry.size.width * 0.01)
+                        }
+                            
+                        HStack {
+                            Circle()
+                                .foregroundColor(heartRateColor(heartRate))
+                                .frame(height: geometry.size.height * 0.02)
+                            
+                            Text("\(heartRateRisk(heartRate))")
+                                .foregroundColor(heartRateColor(heartRate))
+                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                        }
+                        .padding(.leading, geometry.size.width * 0.1)
                         
                         Spacer()
                     }
 
-                    Slider(value: $heartRate, in: 40...220, step: 1)
+                    Slider(value: $heartRate, in: 20...220, step: 1)
                         .accentColor(Color(hex: 0x2A0862))
                 }
                 .padding()
@@ -80,6 +88,7 @@ struct StaticSim: View {
                 .cornerRadius(10)
                 .shadow(radius: 5)
                 .frame(width: geometry.size.width * 0.9)
+                .padding(.top, geometry.size.height * 0.02)
                 
                 Spacer()
                 
@@ -105,16 +114,30 @@ struct StaticSim: View {
     }
     private func heartRateColor(_ rate: Double) -> Color {
         switch rate {
-        case 40...60:
+        case 20...60:
             return .blue
         case 61...100:
             return .green
         case 101...130:
             return .yellow
-        case 131...180:
+        case 131...220:
             return .red
         default:
             return .black
+        }
+    }
+    private func heartRateRisk(_ rate: Double) -> String {
+        switch rate {
+        case 20...60:
+            return "Low"
+        case 61...100:
+            return "Normal"
+        case 101...130:
+            return "Elevated"
+        case 131...220:
+            return "Significantly Elevated"
+        default:
+            return "Normal"
         }
     }
 }
