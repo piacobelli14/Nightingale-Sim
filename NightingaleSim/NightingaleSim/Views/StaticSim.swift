@@ -7,6 +7,61 @@
 
 import SwiftUI
 
+struct TemperatureControlView: View {
+    @Binding var temperatureValue: CGFloat
+    @State var angleValue: CGFloat = 0.0
+    var config: Config  // Configuration passed as a variable
+
+    var body: some View {
+        GeometryReader { geometry in
+            let size = min(geometry.size.width, geometry.size.height) * 0.85 // adjust the size to 85% of the smallest dimension
+            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.02, size * 0.15])
+            let mainStrokeWidth = size * 0.03
+            ZStack {
+                Circle()
+                    .frame(width: size, height: size)
+                Circle()
+                    .stroke(Color.gray, style: strokeStyle)
+                    .frame(width: size, height: size)
+                Circle()
+                    .trim(from: 0.0, to: temperatureValue / config.totalValue)
+                    .stroke(temperatureValue < config.maximumValue / 2 ? Color.blue : Color.red, lineWidth: mainStrokeWidth)
+                    .frame(width: size, height: size)
+                    .rotationEffect(.degrees(-90))
+                Circle()
+                    .fill(temperatureValue < config.maximumValue / 2 ? Color.blue : Color.red)
+                    .frame(width: size * 0.1, height: size * 0.1) // knob size adjusted based on overall size
+                    .offset(y: -(size / 2 - mainStrokeWidth / 2)) // Correctly positioning the knob on the border
+                    .rotationEffect(Angle.degrees(Double(angleValue)))
+                    .gesture(DragGesture(minimumDistance: 0).onChanged({ value in change(location: value.location, in: size) }))
+                Text("\(Int(temperatureValue)) º")
+                    .font(.system(size: size * 0.2)) // font size adjusted
+                    .foregroundColor(.white)
+            }
+        }
+    }
+
+    private func change(location: CGPoint, in size: CGFloat) {
+        let vector = CGVector(dx: location.x - size / 2, dy: location.y - size / 2)
+        let angle = atan2(vector.dy, vector.dx) + .pi / 2.0
+        let fixedAngle = angle < 0.0 ? angle + 2.0 * .pi : angle
+        let value = fixedAngle / (2.0 * .pi) * config.totalValue
+        if value >= config.minimumValue && value <= config.maximumValue {
+            temperatureValue = value
+            angleValue = fixedAngle * 180 / .pi
+        }
+    }
+}
+
+
+struct Config {
+    let minimumValue: CGFloat
+    let maximumValue: CGFloat
+    let totalValue: CGFloat
+    let knobRadius: CGFloat
+    let radius: CGFloat
+}
+
 struct StaticSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
@@ -21,6 +76,15 @@ struct StaticSim: View {
     @State private var respirationRate: Double = 12
     @State private var deviceBattery: Double = 85
     @State private var isConnected: Bool = true
+    
+    var respirationRateBinding: Binding<CGFloat> {
+        Binding<CGFloat>(
+            get: { CGFloat(respirationRate) },
+            set: { respirationRate = Double($0) }
+        )
+    }
+    var configRespirationRate = Config(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+   
     
     var body: some View {
         GeometryReader { geometry in
@@ -193,6 +257,32 @@ struct StaticSim: View {
                 .frame(width: geometry.size.width * 0.9)
                 .padding(.top, geometry.size.height * 0.02)
                 
+                VStack {
+                    // Your existing code for displaying the respiration rate
+                    HStack {
+                        Text("Respiration Rate")
+                            .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                            .foregroundColor(Color.white)
+                            .opacity(0.8)
+
+                        Text("\(Int(respirationRate)) BrPM")
+                            .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                            .foregroundColor(Color.white)
+                            .opacity(0.8)
+                            .padding(.leading, geometry.size.width * 0.01)
+                    }
+
+                    TemperatureControlView(temperatureValue: respirationRateBinding, config: configRespirationRate)
+                                            .frame(width: geometry.size.width * 0.4, height: geometry.size.height * 0.4)
+                }
+                .padding()
+                .background(Color.white.opacity(0.2))
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .frame(width: geometry.size.width * 0.9)
+                .padding(.top, geometry.size.height * 0.02)
+                
+               
                 Spacer()
                 
                 HStack {
