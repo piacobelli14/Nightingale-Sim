@@ -11,15 +11,18 @@ struct MotionSensorGauge: View {
     @Binding var motionValue: CGFloat
     @State var angleValue: CGFloat = 0.0
     var configArray: ConfigArray
+    var motionVector: String
+    var motionUnit: String
 
     var body: some View {
         GeometryReader { geometry in
-            let size = min(geometry.size.width, geometry.size.height) * 0.85
-            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.02, size * 0.15])
+            let size = min(geometry.size.width, geometry.size.height)
+            let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.2, size * 0.15])
             let mainStrokeWidth = size * 0.03
             ZStack {
                 Circle()
                     .frame(width: size, height: size)
+                    .foregroundColor(.clear)  // Set the main circle background to transparent
                 Circle()
                     .stroke(Color.gray, style: strokeStyle)
                     .frame(width: size, height: size)
@@ -31,13 +34,16 @@ struct MotionSensorGauge: View {
                 Circle()
                     .fill(motionValue < configArray.maximumValue / 2 ? Color.blue : Color.red)
                     .frame(width: size * 0.1, height: size * 0.1)
-                    .offset(y: -(size / 1.95 - mainStrokeWidth / 1.95))
+                    .offset(y: -(size / 2 - mainStrokeWidth / 2))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
-                    .gesture(DragGesture(minimumDistance: 0).onChanged({ value in change(location: value.location, in: size) }))
-                Text("\(Int(motionValue)) º")
+                    .gesture(DragGesture(minimumDistance: 0).onChanged({ value in
+                        self.change(location: value.location, in: size)
+                    }))
+                Text("\(motionVector): \(Int(motionValue)) \(motionUnit)")
                     .font(.system(size: size * 0.2))
                     .foregroundColor(.white)
             }
+            .background(Color.clear)
         }
     }
 
@@ -52,6 +58,9 @@ struct MotionSensorGauge: View {
         }
     }
 }
+
+
+
 
 struct ConfigArray {
     let minimumValue: CGFloat
@@ -88,11 +97,9 @@ struct StaticSim: View {
     var configAccX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configAccY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configAccZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    
     var configGyroX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configGyroY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configGyroZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    
     var configMagX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configMagY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configMagZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
@@ -285,20 +292,22 @@ struct StaticSim: View {
                             VStack {
                                 HStack {
                                     Spacer()
-                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX, motionVector: "X", motionUnit: "g")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
-                                    
-                                    Text("X: \(Int(accX))g")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
                                     Spacer()
                                 }
-                                MotionSensorGauge(motionValue: $accY, configArray: configAccY)
-                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
-                                MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
-                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $accY, configArray: configAccY, motionVector: "Y", motionUnit: "g")
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $accZ, configArray: configAccZ, motionVector: "Z", motionUnit: "g")
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    Spacer()
+                                }
                             }
                         }
                         .padding()
@@ -309,7 +318,7 @@ struct StaticSim: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                Text("Accelerometer")
+                                Text("Gyroscope")
                                     .font(.system(size: geometry.size.height * 0.024, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
@@ -319,20 +328,22 @@ struct StaticSim: View {
                             VStack {
                                 HStack {
                                     Spacer()
-                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                                    MotionSensorGauge(motionValue: $gyroX, configArray: configGyroX, motionVector: "X", motionUnit: "°")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
-                                    
-                                    Text("X: \(Int(accX))g")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
                                     Spacer()
                                 }
-                                MotionSensorGauge(motionValue: $accY, configArray: configAccY)
-                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
-                                MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
-                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $gyroY, configArray: configGyroY, motionVector: "Y", motionUnit: "°")
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $gyroZ, configArray: configGyroZ, motionVector: "Z", motionUnit: "°")
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    Spacer()
+                                }
                             }
                         }
                         .padding()
@@ -343,7 +354,7 @@ struct StaticSim: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                Text("Accelerometer")
+                                Text("Magnetometer")
                                     .font(.system(size: geometry.size.height * 0.024, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
@@ -352,20 +363,24 @@ struct StaticSim: View {
                             
                             VStack {
                                 Spacer()
-                                VStack {
-                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $magX, configArray: configMagX, motionVector: "X", motionUnit: "µT")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
-                                        .padding(.none)
-                                    
-                                    Text("X: \(Int(accX))g")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
+                                    Spacer()
                                 }
-                                MotionSensorGauge(motionValue: $accY, configArray: configAccY)
-                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
-                                MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
-                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $magY, configArray: configMagY, motionVector: "Y", motionUnit: "µT")
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $magZ, configArray: configMagZ, motionVector: "Z", motionUnit: "µT")
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    Spacer()
+                                }
                                 Spacer()
                             }
                         }
