@@ -33,7 +33,7 @@ struct MotionSensorGauge: View {
                     .frame(width: size, height: size)
                     .rotationEffect(.degrees(-90))
                 Circle()
-                    .fill(motionValue < 0 ? Color.blue : Color.red)
+                    .fill(Color.blue)
                     .frame(width: size * 0.1, height: size * 0.1)
                     .offset(y: -(size / 2 - mainStrokeWidth / 2))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
@@ -41,7 +41,7 @@ struct MotionSensorGauge: View {
                         self.change(location: value.location, in: size)
                     }))
                 Text("\(motionVector): \(Int(motionValue)) \(motionUnit)")
-                    .font(.system(size: size * 0.12))
+                    .font(.system(size: size * 0.12, weight: .bold))
                     .foregroundColor(.white)
             }
             .background(Color.clear)
@@ -92,15 +92,15 @@ struct StaticSim: View {
     @State private var respirationRate: Double = 12
     @State private var deviceBattery: Double = 85
     @State private var isConnected: Bool = true
-    @State private var accX: CGFloat = -2.0
-    @State private var accY: CGFloat = -2.0
-    @State private var accZ: CGFloat = -2.0
-    @State private var gyroX: CGFloat = -500.0
-    @State private var gyroY: CGFloat = -500.0
-    @State private var gyroZ: CGFloat = -500.0
-    @State private var magX: CGFloat = -100.0
-    @State private var magY: CGFloat = -100.0
-    @State private var magZ: CGFloat = -100.0
+    @State private var accX: CGFloat = 2.0
+    @State private var accY: CGFloat = 2.0
+    @State private var accZ: CGFloat = 2.0
+    @State private var gyroX: CGFloat = 500.0
+    @State private var gyroY: CGFloat = 500.0
+    @State private var gyroZ: CGFloat = 500.0
+    @State private var magX: CGFloat = 100.0
+    @State private var magY: CGFloat = 100.0
+    @State private var magZ: CGFloat = 100.0
     
     let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
     let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
