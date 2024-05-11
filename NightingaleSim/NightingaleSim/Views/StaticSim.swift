@@ -17,6 +17,8 @@ struct StaticSim: View {
         endPoint: .trailing
     )
     
+    @State private var heartRate: Double = 70
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -47,6 +49,27 @@ struct StaticSim: View {
                     }
                 )
                 
+                VStack {
+                    
+                    HStack {
+                        Text("Heart Rate")
+                    }
+
+                    Slider(value: $heartRate, in: 40...220, step: 1)
+                        .accentColor(Color(hex: 0x2A0862))
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+
+                    Text("\(Int(heartRate)) BPM")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.green)  // Color of the text displaying the heart rate
+                        .padding()
+                }
+                .padding()
+                
                 Spacer()
                 
                 HStack {
@@ -66,6 +89,20 @@ struct StaticSim: View {
             }
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
+        }
+    }
+    private func heartRateColor(_ rate: Double) -> Color {
+        switch rate {
+        case 40...60:
+            return .blue
+        case 61...100:
+            return .green
+        case 101...130:
+            return .yellow
+        case 131...180:
+            return .red
+        default:
+            return .black
         }
     }
 }
