@@ -128,176 +128,256 @@ struct StaticSim: View {
                     }
                 )
                 
-                VStack {
-                    HStack {
-                        HStack {
-                            Text("Heart Rate")
-                                .font(.system(size: geometry.size.height * 0.024, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .opacity(0.8)
-                            
-                            
-                            Text("\(Int(heartRate)) BPM")
-                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                                .foregroundColor(Color.white)
-                                .opacity(0.8)
-                                .padding(.leading, geometry.size.width * 0.01)
-                        }
-                            
-                        HStack {
-                            Circle()
-                                .foregroundColor(heartRateColor(heartRate))
-                                .frame(height: geometry.size.height * 0.02)
-                            
-                            Text("\(heartRateRisk(heartRate))")
-                                .foregroundColor(heartRateColor(heartRate))
-                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                        }
-                        .padding(.leading, geometry.size.width * 0.1)
-                        
-                        Spacer()
-                    }
-
-                    Slider(value: $heartRate, in: 20...220, step: 1)
-                        .accentColor(Color(hex: 0x2A0862))
-                }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
-                .shadow(radius: 5)
-                .frame(width: geometry.size.width * 0.9)
-                .padding(.top, geometry.size.height * 0.02)
-                
-                VStack {
-                    HStack {
-                        HStack {
-                            Text("Respiration Rate")
-                                .font(.system(size: geometry.size.height * 0.024, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .opacity(0.8)
-                            
-                            
-                            Text("\(Int(respirationRate)) BrPM")
-                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                                .foregroundColor(Color.white)
-                                .opacity(0.8)
-                                .padding(.leading, geometry.size.width * 0.01)
-                        }
-                            
-                        HStack {
-                            Circle()
-                                .foregroundColor(respirationRateColor(respirationRate))
-                                .frame(height: geometry.size.height * 0.02)
-                            
-                            Text("\(respirationRateRisk(respirationRate))")
-                                .foregroundColor(respirationRateColor(respirationRate))
-                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                        }
-                        .padding(.leading, geometry.size.width * 0.1)
-                        
-                        Spacer()
-                    }
-
-                    Slider(value: $respirationRate, in: 0...20, step: 1)
-                        .accentColor(Color(hex: 0x2A0862))
-                }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
-                .shadow(radius: 5)
-                .frame(width: geometry.size.width * 0.9)
-                .padding(.top, geometry.size.height * 0.02)
-                
-                HStack {
+                ScrollView {
+                    
                     VStack {
                         HStack {
                             HStack {
-                                Text("Device Battery")
+                                Text("Heart Rate")
                                     .font(.system(size: geometry.size.height * 0.024, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
                                 
-                                Text("\(Int(deviceBattery))%")
+                                Text("\(Int(heartRate)) BPM")
                                     .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
                             
+                            HStack {
+                                Circle()
+                                    .foregroundColor(heartRateColor(heartRate))
+                                    .frame(height: geometry.size.height * 0.02)
+                                
+                                Text("\(heartRateRisk(heartRate))")
+                                    .foregroundColor(heartRateColor(heartRate))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                            }
+                            .padding(.leading, geometry.size.width * 0.1)
+                            
                             Spacer()
                         }
-
-                        Slider(value: $deviceBattery, in: 0...100, step: 1)
+                        
+                        Slider(value: $heartRate, in: 20...220, step: 1)
                             .accentColor(Color(hex: 0x2A0862))
                     }
                     .padding()
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
                     .shadow(radius: 5)
+                    .frame(width: geometry.size.width * 0.9)
+                    .padding(.top, geometry.size.height * 0.02)
                     
                     VStack {
                         HStack {
-                            Text("Device Presence")
-                                .font(.system(size: geometry.size.height * 0.024, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .opacity(0.8)
-                            
-                            Spacer()
-                        }
-                        
-                        HStack {
                             HStack {
-                                Toggle("", isOn: $isConnected)
-                                    .tint(Color(hex: 0x2A0862))
-                                    .labelsHidden()
+                                Text("Respiration Rate")
+                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.8)
                                 
-                                Text("\(isConnected ? "Connected" : "Disconnected")")
+                                
+                                Text("\(Int(respirationRate)) BrPM")
                                     .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
+                            
+                            HStack {
+                                Circle()
+                                    .foregroundColor(respirationRateColor(respirationRate))
+                                    .frame(height: geometry.size.height * 0.02)
+                                
+                                Text("\(respirationRateRisk(respirationRate))")
+                                    .foregroundColor(respirationRateColor(respirationRate))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                            }
+                            .padding(.leading, geometry.size.width * 0.1)
+                            
                             Spacer()
                         }
+                        
+                        Slider(value: $respirationRate, in: 0...20, step: 1)
+                            .accentColor(Color(hex: 0x2A0862))
                     }
                     .padding()
                     .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
                     .shadow(radius: 5)
-                }
-                .frame(width: geometry.size.width * 0.9)
-                .padding(.top, geometry.size.height * 0.02)
-                
-                VStack {
-                    HStack {
-                        Text("Accelerometer")
-                            .font(.system(size: geometry.size.height * 0.024, weight: .bold))
-                            .foregroundColor(Color.white)
-                            .opacity(0.8)
-
-                        Text("X: \(Int(respirationRate))g")
-                            .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
-                            .foregroundColor(Color.white)
-                            .opacity(0.8)
-                            .padding(.leading, geometry.size.width * 0.01)
-                    }
+                    .frame(width: geometry.size.width * 0.9)
+                    .padding(.top, geometry.size.height * 0.02)
                     
-                    VStack {
-                        MotionSensorGauge(motionValue: $accX, configArray: configAccX)
-                            .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.2)
-                        MotionSensorGauge(motionValue: $accY, configArray: configAccX)
-                            .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.2)
-                        MotionSensorGauge(motionValue: $accZ, configArray: configAccX)
-                            .frame(width: geometry.size.width * 0.2, height: geometry.size.height * 0.2)
+                    HStack {
+                        VStack {
+                            HStack {
+                                HStack {
+                                    Text("Device Battery")
+                                        .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                    
+                                    
+                                    Text("\(Int(deviceBattery))%")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                }
+                                
+                                Spacer()
+                            }
+                            
+                            Slider(value: $deviceBattery, in: 0...100, step: 1)
+                                .accentColor(Color(hex: 0x2A0862))
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        
+                        VStack {
+                            HStack {
+                                Text("Device Presence")
+                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.8)
+                                
+                                Spacer()
+                            }
+                            
+                            HStack {
+                                HStack {
+                                    Toggle("", isOn: $isConnected)
+                                        .tint(Color(hex: 0x2A0862))
+                                        .labelsHidden()
+                                    
+                                    Text("\(isConnected ? "Connected" : "Disconnected")")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                }
+                                Spacer()
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
                     }
+                    .frame(width: geometry.size.width * 0.9)
+                    .padding(.top, geometry.size.height * 0.02)
+                    
+                    HStack {
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Text("Accelerometer")
+                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.8)
+                                Spacer()
+                            }
+                            
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    
+                                    Text("X: \(Int(accX))g")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    Spacer()
+                                }
+                                MotionSensorGauge(motionValue: $accY, configArray: configAccY)
+                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
+                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Text("Accelerometer")
+                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.8)
+                                Spacer()
+                            }
+                            
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    
+                                    Text("X: \(Int(accX))g")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    Spacer()
+                                }
+                                MotionSensorGauge(motionValue: $accY, configArray: configAccY)
+                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
+                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Text("Accelerometer")
+                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.8)
+                                Spacer()
+                            }
+                            
+                            VStack {
+                                VStack {
+                                    Spacer()
+                                    MotionSensorGauge(motionValue: $accX, configArray: configAccX)
+                                        .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                    
+                                    Text("X: \(Int(accX))g")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    Spacer()
+                                }
+                                MotionSensorGauge(motionValue: $accY, configArray: configAccY)
+                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                MotionSensorGauge(motionValue: $accZ, configArray: configAccZ)
+                                    .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                    }
+                    .frame(width: geometry.size.width * 0.9)
+                    .padding(.top, geometry.size.height * 0.02)
                 }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
-                .shadow(radius: 5)
-                .frame(width: geometry.size.width * 0.9)
-                .padding(.top, geometry.size.height * 0.02)
+                .frame(height: geometry.size.height * 0.86)
                 
                
                 Spacer()
