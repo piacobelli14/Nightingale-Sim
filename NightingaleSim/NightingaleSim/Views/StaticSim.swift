@@ -18,6 +18,7 @@ struct StaticSim: View {
     )
     
     @State private var heartRate: Double = 70
+    @State private var respirationRate: Double = 12
     
     var body: some View {
         GeometryReader { geometry in
@@ -50,7 +51,6 @@ struct StaticSim: View {
                 )
                 
                 VStack {
-                    
                     HStack {
                         HStack {
                             Text("Heart Rate")
@@ -81,6 +81,46 @@ struct StaticSim: View {
                     }
 
                     Slider(value: $heartRate, in: 20...220, step: 1)
+                        .accentColor(Color(hex: 0x2A0862))
+                }
+                .padding()
+                .background(Color.white.opacity(0.2))
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .frame(width: geometry.size.width * 0.9)
+                .padding(.top, geometry.size.height * 0.02)
+                
+                VStack {
+                    HStack {
+                        HStack {
+                            Text("Respiration Rate")
+                                .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.8)
+                            
+                            
+                            Text("\(Int(respirationRate)) BrPM")
+                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.8)
+                                .padding(.leading, geometry.size.width * 0.01)
+                        }
+                            
+                        HStack {
+                            Circle()
+                                .foregroundColor(respirationRateColor(respirationRate))
+                                .frame(height: geometry.size.height * 0.02)
+                            
+                            Text("\(respirationRateRisk(respirationRate))")
+                                .foregroundColor(respirationRateColor(respirationRate))
+                                .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                        }
+                        .padding(.leading, geometry.size.width * 0.1)
+                        
+                        Spacer()
+                    }
+
+                    Slider(value: $respirationRate, in: 0...20, step: 1)
                         .accentColor(Color(hex: 0x2A0862))
                 }
                 .padding()
@@ -135,6 +175,34 @@ struct StaticSim: View {
         case 101...130:
             return "Elevated"
         case 131...220:
+            return "Significantly Elevated"
+        default:
+            return "Normal"
+        }
+    }
+    private func respirationRateColor(_ rate: Double) -> Color {
+        switch rate {
+        case 0...8:
+            return .blue
+        case 9...14:
+            return .green
+        case 15...17:
+            return .yellow
+        case 18...20:
+            return .red
+        default:
+            return .black
+        }
+    }
+    private func respirationRateRisk(_ rate: Double) -> String {
+        switch rate {
+        case 0...8:
+            return "Low"
+        case 9...14:
+            return "Normal"
+        case 15...17:
+            return "Elevated"
+        case 18...20:
             return "Significantly Elevated"
         default:
             return "Normal"
