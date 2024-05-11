@@ -162,12 +162,19 @@ struct StaticSim: View {
                     
                     VStack {
                         HStack {
+                            Text("Device Presence")
+                                .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.8)
+                            
+                            Spacer()
+                        }
+                        
+                        HStack {
                             HStack {
-                                Text("Device Presence")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .opacity(0.8)
-                                
+                                Toggle("", isOn: $isConnected)
+                                    .tint(Color(hex: 0x2A0862))
+                                    .labelsHidden()
                                 
                                 Text("\(isConnected ? "Connected" : "Disconnected")")
                                     .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
@@ -175,13 +182,8 @@ struct StaticSim: View {
                                     .opacity(0.8)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
-                            
                             Spacer()
                         }
-
-                        Toggle("", isOn: $isConnected)
-                            .tint(Color(hex: 0x2A0862))
-                            .labelsHidden()
                     }
                     .padding()
                     .background(Color.white.opacity(0.2))
