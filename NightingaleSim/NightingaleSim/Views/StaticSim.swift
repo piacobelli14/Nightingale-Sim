@@ -51,7 +51,10 @@ struct MotionSensorGauge: View {
         let vector = CGVector(dx: location.x - size / 2, dy: location.y - size / 2)
         let angle = atan2(vector.dy, vector.dx) + .pi / 2.0
         let fixedAngle = angle < 0.0 ? angle + 2.0 * .pi : angle
-        let value = fixedAngle / (2.0 * .pi) * configArray.totalValue
+        var value = fixedAngle / (2.0 * .pi) * configArray.totalValue
+        
+        value = round(value / configArray.step) * configArray.step
+        
         if value >= configArray.minimumValue && value <= configArray.maximumValue {
             motionValue = value
             angleValue = fixedAngle * 180 / .pi
@@ -59,13 +62,11 @@ struct MotionSensorGauge: View {
     }
 }
 
-
-
-
 struct ConfigArray {
     let minimumValue: CGFloat
     let maximumValue: CGFloat
     let totalValue: CGFloat
+    let step: CGFloat
     let knobRadius: CGFloat
     let radius: CGFloat
 }
@@ -94,9 +95,9 @@ struct StaticSim: View {
     @State private var magY: CGFloat = 0.0
     @State private var magZ: CGFloat = 0.0
     
-    var configAccX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configAccY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configAccZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    var configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 4, knobRadius: 15.0, radius: 125.0)
+    var configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 4, knobRadius: 15.0, radius: 125.0)
+    var configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 4, knobRadius: 15.0, radius: 125.0)
     var configGyroX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configGyroY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
     var configGyroZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
@@ -389,6 +390,16 @@ struct StaticSim: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                     }
+                    .frame(width: geometry.size.width * 0.92)
+                    .padding(.top, geometry.size.height * 0.02)
+                    
+                    HStack {
+                        //GeolocationMap Here
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                 }
