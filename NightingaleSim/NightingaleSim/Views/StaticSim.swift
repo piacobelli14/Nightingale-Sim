@@ -95,15 +95,15 @@ struct StaticSim: View {
     @State private var magY: CGFloat = 0.0
     @State private var magZ: CGFloat = 0.0
     
-    var configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 4, knobRadius: 15.0, radius: 125.0)
-    var configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 4, knobRadius: 15.0, radius: 125.0)
-    var configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 4, knobRadius: 15.0, radius: 125.0)
-    var configGyroX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configGyroY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configGyroZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configMagX = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configMagY = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
-    var configMagZ = ConfigArray(minimumValue: 0.0, maximumValue: 20.0, totalValue: 20.0, knobRadius: 15.0, radius: 125.0)
+    let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
+    let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
+    let configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.5, knobRadius: 15.0, radius: 125.0)
+    var configGyroX = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 250.0, knobRadius: 15.0, radius: 125.0)
+    var configGyroY = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 250.0, knobRadius: 15.0, radius: 125.0)
+    var configGyroZ = ConfigArray(minimumValue: -500.0, maximumValue: 500.0, totalValue: 1000.0, step: 250.0, knobRadius: 15.0, radius: 125.0)
+    var configMagX = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 25.0,  knobRadius: 15.0, radius: 125.0)
+    var configMagY = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 25.0,  knobRadius: 15.0, radius: 125.0)
+    var configMagZ = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 25.0,  knobRadius: 15.0, radius: 125.0)
    
     
     var body: some View {
