@@ -29,7 +29,7 @@ struct MotionSensorGauge: View {
                     .frame(width: size, height: size)
                 Circle()
                     .trim(from: 0.0, to: normalizedMotionValue())
-                    .stroke(motionValue < 0 ? Color.blue : Color.red, lineWidth: mainStrokeWidth)
+                    .stroke(Color.blue lineWidth: mainStrokeWidth)
                     .frame(width: size, height: size)
                     .rotationEffect(.degrees(-90))
                 Circle()
