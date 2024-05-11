@@ -6,7 +6,34 @@
 //
 
 import SwiftUI
+import MapKit
 
+struct DraggablePin: Identifiable {
+    let id = UUID()
+    var location: CLLocationCoordinate2D
+}
+
+struct DynamicMapView: View {
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437),
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+    )
+    @State private var pin = DraggablePin(location: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437))
+
+    var body: some View {
+        Map(coordinateRegion: $region, annotationItems: [pin]) { pin in
+            MapAnnotation(coordinate: pin.location) {
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 20, height: 20)
+                    .gesture(DragGesture().onChanged({ value in
+                        let newLocation = region.center
+                        pin.location = newLocation
+                    }))
+            }
+        }
+    }
+}
 
 struct MotionSensorGauge: View {
     @Binding var motionValue: CGFloat
@@ -161,7 +188,11 @@ struct StaticSim: View {
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
                             
+                            Spacer()
+                            
                             HStack {
+                                Spacer()
+                                
                                 Circle()
                                     .foregroundColor(heartRateColor(heartRate))
                                     .frame(height: geometry.size.height * 0.02)
@@ -201,7 +232,11 @@ struct StaticSim: View {
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
                             
+                            Spacer()
+                            
                             HStack {
+                                Spacer()
+                                
                                 Circle()
                                     .foregroundColor(respirationRateColor(respirationRate))
                                     .frame(height: geometry.size.height * 0.02)
@@ -401,7 +436,8 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
-                        //GeolocationMap Here
+                        DynamicMapView()
+                            .frame(height: geometry.size.height * 0.3) // Adjust size according to your UI design
                     }
                     .padding()
                     .background(Color.white.opacity(0.2))
