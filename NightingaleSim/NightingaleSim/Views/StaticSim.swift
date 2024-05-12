@@ -400,6 +400,17 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
+                        DynamicMapView()
+                            .frame(height: geometry.size.height * 0.3) // Adjust size according to your UI design
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .frame(width: geometry.size.width * 0.92)
+                    .padding(.top, geometry.size.height * 0.02)
+                    
+                    HStack {
                         VStack {
                             HStack {
                                 Spacer()
@@ -510,17 +521,6 @@ struct StaticSim: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                     }
-                    .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.02)
-                    
-                    HStack {
-                        DynamicMapView()
-                            .frame(height: geometry.size.height * 0.3) // Adjust size according to your UI design
-                    }
-                    .padding()
-                    .background(Color.white.opacity(0.2))
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                 }
