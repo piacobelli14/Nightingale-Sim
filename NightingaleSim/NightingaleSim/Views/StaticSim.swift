@@ -236,6 +236,7 @@ struct StaticSim: View {
     )
     
     @State private var isRandom: Bool = false
+    @State private var showInfoPopover = false
     
     @State private var heartRate: Double = 70
     @State private var respirationRate: Double = 12
@@ -588,13 +589,36 @@ struct StaticSim: View {
                         Toggle("", isOn: $isRandom)
                             .tint(Color(hex: 0x2A0862))
                             .labelsHidden()
+                            .padding(.leading, geometry.size.width * 0.01)
                         
                         Text("\(isRandom ? "Randomized Values" : "Constant Values")")
-                            .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                            .font(.system(size: geometry.size.height * 0.014, weight: .semibold))
                             .foregroundColor(Color.white)
                             .opacity(0.8)
                             .padding(.leading, geometry.size.width * 0.01)
+                        
+                        Button(action: {
+                            
+                        }) {
+                            Image(systemName: "info.circle.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: geometry.size.height * 0.02)
+                                .forgroundColor(Color.white)
+                                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                                .padding(.leading, geometry.size.width * 0.01)
+                                
+                        }
+                        .popover(isPresented: $showInfoPopover) {
+                            Text("Detailed information about \(isRandom ? "Randomized Values" : "Constant Values")")
+                                .padding()
+                                .frame(width: 300, height: 200)  // Adjust size according to your content needs
+                        }
                     }
+                    
+                    Spacer()
+                    
+                    
                     
                     
                     
