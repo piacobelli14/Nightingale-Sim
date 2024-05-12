@@ -304,7 +304,7 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
-                        DynamicMapView(isRandom: isRandom, geometry: geometry)
+                        DynamicMapView(isRandom: $isRandom, geometry: geometry)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.02)
                     }
@@ -545,24 +545,34 @@ struct StaticSim: View {
         }
     }
     private func sendMotionData() {
-        let motionData = [
+        let accXValue = getRandomizedValue(value: accX, range: 0.3)
+        let accYValue = getRandomizedValue(value: accY, range: 0.3)
+        let accZValue = getRandomizedValue(value: accZ, range: 0.3)
+        let gyroXValue = getRandomizedValue(value: gyroX, range: 100)
+        let gyroYValue = getRandomizedValue(value: gyroY, range: 100)
+        let gyroZValue = getRandomizedValue(value: gyroZ, range: 100)
+        let magXValue = getRandomizedValue(value: magX, range: 40)
+        let magYValue = getRandomizedValue(value: magY, range: 40)
+        let magZValue = getRandomizedValue(value: magZ, range: 40)
+
+        let motionData: [String: Any] = [
             "accelerometer": [
-                "x": !isRandom ? Double(accX) : Double(accX - 0.3)...Double(accX + 0.3),
-                "y": !isRandom ? Double(accY) : Double(accY - 0.3)...Double(accY + 0.3),
-                "z": !isRandom ? Double(accZ) : Double(accZ - 0.3)...Double(accZ + 0.3),
+                "x": accXValue,
+                "y": accYValue,
+                "z": accZValue
             ],
             "gyroscope": [
-                "x": !isRandom ? Double(gyroX) : Double(gyroX - 100)...Double(gyroX + 100),
-                "y": !isRandom ? Double(gyroY) : Double(gyroY - 100)...Double(gyroY + 100),,
-                "z": !isRandom ? Double(gyroZ) : Double(gyroZ - 100)...Double(gyroZ + 100),
+                "x": gyroXValue,
+                "y": gyroYValue,
+                "z": gyroZValue
             ],
             "magnetometer": [
-                "x": !isRandom ? Double(magX) : Double(magX - 40)...Double(magX + 40),
-                "y": !isRandom ? Double(magY) : Double(magY - 40)...Double(magZ + 40),
-                "z": !isRandom ? Double(magZ) : Double(magZ - 40)...Double(magZ + 40)
+                "x": magXValue,
+                "y": magYValue,
+                "z": magZValue
             ],
             "timestamp": ISO8601DateFormatter().string(from: Date())
-        ] as [String: Any]
+        ]
 
         guard let url = URL(string: "http://172.20.10.2:5000/motion-data") else { return }
         var request = URLRequest(url: url)
@@ -626,6 +636,13 @@ struct StaticSim: View {
                 print("Failed to send health data, received non-200 response")
             }
         }.resume()
+    }
+    private func getRandomizedValue(value: CGFloat, range: CGFloat) -> Double {
+        if isRandom {
+            return Double.random(in: (value - range)...(value + range))
+        } else {
+            return Double(value)
+        }
     }
 }
 

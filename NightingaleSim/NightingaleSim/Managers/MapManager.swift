@@ -25,7 +25,7 @@ struct DynamicMapView: View {
     @State private var showSuggestions = false
     @State private var altitude: Double = 0
     @State private var geolocationTimer: AnyCancellable?
-    var isRandom: Bool
+    @Binding var isRandom: Bool
     let geometry: GeometryProxy
     
 
@@ -144,10 +144,13 @@ struct DynamicMapView: View {
     }
 
     private func sendGeolocationData() {
+        let latValue = getRandomizedValue(value: pin.location.latitude, range: 0.0001)
+        let lonValue = getRandomizedValue(value: pin.location.longitude, range: 0.0001)
+        let altValue = getRandomizedValue(value: altitude, range: 5)
         let geolocationData = [
-            "lat": !isRandom ? pin.location.latitude : Double.random(in: -0.0001...0.0001),
-            "lon": !isRandom ? pin.location.longitude : Double.random(in: -0.0001...0.0001),
-            "alt": !isRandom ? altitude : Double.random(in: -5...5),
+            "lat": latValue,
+            "lon": lonValue,
+            "alt": altValue,
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ] as [String : Any]
 
@@ -222,6 +225,13 @@ struct DynamicMapView: View {
                 print("Failed to decode suggestions")
             }
         }.resume()
+    }
+    private func getRandomizedValue(value: CGFloat, range: CGFloat) -> Double {
+        if isRandom {
+            return Double.random(in: (value - range)...(value + range))
+        } else {
+            return Double(value)
+        }
     }
 }
 
