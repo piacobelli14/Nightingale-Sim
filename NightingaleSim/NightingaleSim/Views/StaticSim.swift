@@ -304,7 +304,7 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
-                        DynamicMapView(geometry: geometry)
+                        DynamicMapView(isRandom: isRandom, geometry: geometry)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.02)
                     }
@@ -546,9 +546,21 @@ struct StaticSim: View {
     }
     private func sendMotionData() {
         let motionData = [
-            "accelerometer": ["x": Double(accX), "y": Double(accY), "z": Double(accZ)],
-            "gyroscope": ["x": Double(gyroX), "y": Double(gyroY), "z": Double(gyroZ)],
-            "magnetometer": ["x": Double(magX), "y": Double(magY), "z": Double(magZ)],
+            "accelerometer": [
+                "x": !isRandom ? Double(accX) : Double(accX - 0.3)...Double(accX + 0.3),
+                "y": !isRandom ? Double(accY) : Double(accY - 0.3)...Double(accY + 0.3),
+                "z": !isRandom ? Double(accZ) : Double(accZ - 0.3)...Double(accZ + 0.3),
+            ],
+            "gyroscope": [
+                "x": !isRandom ? Double(gyroX) : Double(gyroX - 100)...Double(gyroX + 100),
+                "y": !isRandom ? Double(gyroY) : Double(gyroY - 100)...Double(gyroY + 100),,
+                "z": !isRandom ? Double(gyroZ) : Double(gyroZ - 100)...Double(gyroZ + 100),
+            ],
+            "magnetometer": [
+                "x": !isRandom ? Double(magX) : Double(magX - 40)...Double(magX + 40),
+                "y": !isRandom ? Double(magY) : Double(magY - 40)...Double(magZ + 40),
+                "z": !isRandom ? Double(magZ) : Double(magZ - 40)...Double(magZ + 40)
+            ],
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ] as [String: Any]
 
@@ -584,8 +596,8 @@ struct StaticSim: View {
     }
     private func sendHealthData() {
         let healthData = [
-            "heartRate": heartRate,
-            "respirationRate": respirationRate,
+            "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate - 6)...Double(heartRate + 6))),
+            "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate - 2)...Double(respirationRate + 2))),
             "batteryLevel": deviceBattery / 100,
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ] as [String: Any]

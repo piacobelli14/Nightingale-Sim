@@ -25,7 +25,9 @@ struct DynamicMapView: View {
     @State private var showSuggestions = false
     @State private var altitude: Double = 0
     @State private var geolocationTimer: AnyCancellable?
+    var isRandom: Bool
     let geometry: GeometryProxy
+    
 
     var body: some View {
         VStack {
@@ -143,9 +145,9 @@ struct DynamicMapView: View {
 
     private func sendGeolocationData() {
         let geolocationData = [
-            "lat": pin.location.latitude,
-            "lon": pin.location.longitude,
-            "alt": altitude,
+            "lat": !isRandom ? pin.location.latitude : Double.random(in: -0.0001...0.0001),
+            "lon": !isRandom ? pin.location.longitude : Double.random(in: -0.0001...0.0001),
+            "alt": !isRandom ? altitude : Double.random(in: -5...5),
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ] as [String : Any]
 
