@@ -25,17 +25,6 @@ struct DynamicMapView: View {
 
     var body: some View {
         VStack {
-            TextField("Enter address", text: $searchText, onEditingChanged: { isEditing in
-                self.showSuggestions = isEditing
-            }, onCommit: {
-                geocodeAddressString(searchText)
-            })
-            .padding()
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .onChange(of: searchText) { newValue in
-                fetchSuggestions(query: newValue)
-            }
-            
             ZStack {
                 Map(coordinateRegion: $region, annotationItems: [pin]) { pin in
                     MapAnnotation(coordinate: pin.location) {
@@ -45,38 +34,50 @@ struct DynamicMapView: View {
                     }
                 }
                 
-                if showSuggestions {
-                    List(suggestions, id: \.self) { suggestion in
-                        VStack(spacing: 0) {
-                            GeometryReader { geometry in
-                                HStack(alignment: .center) {
-                                    Text(suggestion)
-                                        .multilineTextAlignment(.leading)
-                                        .font(.system(size: geometry.size.height * 0.4, weight: .semibold))
-                                        .foregroundColor(.white)
-                                        .frame(width: geometry.size.width, alignment: .leading)
-                                        .padding(.leading, geometry.size.width * 0.04)
-                                        .padding(.vertical, geometry.size.height * 0.4)
-                                }
-                                .background(Color.clear)
-                            }
-                            Divider()
-                                .background(Color.white)
-                        }
-                        .onTapGesture {
-                            self.searchText = suggestion
-                            self.showSuggestions = false
-                            self.geocodeAddressString(suggestion)
-                        }
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets())
+                VStack {
+                    TextField("Enter address", text: $searchText, onEditingChanged: { isEditing in
+                        self.showSuggestions = isEditing
+                    }, onCommit: {
+                        geocodeAddressString(searchText)
+                    })
+                    .padding()
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onChange(of: searchText) { newValue in
+                        fetchSuggestions(query: newValue)
                     }
-                    .listStyle(PlainListStyle())
-                    .background(Color.black)
-                    .frame(maxHeight: 200)
+                    
+                    if showSuggestions {
+                        List(suggestions, id: \.self) { suggestion in
+                            VStack(spacing: 0) {
+                                GeometryReader { geometry in
+                                    HStack(alignment: .center) {
+                                        Text(suggestion)
+                                            .multilineTextAlignment(.leading)
+                                            .font(.system(size: geometry.size.height * 0.4, weight: .semibold))
+                                            .foregroundColor(.white)
+                                            .frame(width: geometry.size.width, alignment: .leading)
+                                            .padding(.leading, geometry.size.width * 0.04)
+                                            .padding(.vertical, geometry.size.height * 0.4)
+                                    }
+                                    .background(Color.clear)
+                                }
+                                Divider()
+                                    .background(Color.white)
+                            }
+                            .onTapGesture {
+                                self.searchText = suggestion
+                                self.showSuggestions = false
+                                self.geocodeAddressString(suggestion)
+                            }
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(EdgeInsets())
+                        }
+                        .listStyle(PlainListStyle())
+                        .background(Color.black)
+                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
+                    }
                 }
             }
-            Spacer()
         }
     }
 
@@ -428,14 +429,10 @@ struct StaticSim: View {
                     
                     HStack {
                         DynamicMapView(geometry: geometry)
-                            .frame(height: geometry.size.height * 0.3) // Adjust size according to your UI design
+                            .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                     }
-                    .padding()
-                    .background(Color.white.opacity(0.2))
                     .cornerRadius(10)
                     .shadow(radius: 5)
-                    .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
                         VStack {
