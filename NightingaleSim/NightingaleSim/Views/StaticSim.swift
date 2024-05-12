@@ -55,10 +55,8 @@ struct DynamicMapView: View {
                                         .font(.system(size: geometry.size.height * 0.4, weight: .semibold))
                                         .foregroundColor(.white)
                                         .frame(width: geometry.size.width, alignment: .leading)
-                                        .padding(.leading, geometry.size.width * 0.1)
+                                        .padding(.leading, geometry.size.width * 0.04)
                                         .padding(.vertical, geometry.size.height * 0.4)
-                                    
-                                    Spacer()
                                 }
                                 .background(Color.clear)
                             }
