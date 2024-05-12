@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Combine
 
 struct LocationPin: Identifiable {
     let id = UUID()
@@ -228,6 +229,9 @@ struct ConfigArray {
 struct StaticSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
+    @State private var motionTimer: AnyCancellable?
+    @State private var motionDataCollection = [Dictionary<String, Any>]()
+
     
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
@@ -580,12 +584,24 @@ struct StaticSim: View {
                 }
                 .frame(height: geometry.size.height * 0.86)
                 .frame(width: geometry.size.width * 1.0)
+                .onAppear {
+                    self.motionTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
+                        self.collectMotionData()
+                        if motionDataCollection.count >= 10 {
+                            self.sendMotionData()
+                            motionDataCollection.removeAll()
+                        }
+                    }
+                }
+                .onDisappear {
+                    self.motionTimer?.cancel()
+                }
                 
                
                 Spacer()
                 
-                HStack {
-                    HStack {
+                HStack(alignment: .center) {
+                    HStack(alignment: .center) {
                         Toggle("", isOn: $isRandom)
                             .tint(Color(hex: 0x2A0862))
                             .labelsHidden()
@@ -596,32 +612,10 @@ struct StaticSim: View {
                             .foregroundColor(Color.white)
                             .opacity(0.8)
                             .padding(.leading, geometry.size.width * 0.01)
-                        
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemName: "info.circle.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: geometry.size.height * 0.02)
-                                .forgroundColor(Color.white)
-                                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
-                                .padding(.leading, geometry.size.width * 0.01)
-                                
-                        }
-                        .popover(isPresented: $showInfoPopover) {
-                            Text("Detailed information about \(isRandom ? "Randomized Values" : "Constant Values")")
-                                .padding()
-                                .frame(width: 300, height: 200)  // Adjust size according to your content needs
-                        }
                     }
+                    .padding(.vertical, geometry.size.height * 0.01)
                     
                     Spacer()
-                    
-                    
-                    
-                    
-                    
                     
                 }
                 .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 0.06)
@@ -696,6 +690,42 @@ struct StaticSim: View {
         default:
             return "Normal"
         }
+    }
+    private func collectMotionData() {
+        let motionData = [
+            "accelerometer": ["x": accX, "y": accY, "z": accZ],
+            "gyroscope": ["x": gyroX, "y": gyroY, "z": gyroZ],
+            "magnetometer": ["x": magX, "y": magY, "z": magZ],
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ] as [String : Any]
+        
+        motionDataCollection.append(motionData)
+    }
+    private func sendMotionData() {
+        guard let url = URL(string: "http://172.20.10.2:5000/motion-data") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["data": motionDataCollection], options: [])
+        } catch {
+            print("Failed to serialize motion data: \(error)")
+            return
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error sending motion data: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                print("Motion data sent successfully")
+            } else {
+                print("Failed to send motion data, received non-200 response")
+            }
+        }.resume()
     }
 }
 
