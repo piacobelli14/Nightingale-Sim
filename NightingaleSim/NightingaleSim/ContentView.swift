@@ -17,6 +17,8 @@ struct ContentView: View {
         switch currentView {
         case .StaticSim:
             StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername)
+        case .SettingsSim:
+            SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername)
         }
     }
 }

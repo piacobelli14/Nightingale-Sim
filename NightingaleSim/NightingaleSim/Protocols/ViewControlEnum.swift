@@ -10,4 +10,5 @@ import Foundation
 
 enum AppView {
     case StaticSim
+    case SettingsSim
 }
