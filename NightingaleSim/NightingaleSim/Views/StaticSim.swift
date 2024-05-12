@@ -51,14 +51,23 @@ struct DynamicMapView: View {
                             GeometryReader { geometry in
                                 HStack(alignment: .center) {
                                     Text(suggestion)
+                                        .font(.system(size: geometry.size.height * 0.4, weight: .semibold))
                                         .foregroundColor(.white)
                                         .frame(width: geometry.size.width)
                                         .padding(.leading, 0)
+                                        .padding(.vertical, geometry.size.height * 0.4)
+                                    
+                                    Spacer()
                                 }
-                                .background(Color.blue)
+                                .background(Color.clear)
                             }
                             Divider()
                                 .background(Color.white)
+                        }
+                        .onTapGesture {
+                            self.searchText = suggestion
+                            self.showSuggestions = false
+                            self.geocodeAddressString(suggestion)
                         }
                         .listRowBackground(Color.clear)
                         .listRowInsets(EdgeInsets())
