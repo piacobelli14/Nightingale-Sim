@@ -49,10 +49,10 @@ struct DynamicMapView: View {
                     List(suggestions, id: \.self) { suggestion in
                         VStack(spacing: 0) {
                             GeometryReader { geometry in
-                                HStack {
+                                HStack(alignment: .center) {
                                     Text(suggestion)
                                         .foregroundColor(.white)
-                                        .frame(width: geometry.size.width) 
+                                        .frame(width: geometry.size.width)
                                         .padding(.leading, 0)
                                 }
                                 .background(Color.blue)
@@ -68,7 +68,6 @@ struct DynamicMapView: View {
                     .frame(maxHeight: 200)
                 }
             }
-            
             Spacer()
         }
     }
