@@ -51,10 +51,11 @@ struct DynamicMapView: View {
                             GeometryReader { geometry in
                                 HStack(alignment: .center) {
                                     Text(suggestion)
+                                        .multilineTextAlignment(.leading)
                                         .font(.system(size: geometry.size.height * 0.4, weight: .semibold))
                                         .foregroundColor(.white)
-                                        .frame(width: geometry.size.width)
-                                        .padding(.leading, 0)
+                                        .frame(width: geometry.size.width, alignment: .leading)
+                                        .padding(.leading, geometry.size.width * 0.1)
                                         .padding(.vertical, geometry.size.height * 0.4)
                                     
                                     Spacer()
