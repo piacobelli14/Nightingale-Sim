@@ -48,10 +48,10 @@ struct DynamicMapView: View {
                     .font(.system(size: geometry.size.height * 0.02, weight: .regular))
                     .frame(maxWidth: .infinity)
                     .overlay(
-                        Rectangle()  // Rectangle used as a border line
-                            .frame(height: 2)  // Height of the border line
-                            .foregroundColor(.white), // Color of the border line
-                        alignment: .bottom  // Align the rectangle to the bottom of the TextField
+                        Rectangle()
+                            .frame(height: 2)
+                            .foregroundColor(.white),
+                        alignment: .bottom
                     )
                     .onChange(of: searchText) { newValue in
                         fetchSuggestions(query: newValue)
@@ -139,7 +139,7 @@ struct DynamicMapView: View {
             if let results = try? JSONDecoder().decode([NominatimResult].self, from: data) {
                 DispatchQueue.main.async {
                     self.suggestions = results.map { $0.display_name }
-                    print(self.suggestions)  // Debug: Check what suggestions are received
+                    print(self.suggestions)
                 }
             } else {
                 print("Failed to decode suggestions")
@@ -234,6 +234,8 @@ struct StaticSim: View {
         startPoint: .leading,
         endPoint: .trailing
     )
+    
+    @State private var isRandom: Bool = false
     
     @State private var heartRate: Double = 70
     @State private var respirationRate: Double = 12
@@ -582,11 +584,25 @@ struct StaticSim: View {
                 Spacer()
                 
                 HStack {
+                    HStack {
+                        Toggle("", isOn: $isRandom)
+                            .tint(Color(hex: 0x2A0862))
+                            .labelsHidden()
+                        
+                        Text("\(isRandom ? "Randomized Values" : "Constant Values")")
+                            .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                            .foregroundColor(Color.white)
+                            .opacity(0.8)
+                            .padding(.leading, geometry.size.width * 0.01)
+                    }
+                    
+                    
+                    
                     
                 }
-                .frame(width: geometry.size.width * 1.0)
+                .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 0.06)
                 .edgesIgnoringSafeArea(.all)
-                .background(Color.gray)
+                .background(Color(hex: 0x504F51))
                 .background(
                     VStack {
                         Rectangle()
