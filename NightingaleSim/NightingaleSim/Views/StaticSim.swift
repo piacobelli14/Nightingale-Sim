@@ -370,7 +370,6 @@ struct StaticSim: View {
                             
                             Slider(value: $deviceBattery, in: 0...100, step: 1)
                                 .accentColor(Color(hex: 0x2A0862))
-                                .padding(.vertical, geometry.size.height * 0.02)
                         }
                         .padding()
                         .background(Color.white.opacity(0.2))
