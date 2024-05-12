@@ -4,10 +4,8 @@
 //
 //  Created by Peter Iacobelli on 5/10/24.
 //
-
 import SwiftUI
 import MapKit
-
 
 struct DraggablePin: Identifiable {
     let id = UUID()
@@ -17,38 +15,102 @@ struct DraggablePin: Identifiable {
 struct DynamicMapView: View {
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437),
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
     @State private var pin = DraggablePin(location: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437))
+    @State private var searchText = ""
+    @State private var suggestions: [String] = []
+    @State private var showSuggestions = false
 
     var body: some View {
-        Map(coordinateRegion: $region, annotationItems: [pin]) { pin in
-            MapAnnotation(coordinate: pin.location) {
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: 20, height: 20)
-                    .gesture(DragGesture().onChanged({ value in
-                        updatePinLocation(from: value.location)
-                    }))
+        VStack {
+            TextField("Enter address", text: $searchText, onEditingChanged: { isEditing in
+                self.showSuggestions = isEditing
+            }, onCommit: {
+                geocodeAddressString(searchText)
+            })
+            .padding()
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .onChange(of: searchText) { newValue in
+                fetchSuggestions(query: newValue)
+            }
+            
+            if showSuggestions {
+                List(suggestions, id: \.self) { suggestion in
+                    Text(suggestion).onTapGesture {
+                        self.searchText = suggestion
+                        self.showSuggestions = false
+                        self.geocodeAddressString(suggestion)  // Make sure this function call is correct
+                    }
+                }
+                .frame(maxHeight: 200)
+            }
+
+            
+            Map(coordinateRegion: $region, annotationItems: [pin]) { pin in
+                MapAnnotation(coordinate: pin.location) {
+                    Circle()
+                        .fill(Color.blue)
+                        .frame(width: 20, height: 20)
+                }
             }
         }
-        .edgesIgnoringSafeArea(.all) // Ensure map fills the entire view if needed
     }
 
-    private func updatePinLocation(from gesturePoint: CGPoint) {
-        // Convert the view's gesture point to a CLLocationCoordinate2D directly
-        let locationInView = gesturePoint
-        let locationInMap = self.region.center // Placeholder to calculate actual map coordinate
-
-        // Assuming the map takes up the entire screen, we calculate directly
-        let mapWidth = UIScreen.main.bounds.width
-        let mapHeight = UIScreen.main.bounds.height
-
-        let newLongitude = locationInMap.longitude + (Double(locationInView.x) - Double(mapWidth / 2)) / Double(mapWidth) * region.span.longitudeDelta
-        let newLatitude = locationInMap.latitude - (Double(locationInView.y) - Double(mapHeight / 2)) / Double(mapHeight) * region.span.latitudeDelta
+    private func geocodeAddressString(_ address: String) {
+        let urlString = "https://nominatim.openstreetmap.org/search?format=json&q=\(address)&limit=1"
+        guard let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else { return }
         
-        self.pin.location = CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude)
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching geocode: \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            if let results = try? JSONDecoder().decode([NominatimResult].self, from: data), let firstResult = results.first,
+               let latitude = Double(firstResult.lat), let longitude = Double(firstResult.lon) {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        let newLocation = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                        self.region.center = newLocation
+                        self.region.span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                        self.pin.location = newLocation
+                    }
+                }
+            } else {
+                print("Failed to decode suggestions or convert coordinates")
+            }
+        }.resume()
     }
+
+    
+    private func fetchSuggestions(query: String) {
+        let urlString = "https://nominatim.openstreetmap.org/search?format=json&q=\(query)&limit=5"
+        guard let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching suggestions: \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            if let results = try? JSONDecoder().decode([NominatimResult].self, from: data) {
+                DispatchQueue.main.async {
+                    self.suggestions = results.map { $0.display_name }
+                    print(self.suggestions)  // Debug: Check what suggestions are received
+                }
+            } else {
+                print("Failed to decode suggestions")
+            }
+        }.resume()
+    }
+
+}
+
+struct NominatimResult: Codable {
+    let display_name: String
+    let lat: String
+    let lon: String
 }
 
 struct MotionSensorGauge: View {
