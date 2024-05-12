@@ -84,6 +84,7 @@ struct StaticSim: View {
     @Binding var authenticatedUsername: String
     @State private var motionTimer: AnyCancellable?
     @State private var healthTimer: AnyCancellable?
+    @State private var motionDataCollection = [[String: Any]]()
 
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
@@ -540,47 +541,44 @@ struct StaticSim: View {
         }
     }
     private func startMotionDataCollection() {
-        motionTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect().sink { _ in
-            sendMotionData()
+        motionTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
+            collectMotionData()
+            if motionDataCollection.count >= 10 {
+                sendMotionData()
+                motionDataCollection.removeAll()
+            }
         }
     }
-    private func sendMotionData() {
-        let accXValue = getRandomizedValue(value: accX, range: 0.3)
-        let accYValue = getRandomizedValue(value: accY, range: 0.3)
-        let accZValue = getRandomizedValue(value: accZ, range: 0.3)
-        let gyroXValue = getRandomizedValue(value: gyroX, range: 100)
-        let gyroYValue = getRandomizedValue(value: gyroY, range: 100)
-        let gyroZValue = getRandomizedValue(value: gyroZ, range: 100)
-        let magXValue = getRandomizedValue(value: magX, range: 40)
-        let magYValue = getRandomizedValue(value: magY, range: 40)
-        let magZValue = getRandomizedValue(value: magZ, range: 40)
-
+    private func collectMotionData() {
         let motionData: [String: Any] = [
             "accelerometer": [
-                "x": accXValue,
-                "y": accYValue,
-                "z": accZValue
+                "x": Double(accX),
+                "y": Double(accY),
+                "z": Double(accZ)
             ],
             "gyroscope": [
-                "x": gyroXValue,
-                "y": gyroYValue,
-                "z": gyroZValue
+                "x": Double(gyroX),
+                "y": Double(gyroY),
+                "z": Double(gyroZ)
             ],
             "magnetometer": [
-                "x": magXValue,
-                "y": magYValue,
-                "z": magZValue
+                "x": Double(magX),
+                "y": Double(magY),
+                "z": Double(magZ)
             ],
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ]
 
+        motionDataCollection.append(motionData)
+    }
+    private func sendMotionData() {
         guard let url = URL(string: "http://172.20.10.2:5000/motion-data") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: motionData, options: [])
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["data": motionDataCollection], options: [])
         } catch {
             print("Failed to serialize motion data: \(error)")
             return
