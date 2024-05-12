@@ -435,7 +435,7 @@ struct StaticSim: View {
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                 }
-                .frame(height: geometry.size.height * 0.8)
+                .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
                 .onAppear {
                     startMotionDataCollection()
@@ -463,9 +463,54 @@ struct StaticSim: View {
                             .padding(.leading, geometry.size.width * 0.01)
                     }
                     .padding(.top, geometry.size.height * 0.01)
-                    .padding(.bottom, geometry.size.height * 0.02)
+                    .padding(.bottom, geometry.size.height * 0.01)
                     
                     Spacer()
+                    
+                    HStack {
+                        
+                        VStack {
+                            Button(action: {
+                                
+                            }) {
+                                Image(systemName: "gear")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: geometry.size.height * 0.022)
+                                    .foregroundColor(Color.white)
+                                    .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                                    .padding(.leading, geometry.size.width * 0.01)
+                            }
+                            
+                            Text("Settings")
+                                .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.6)
+                        }
+                        .padding(.trailing, geometry.size.width * 0.01)
+                        
+                        VStack {
+                            Button(action: {
+                                
+                            }) {
+                                Image(systemName: "lock")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: geometry.size.height * 0.022)
+                                    .foregroundColor(Color.white)
+                                    .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                                    .padding(.leading, geometry.size.width * 0.01)
+                            }
+                            
+                            Text("Logout")
+                                .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.6)
+                        }
+                        .padding(.trailing, geometry.size.width * 0.03)
+                    }
+                    .padding(.top, geometry.size.height * 0.01)
+                    .padding(.bottom, geometry.size.height * 0.01)
                     
                 }
                 .frame(width: geometry.size.width * 1.0)
