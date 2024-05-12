@@ -47,14 +47,24 @@ struct DynamicMapView: View {
                 
                 if showSuggestions {
                     List(suggestions, id: \.self) { suggestion in
-                        Text(suggestion).onTapGesture {
+                        HStack {
+                            Spacer()
+                            Text(suggestion)
+                                .foregroundColor(.white)
+                                .padding()
+                            Spacer()
+                        }
+                        .background(Color.blue) 
+                        .onTapGesture {
                             self.searchText = suggestion
                             self.showSuggestions = false
-                            self.geocodeAddressString(suggestion)  // Make sure this function call is correct
+                            self.geocodeAddressString(suggestion)
                         }
                     }
+                    .listStyle(PlainListStyle())
                     .background(Color.black)
                     .frame(maxHeight: 200)
+
                     
                     Spacer()
                 }
