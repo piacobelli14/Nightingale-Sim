@@ -617,7 +617,6 @@ struct StaticSim: View {
     }
 }
 
-
 extension Color {
     init(hex: UInt, alpha: Double = 1.0) {
         let red = Double((hex & 0xFF0000) >> 16) / 255.0
@@ -626,5 +625,15 @@ extension Color {
         self.init(.sRGB, red: red, green: green, blue: blue, opacity: alpha)
     }
 }
+
+extension ISO8601DateFormatter {
+    static var shared: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)  // Set the formatter to UTC
+        return formatter
+    }()
+}
+
 
 
