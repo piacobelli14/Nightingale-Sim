@@ -18,7 +18,7 @@ struct DynamicMapView: View {
         center: CLLocationCoordinate2D(latitude: 29.559684, longitude: -95.08374),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
-    @State private var pin = LocationPin(location: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437))
+    @State private var pin = LocationPin(location: CLLocationCoordinate2D(latitude: 29.559684, longitude: -95.08374))
     @State private var searchText = ""
     @State private var suggestions: [String] = []
     @State private var showSuggestions = false
@@ -166,7 +166,7 @@ struct MotionSensorGauge: View {
         GeometryReader { geometry in
             let size = min(geometry.size.width, geometry.size.height)
             let strokeStyle = StrokeStyle(lineWidth: size * 0.02, lineCap: .butt, dash: [size * 0.2, size * 0.15])
-            let mainStrokeWidth = size * 0.03
+            let mainStrokeWidth = size * 0.04
             ZStack {
                 Circle()
                     .frame(width: size, height: size)
@@ -181,7 +181,7 @@ struct MotionSensorGauge: View {
                     .rotationEffect(.degrees(-90))
                 Circle()
                     .fill(Color.blue)
-                    .frame(width: size * 0.1, height: size * 0.1)
+                    .frame(width: size * 0.2, height: size * 0.2)
                     .offset(y: -(size / 1.95 - mainStrokeWidth / 1.95))
                     .rotationEffect(Angle.degrees(Double(angleValue)))
                     .gesture(DragGesture(minimumDistance: 0).onChanged({ value in
@@ -259,7 +259,6 @@ struct StaticSim: View {
     var configMagY = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
     var configMagZ = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
    
-    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -458,7 +457,7 @@ struct StaticSim: View {
                             HStack {
                                 Spacer()
                                 Text("Accelerometer")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 Spacer()
@@ -469,18 +468,21 @@ struct StaticSim: View {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $accX, configArray: configAccX, motionVector: "X", motionUnit: "g")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 HStack {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $accY, configArray: configAccY, motionVector: "Y", motionUnit: "g")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 HStack {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $accZ, configArray: configAccZ, motionVector: "Z", motionUnit: "g")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                             }
@@ -494,7 +496,7 @@ struct StaticSim: View {
                             HStack {
                                 Spacer()
                                 Text("Gyroscope")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 Spacer()
@@ -505,18 +507,21 @@ struct StaticSim: View {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $gyroX, configArray: configGyroX, motionVector: "X", motionUnit: "°")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 HStack {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $gyroY, configArray: configGyroY, motionVector: "Y", motionUnit: "°")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 HStack {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $gyroZ, configArray: configGyroZ, motionVector: "Z", motionUnit: "°")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                             }
@@ -530,7 +535,7 @@ struct StaticSim: View {
                             HStack {
                                 Spacer()
                                 Text("Magnetometer")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 Spacer()
@@ -542,18 +547,21 @@ struct StaticSim: View {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $magX, configArray: configMagX, motionVector: "X", motionUnit: "µT")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 HStack {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $magY, configArray: configMagY, motionVector: "Y", motionUnit: "µT")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 HStack {
                                     Spacer()
                                     MotionSensorGauge(motionValue: $magZ, configArray: configMagZ, motionVector: "Z", motionUnit: "µT")
                                         .frame(width: geometry.size.width * 0.14, height: geometry.size.height * 0.14)
+                                        .padding(.top, geometry.size.height * 0.01)
                                     Spacer()
                                 }
                                 Spacer()
