@@ -8,6 +8,7 @@
 import SwiftUI
 import MapKit
 
+
 struct DraggablePin: Identifiable {
     let id = UUID()
     var location: CLLocationCoordinate2D
@@ -27,11 +28,26 @@ struct DynamicMapView: View {
                     .fill(Color.blue)
                     .frame(width: 20, height: 20)
                     .gesture(DragGesture().onChanged({ value in
-                        let newLocation = region.center
-                        pin.location = newLocation
+                        updatePinLocation(from: value.location)
                     }))
             }
         }
+        .edgesIgnoringSafeArea(.all) // Ensure map fills the entire view if needed
+    }
+
+    private func updatePinLocation(from gesturePoint: CGPoint) {
+        // Convert the view's gesture point to a CLLocationCoordinate2D directly
+        let locationInView = gesturePoint
+        let locationInMap = self.region.center // Placeholder to calculate actual map coordinate
+
+        // Assuming the map takes up the entire screen, we calculate directly
+        let mapWidth = UIScreen.main.bounds.width
+        let mapHeight = UIScreen.main.bounds.height
+
+        let newLongitude = locationInMap.longitude + (Double(locationInView.x) - Double(mapWidth / 2)) / Double(mapWidth) * region.span.longitudeDelta
+        let newLatitude = locationInMap.latitude - (Double(locationInView.y) - Double(mapHeight / 2)) / Double(mapHeight) * region.span.latitudeDelta
+        
+        self.pin.location = CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude)
     }
 }
 
