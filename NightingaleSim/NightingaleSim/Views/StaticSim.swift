@@ -21,6 +21,7 @@ struct DynamicMapView: View {
     @State private var searchText = ""
     @State private var suggestions: [String] = []
     @State private var showSuggestions = false
+    let geometry: GeometryProxy
 
     var body: some View {
         VStack {
@@ -35,25 +36,31 @@ struct DynamicMapView: View {
                 fetchSuggestions(query: newValue)
             }
             
-            if showSuggestions {
-                List(suggestions, id: \.self) { suggestion in
-                    Text(suggestion).onTapGesture {
-                        self.searchText = suggestion
-                        self.showSuggestions = false
-                        self.geocodeAddressString(suggestion)  // Make sure this function call is correct
+            ZStack {
+                Map(coordinateRegion: $region, annotationItems: [pin]) { pin in
+                    MapAnnotation(coordinate: pin.location) {
+                        Circle()
+                            .fill(Color.blue)
+                            .frame(width: 20, height: 20)
                     }
                 }
-                .frame(maxHeight: 200)
-            }
-
-            
-            Map(coordinateRegion: $region, annotationItems: [pin]) { pin in
-                MapAnnotation(coordinate: pin.location) {
-                    Circle()
-                        .fill(Color.blue)
-                        .frame(width: 20, height: 20)
+                
+                if showSuggestions {
+                    List(suggestions, id: \.self) { suggestion in
+                        Text(suggestion).onTapGesture {
+                            self.searchText = suggestion
+                            self.showSuggestions = false
+                            self.geocodeAddressString(suggestion)  // Make sure this function call is correct
+                        }
+                    }
+                    .background(Color.black)
+                    .frame(maxHeight: 200)
+                    
+                    Spacer()
                 }
             }
+            
+            Spacer()
         }
     }
 
@@ -400,7 +407,7 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
-                        DynamicMapView()
+                        DynamicMapView(geometry: geometry)
                             .frame(height: geometry.size.height * 0.3) // Adjust size according to your UI design
                     }
                     .padding()
