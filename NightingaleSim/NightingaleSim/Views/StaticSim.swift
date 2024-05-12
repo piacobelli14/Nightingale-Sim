@@ -47,26 +47,25 @@ struct DynamicMapView: View {
                 
                 if showSuggestions {
                     List(suggestions, id: \.self) { suggestion in
-                        HStack {
-                            Spacer()
-                            Text(suggestion)
-                                .foregroundColor(.white)
-                                .padding()
-                            Spacer()
+                        VStack(spacing: 0) {
+                            GeometryReader { geometry in
+                                HStack {
+                                    Text(suggestion)
+                                        .foregroundColor(.white)
+                                        .frame(width: geometry.size.width) 
+                                        .padding(.leading, 0)
+                                }
+                                .background(Color.blue)
+                            }
+                            Divider()
+                                .background(Color.white)
                         }
-                        .background(Color.blue) 
-                        .onTapGesture {
-                            self.searchText = suggestion
-                            self.showSuggestions = false
-                            self.geocodeAddressString(suggestion)
-                        }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
                     }
                     .listStyle(PlainListStyle())
                     .background(Color.black)
                     .frame(maxHeight: 200)
-
-                    
-                    Spacer()
                 }
             }
             
