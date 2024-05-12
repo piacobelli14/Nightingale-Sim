@@ -261,34 +261,35 @@ struct StaticSim: View {
                         HStack {
                             HStack {
                                 Text("Heart Rate")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
                                 
                                 Text("\(Int(heartRate)) BPM")
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
+                            .padding(.vertical, geometry.size.height * 0.005)
                             
                             Spacer()
                             
                             HStack {
                                 Spacer()
-                                
                                 Circle()
                                     .foregroundColor(heartRateColor(heartRate))
-                                    .frame(height: geometry.size.height * 0.02)
-                                
+                                    .frame(width: geometry.size.width * 0.03, height: geometry.size.height * 0.03)
                                 Text("\(heartRateRisk(heartRate))")
                                     .foregroundColor(heartRateColor(heartRate))
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    
                             }
-                            .padding(.leading, geometry.size.width * 0.1)
+                            .padding(.vertical, geometry.size.height * 0.005)
+
+                
                             
-                            Spacer()
                         }
                         
                         Slider(value: $heartRate, in: 20...220, step: 1)
