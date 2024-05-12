@@ -586,7 +586,7 @@ struct StaticSim: View {
         let healthData = [
             "heartRate": heartRate,
             "respirationRate": respirationRate,
-            "batteryLevel": deviceBattery,
+            "batteryLevel": deviceBattery / 100,
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ] as [String: Any]
 
