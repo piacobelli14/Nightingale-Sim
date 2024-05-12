@@ -13,6 +13,7 @@
 		CB24F3EE2BEE6D92006ABE5E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB24F3ED2BEE6D92006ABE5E /* Preview Assets.xcassets */; };
 		CB24F3F72BEE8389006ABE5E /* ViewControlEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB24F3F62BEE8389006ABE5E /* ViewControlEnum.swift */; };
 		CB24F3F92BEE83B4006ABE5E /* StaticSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */; };
+		CBCE57712BF1477E00A6C84F /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCE57702BF1477D00A6C84F /* MapManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		CB24F3ED2BEE6D92006ABE5E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CB24F3F62BEE8389006ABE5E /* ViewControlEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControlEnum.swift; sourceTree = "<group>"; };
 		CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticSim.swift; sourceTree = "<group>"; };
+		CBCE57702BF1477D00A6C84F /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +57,7 @@
 		CB24F3E52BEE6D8E006ABE5E /* NightingaleSim */ = {
 			isa = PBXGroup;
 			children = (
+				CBCE576F2BF1476800A6C84F /* Managers */,
 				CB24F3F42BEE834B006ABE5E /* Protocols */,
 				CB24F3F52BEE8359006ABE5E /* Views */,
 				CB24F3E62BEE6D8E006ABE5E /* NightingaleSimApp.swift */,
@@ -87,6 +90,14 @@
 				CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		CBCE576F2BF1476800A6C84F /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				CBCE57702BF1477D00A6C84F /* MapManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB24F3F72BEE8389006ABE5E /* ViewControlEnum.swift in Sources */,
+				CBCE57712BF1477E00A6C84F /* MapManager.swift in Sources */,
 				CB24F3E92BEE6D8E006ABE5E /* ContentView.swift in Sources */,
 				CB24F3E72BEE6D8E006ABE5E /* NightingaleSimApp.swift in Sources */,
 				CB24F3F92BEE83B4006ABE5E /* StaticSim.swift in Sources */,
