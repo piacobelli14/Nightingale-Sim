@@ -435,7 +435,7 @@ struct StaticSim: View {
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                 }
-                .frame(height: geometry.size.height * 0.86)
+                .frame(height: geometry.size.height * 0.8)
                 .frame(width: geometry.size.width * 1.0)
                 .onAppear {
                     startMotionDataCollection()
@@ -462,12 +462,13 @@ struct StaticSim: View {
                             .opacity(0.8)
                             .padding(.leading, geometry.size.width * 0.01)
                     }
-                    .padding(.vertical, geometry.size.height * 0.01)
+                    .padding(.top, geometry.size.height * 0.01)
+                    .padding(.bottom, geometry.size.height * 0.02)
                     
                     Spacer()
                     
                 }
-                .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 0.06)
+                .frame(width: geometry.size.width * 1.0)
                 .edgesIgnoringSafeArea(.all)
                 .background(Color(hex: 0x504F51))
                 .background(
