@@ -4,20 +4,21 @@
 //
 //  Created by Peter Iacobelli on 5/10/24.
 //
+
 import SwiftUI
 import MapKit
 
-struct DraggablePin: Identifiable {
+struct LocationPin: Identifiable {
     let id = UUID()
     var location: CLLocationCoordinate2D
 }
 
 struct DynamicMapView: View {
     @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437),
+        center: CLLocationCoordinate2D(latitude: 29.559684, longitude: -95.08374),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
-    @State private var pin = DraggablePin(location: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437))
+    @State private var pin = LocationPin(location: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437))
     @State private var searchText = ""
     @State private var suggestions: [String] = []
     @State private var showSuggestions = false
@@ -30,7 +31,7 @@ struct DynamicMapView: View {
                     MapAnnotation(coordinate: pin.location) {
                         Circle()
                             .fill(Color.blue)
-                            .frame(width: 20, height: 20)
+                            .frame(width: geometry.size.width * 0.04, height: geometry.size.height * 0.04)
                     }
                 }
                 
@@ -40,19 +41,22 @@ struct DynamicMapView: View {
                     }, onCommit: {
                         geocodeAddressString(searchText)
                     })
+                    .padding(.horizontal, geometry.size.width * 0.04)
+                    .padding(.vertical, geometry.size.height * 0.01)
+                    .background(Color(hex: 0x646464))
                     .foregroundColor(Color.white)
-                    .background(
-                        Color.black  // Background color applied within the padding
-                    )
-                    .frame(width: geometry.size.width * 0.92)  // Control width separately
+                    .font(.system(size: geometry.size.height * 0.02, weight: .regular))
+                    .frame(maxWidth: .infinity)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1)  // Adds a border
+                        Rectangle()  // Rectangle used as a border line
+                            .frame(height: 2)  // Height of the border line
+                            .foregroundColor(.white), // Color of the border line
+                        alignment: .bottom  // Align the rectangle to the bottom of the TextField
                     )
-                    .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
-                    .padding(.top, geometry.size.height * 0.02)
                     .onChange(of: searchText) { newValue in
                         fetchSuggestions(query: newValue)
                     }
+
                     
                     if !showSuggestions {
                         Spacer()
@@ -73,6 +77,7 @@ struct DynamicMapView: View {
                                     }
                                     .background(Color.clear)
                                 }
+                                
                                 Divider()
                                     .background(Color.white)
                             }
@@ -85,8 +90,9 @@ struct DynamicMapView: View {
                             .listRowInsets(EdgeInsets())
                         }
                         .listStyle(PlainListStyle())
-                        .background(Color.black)
-                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.2)
+                        .background(Color(hex: 0x504F51))
+                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.26)
+                        .padding(.top, geometry.size.height * -0.01)
                     }
                 }
             }
@@ -442,6 +448,7 @@ struct StaticSim: View {
                     HStack {
                         DynamicMapView(geometry: geometry)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
+                            .padding(.top, geometry.size.height * 0.02)
                     }
                     .cornerRadius(10)
                     .shadow(radius: 5)
