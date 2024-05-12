@@ -276,20 +276,19 @@ struct StaticSim: View {
                             
                             Spacer()
                             
-                            HStack {
+                            HStack(alignment: .center, spacing: 0) {
                                 Spacer()
                                 Circle()
                                     .foregroundColor(heartRateColor(heartRate))
-                                    .frame(width: geometry.size.width * 0.03, height: geometry.size.height * 0.03)
+                                    .frame(width: geometry.size.width * 0.02, height: geometry.size.height * 0.02)
+                                    .padding(.trailing, geometry.size.width * 0.02)
                                 Text("\(heartRateRisk(heartRate))")
                                     .foregroundColor(heartRateColor(heartRate))
                                     .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    .padding(.trailing, geometry.size.width * 0.02)
                                     
                             }
                             .padding(.vertical, geometry.size.height * 0.005)
-
-                
-                            
                         }
                         
                         Slider(value: $heartRate, in: 20...220, step: 1)
@@ -306,32 +305,34 @@ struct StaticSim: View {
                         HStack {
                             HStack {
                                 Text("Respiration Rate")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
                                 
                                 Text("\(Int(respirationRate)) BrPM")
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
+                            .padding(.vertical, geometry.size.height * 0.005)
                             
                             Spacer()
                             
-                            HStack {
+                            HStack(alignment: .center, spacing: 0) {
                                 Spacer()
-                                
                                 Circle()
                                     .foregroundColor(respirationRateColor(respirationRate))
-                                    .frame(height: geometry.size.height * 0.02)
+                                    .frame(width: geometry.size.width * 0.02, height: geometry.size.height * 0.02)
+                                    .padding(.trailing, geometry.size.width * 0.02)
                                 
                                 Text("\(respirationRateRisk(respirationRate))")
                                     .foregroundColor(respirationRateColor(respirationRate))
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    .padding(.trailing, geometry.size.width * 0.02)
                             }
-                            .padding(.leading, geometry.size.width * 0.1)
+                            .padding(.vertical, geometry.size.height * 0.005)
                             
                             Spacer()
                         }
@@ -351,23 +352,25 @@ struct StaticSim: View {
                             HStack {
                                 HStack {
                                     Text("Device Battery")
-                                        .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.8)
                                     
                                     
                                     Text("\(Int(deviceBattery))%")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.8)
                                         .padding(.leading, geometry.size.width * 0.01)
                                 }
+                                .padding(.vertical, geometry.size.height * 0.005)
                                 
                                 Spacer()
                             }
                             
                             Slider(value: $deviceBattery, in: 0...100, step: 1)
                                 .accentColor(Color(hex: 0x2A0862))
+                                .padding(.vertical, geometry.size.height * 0.02)
                         }
                         .padding()
                         .background(Color.white.opacity(0.2))
@@ -377,12 +380,13 @@ struct StaticSim: View {
                         VStack {
                             HStack {
                                 Text("Device Presence")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
                                 Spacer()
                             }
+                            .padding(.vertical, geometry.size.height * 0.005)
                             
                             HStack {
                                 HStack {
@@ -391,7 +395,7 @@ struct StaticSim: View {
                                         .labelsHidden()
                                     
                                     Text("\(isConnected ? "Connected" : "Disconnected")")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .semibold))
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.8)
                                         .padding(.leading, geometry.size.width * 0.01)
