@@ -40,10 +40,22 @@ struct DynamicMapView: View {
                     }, onCommit: {
                         geocodeAddressString(searchText)
                     })
-                    .padding()
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .foregroundColor(Color.white)
+                    .background(
+                        Color.black  // Background color applied within the padding
+                    )
+                    .frame(width: geometry.size.width * 0.92)  // Control width separately
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: 1)  // Adds a border
+                    )
+                    .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                    .padding(.top, geometry.size.height * 0.02)
                     .onChange(of: searchText) { newValue in
                         fetchSuggestions(query: newValue)
+                    }
+                    
+                    if !showSuggestions {
+                        Spacer()
                     }
                     
                     if showSuggestions {
@@ -74,7 +86,7 @@ struct DynamicMapView: View {
                         }
                         .listStyle(PlainListStyle())
                         .background(Color.black)
-                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
+                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.2)
                     }
                 }
             }
