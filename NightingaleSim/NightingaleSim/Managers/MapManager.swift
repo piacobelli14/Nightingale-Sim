@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Combine
 
 struct LocationPin: Identifiable {
     let id = UUID()
@@ -22,6 +23,8 @@ struct DynamicMapView: View {
     @State private var searchText = ""
     @State private var suggestions: [String] = []
     @State private var showSuggestions = false
+    @State private var altitude: Double = 0
+    @State private var geolocationTimer: AnyCancellable?
     let geometry: GeometryProxy
 
     var body: some View {
@@ -34,7 +37,7 @@ struct DynamicMapView: View {
                             .frame(width: geometry.size.width * 0.04, height: geometry.size.height * 0.04)
                     }
                 }
-                
+
                 VStack {
                     TextField("Enter address", text: $searchText, onEditingChanged: { isEditing in
                         self.showSuggestions = isEditing
@@ -47,21 +50,14 @@ struct DynamicMapView: View {
                     .foregroundColor(Color.white)
                     .font(.system(size: geometry.size.height * 0.02, weight: .regular))
                     .frame(maxWidth: .infinity)
-                    .overlay(
-                        Rectangle()
-                            .frame(height: 2)
-                            .foregroundColor(.white),
-                        alignment: .bottom
-                    )
                     .onChange(of: searchText) { newValue in
                         fetchSuggestions(query: newValue)
                     }
 
-                    
                     if !showSuggestions {
                         Spacer()
                     }
-                    
+
                     if showSuggestions {
                         List(suggestions, id: \.self) { suggestion in
                             VStack(spacing: 0) {
@@ -77,7 +73,7 @@ struct DynamicMapView: View {
                                     }
                                     .background(Color.clear)
                                 }
-                                
+
                                 Divider()
                                     .background(Color.white)
                             }
@@ -97,18 +93,98 @@ struct DynamicMapView: View {
                 }
             }
         }
+        .cornerRadius(10)
+        .onAppear {
+            startGeolocationUpdates()
+        }
+        .onDisappear {
+            geolocationTimer?.cancel()
+        }
+    }
+
+    private func startGeolocationUpdates() {
+        geolocationTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
+            fetchAndSendGeolocationData()
+        }
+    }
+
+    private func fetchAndSendGeolocationData() {
+        fetchAltitude(for: pin.location) { altitude in
+            self.altitude = altitude ?? 0
+            self.sendGeolocationData()
+        }
+    }
+
+    private func fetchAltitude(for location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
+        let urlString = "https://api.open-elevation.com/api/v1/lookup?locations=\(location.latitude),\(location.longitude)"
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching elevation: \(error?.localizedDescription ?? "")")
+                completion(nil)
+                return
+            }
+
+            if let elevationResponse = try? JSONDecoder().decode(ElevationResult.self, from: data),
+               let elevation = elevationResponse.results.first?.elevation {
+                DispatchQueue.main.async {
+                    completion(elevation)
+                }
+            } else {
+                print("Failed to decode elevation data")
+                completion(nil)
+            }
+        }.resume()
+    }
+
+    private func sendGeolocationData() {
+        let geolocationData = [
+            "lat": pin.location.latitude,
+            "lon": pin.location.longitude,
+            "alt": altitude,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ] as [String : Any]
+
+        guard let url = URL(string: "http://172.20.10.2:5000/geolocation-data") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: geolocationData, options: [])
+        } catch {
+            print("Failed to serialize geolocation data: \(error)")
+            return
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard error == nil else {
+                print("Error sending geolocation data: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                print("Geolocation data sent successfully")
+            } else {
+                print("Failed to send geolocation data, received non-200 response")
+            }
+        }.resume()
     }
 
     private func geocodeAddressString(_ address: String) {
         let urlString = "https://nominatim.openstreetmap.org/search?format=json&q=\(address)&limit=1"
         guard let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else { return }
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 print("Error fetching geocode: \(error?.localizedDescription ?? "")")
                 return
             }
-            
+
             if let results = try? JSONDecoder().decode([NominatimResult].self, from: data), let firstResult = results.first,
                let latitude = Double(firstResult.lat), let longitude = Double(firstResult.lon) {
                 DispatchQueue.main.async {
@@ -125,17 +201,16 @@ struct DynamicMapView: View {
         }.resume()
     }
 
-    
     private func fetchSuggestions(query: String) {
         let urlString = "https://nominatim.openstreetmap.org/search?format=json&q=\(query)&limit=5"
         guard let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else { return }
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 print("Error fetching suggestions: \(error?.localizedDescription ?? "")")
                 return
             }
-            
+
             if let results = try? JSONDecoder().decode([NominatimResult].self, from: data) {
                 DispatchQueue.main.async {
                     self.suggestions = results.map { $0.display_name }
@@ -146,11 +221,17 @@ struct DynamicMapView: View {
             }
         }.resume()
     }
-
 }
 
 struct NominatimResult: Codable {
     let display_name: String
     let lat: String
     let lon: String
+}
+
+struct ElevationResult: Codable {
+    struct Result: Codable {
+        let elevation: Double
+    }
+    let results: [Result]
 }
