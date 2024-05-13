@@ -82,6 +82,9 @@ struct ConfigArray {
 struct StaticSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
+    @Binding var isMotion: Bool
+    @Binding var isHealth: Bool
+    @Binding var isGeolocation: Bool
     @State private var motionTimer: AnyCancellable?
     @State private var healthTimer: AnyCancellable?
     @State private var motionDataCollection = [[String: Any]]()

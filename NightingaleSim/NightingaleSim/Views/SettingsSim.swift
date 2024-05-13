@@ -10,16 +10,15 @@ import SwiftUI
 struct SettingsSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
-
+    @Binding var isMotion: Bool
+    @Binding var isHealth: Bool
+    @Binding var isGeolocation: Bool
+    
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
         startPoint: .leading,
         endPoint: .trailing
     )
-    
-    @State private var isMotion: Bool = true
-    @State private var isHealth: Bool = true
-    @State private var isGeolocation: Bool = true
     
     var body: some View {
         GeometryReader { geometry in
