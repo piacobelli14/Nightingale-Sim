@@ -188,6 +188,17 @@ struct SettingsSim: View {
                                 }
                                 .padding(.top, geometry.size.height * 0.01)
                             }
+                            
+                            HStack {
+                                Text("Current Device")
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .padding(.vertical, geometry.size.height * 0.01)
+                                    .padding(.leading, geometry.size.width * 0.01)
+                                
+                                Spacer()
+                            }
+                            
                             Spacer()
                         }
                         .frame(height: geometry.size.height * 0.4)
