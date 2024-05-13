@@ -33,22 +33,24 @@ struct ResetAuth: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
+                HStack {
+                    Button(action: {
+                        self.currentView = .LoginAuth
+                    }) {
+                        Image(systemName: "arrow.backward.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: geometry.size.height * 0.03)
+                            .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                            .padding(.leading, geometry.size.width * 0.03)
+                            .padding(.top, geometry.size.height * 0.03)
+                            .foregroundColor(Color.white)
+                    }
+                    
+                    Spacer()
+                }
                 ZStack {
                     HStack {
-                        HStack {
-                            Button(action: {
-                                self.currentView = .LoginAuth
-                            }) {
-                                Image(systemName: "arrow.backward.circle")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: geometry.size.height * 0.05)
-                                    .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
-                                    .padding(.leading, geometry.size.width * 0.01)
-                            }
-                            
-                            Spacer()
-                        }
                         Spacer()
                         VStack {
                             Spacer()
