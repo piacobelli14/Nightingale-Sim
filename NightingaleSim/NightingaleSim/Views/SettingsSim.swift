@@ -81,7 +81,7 @@ struct SettingsSim: View {
                                     
                                     Text("\(isHealth ? "On" : "Off")")
                                         .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
-                                        .foregroundColor(isMotion ? Color.green : Color.red)
+                                        .foregroundColor(isHealth ? Color.green : Color.red)
                                         .opacity(0.8)
                                         .padding(.leading, geometry.size.width * 0.01)
                                 }
@@ -112,7 +112,7 @@ struct SettingsSim: View {
                             .padding(.top, geometry.size.height * 0.01)
                             
                             HStack {
-                                Text("Geolocation")
+                                Text("Geolocation Sensor")
                                     .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.6)
@@ -127,7 +127,7 @@ struct SettingsSim: View {
                                     
                                     Text("\(isGeolocation ? "On" : "Off")")
                                         .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
-                                        .foregroundColor(isMotion ? Color.green : Color.red)
+                                        .foregroundColor(isGeolocation ? Color.green : Color.red)
                                         .opacity(0.8)
                                         .padding(.leading, geometry.size.width * 0.01)
                                 }
