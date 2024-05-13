@@ -17,7 +17,10 @@ struct LoginAuth: View {
         endPoint: .trailing
     )
     
+    @State private var errorMessage: String? = nil
     @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isLoginSuccessful: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -121,7 +124,7 @@ struct LoginAuth: View {
                         }
                         
                         HStack {
-                            TextField("", text: $username)
+                            TextField("", text: $password)
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .foregroundColor(.black)
@@ -148,7 +151,7 @@ struct LoginAuth: View {
                     Spacer()
                 }
                 .padding(.leading, geometry.size.width * 0.04)
-                .padding(.top, geometry.size.height * 0.02)
+                .padding(.top, geometry.size.height * 0.01)
                 
                 HStack {
                     Button(action: {
@@ -185,5 +188,39 @@ struct LoginAuth: View {
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
         }
+    }
+    private func authenticateUser() {
+        
+        let requestBody: [String: Any] = [
+            "username": username,
+            "password": password
+        ]
+
+        let url = URL(string: "http://172.20.10.2:5000/authenticate-user")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: requestBody)
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                self.isLoginSuccessful = false
+                return
+            }
+
+            guard let data = data, let response = response as? HTTPURLResponse else {
+                self.isLoginSuccessful = false
+                return
+            }
+
+            if response.statusCode == 200 {
+                self.isLoginSuccessful = true
+                self.authenticatedUsername = username
+                self.currentView = .StaticSim
+            } else {
+                self.isLoginSuccessful = false
+                self.errorMessage = "That username or password is incorrect."
+            }
+        }.resume()
     }
 }
