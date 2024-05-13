@@ -48,10 +48,10 @@ struct DynamicMapView: View {
                         geocodeAddressString(searchText)
                     })
                     .padding(.horizontal, geometry.size.width * 0.04)
-                    .padding(.vertical, geometry.size.height * 0.01)
+                    .padding(.vertical, geometry.size.height * 0.014)
                     .background(Color(hex: 0x646464))
                     .foregroundColor(Color.white)
-                    .font(.system(size: geometry.size.height * 0.02, weight: .regular))
+                    .font(.system(size: geometry.size.height * 0.012, weight: .regular))
                     .frame(maxWidth: .infinity)
                     .onChange(of: searchText) { newValue in
                         fetchSuggestions(query: newValue)
