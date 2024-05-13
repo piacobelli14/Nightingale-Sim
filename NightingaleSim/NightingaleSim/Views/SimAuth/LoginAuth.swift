@@ -94,11 +94,11 @@ struct LoginAuth: View {
                             Text("Forgot password?")
                                 .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                 .foregroundColor(Color.white)
-                                .opacity(0.9)
-                                .padding(0)
+                                .opacity(0.8)
+                                .padding(.leading, geometry.size.width * 0.005)
                             
                             Text("Click here to reset.")
-                                .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                 .foregroundColor(Color(hex: 0xDA64ED))
                                 .padding(0)
                             Spacer()
@@ -149,6 +149,34 @@ struct LoginAuth: View {
                 }
                 .padding(.leading, geometry.size.width * 0.04)
                 .padding(.top, geometry.size.height * 0.02)
+                
+                HStack {
+                    Button(action: {
+                        
+                    }) {
+                        HStack {
+                            Text("Login")
+                                .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                .foregroundColor(Color.white)
+                            
+                            Image(systemName: "arrow.forward")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: geometry.size.height * 0.016)
+                                .foregroundColor(Color.white)
+                                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                                .padding(.trailing, geometry.size.width * 0.01)
+                        }
+                    }
+                    .frame(width: geometry.size.width * 0.5)
+                    .padding()
+                    .background(Color(hex: 0xDA64ED))
+                    .cornerRadius(geometry.size.height * 0.01)
+                    
+                    Spacer()
+                }
+                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.top, geometry.size.height * 0.1)
                 
                 
                 
