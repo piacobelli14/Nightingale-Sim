@@ -60,32 +60,33 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .padding(.vertical, geometry.size.height * 0.01)
+                                    .padding(.leading, geometry.size.width * 0.01)
                                 
                                 Spacer()
                             }
                                 
-                            
                             HStack {
                                 Text("Motion Sensor")
-                                    .font(.system(size: geometry.size.height * 0.024, weight: .regular))
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                     .foregroundColor(Color.white)
-                                    .padding(.trailing, geometry.size.width * 0.02)
-                                
+                                    .opacity(0.6)
+                                    .padding(.horizontal, geometry.size.width * 0.01)
+                            
                                 HStack {
                                     Toggle("", isOn: $isMotion)
                                         .tint(Color(hex: 0x2A0862))
                                         .labelsHidden()
                                     
-                                    Spacer()
-                                    
                                     Text("\(isMotion ? "On" : "Off")")
-                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
-                                        .foregroundColor(Color.white)
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
+                                        .foregroundColor(isMotion ? Color.green : Color.red)
                                         .opacity(0.8)
-                                        .padding(.trailing, geometry.size.width * 0.02)
+                                        .padding(.leading, geometry.size.width * 0.01)
                                 }
+                                .padding(.leading, geometry.size.width * 0.04)
+                                Spacer()
                             }
-                            .padding(.top, geometry.size.height * 0.02)
+                            .padding(.top, geometry.size.height * 0.01)
                             Spacer()
                         }
                         .frame(height: geometry.size.height * 0.4)
