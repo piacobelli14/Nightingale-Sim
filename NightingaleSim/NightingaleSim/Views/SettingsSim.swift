@@ -67,7 +67,7 @@ struct SettingsSim: View {
                             
                             HStack {
                                 Text("Motion Sensor")
-                                    .font(.system(size: geometry.size.height * 0.018, weight: .regular))
+                                    .font(.system(size: geometry.size.height * 0.024, weight: .regular))
                                     .foregroundColor(Color.white)
                                     .padding(.trailing, geometry.size.width * 0.02)
                                 
@@ -82,10 +82,13 @@ struct SettingsSim: View {
                                         .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
+                                        .padding(.trailing, geometry.size.width * 0.02)
                                 }
                             }
+                            .padding(.top, geometry.size.height * 0.02)
+                            Spacer()
                         }
+                        .frame(height: geometry.size.height * 0.4)
                         .padding()
                         .background(Color.white.opacity(0.2))
                         .cornerRadius(geometry.size.height * 0.005)
@@ -102,27 +105,9 @@ struct SettingsSim: View {
                             }
                                 
                             
-                            HStack {
-                                Text("Motion Sensor")
-                                    .font(.system(size: geometry.size.height * 0.018, weight: .regular))
-                                    .foregroundColor(Color.white)
-                                    .padding(.trailing, geometry.size.width * 0.02)
-                                
-                                HStack {
-                                    Toggle("", isOn: $isMotion)
-                                        .tint(Color(hex: 0x2A0862))
-                                        .labelsHidden()
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(isMotion ? "On" : "Off")")
-                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                }
-                            }
+                            Spacer()
                         }
+                        .frame(height: geometry.size.height * 0.4)
                         .padding()
                         .background(Color.white.opacity(0.2))
                         .cornerRadius(geometry.size.height * 0.005)
