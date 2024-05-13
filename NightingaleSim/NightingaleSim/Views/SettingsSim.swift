@@ -142,23 +142,43 @@ struct SettingsSim: View {
                         .shadow(radius: 5)
                         
                         VStack {
-                            HStack {
-                                Text("Configure Sensors")
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .padding(.vertical, geometry.size.height * 0.01)
+                            VStack {
+                                HStack {
+                                    Text("Current User")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .padding(.vertical, geometry.size.height * 0.01)
+                                    
+                                    Spacer()
+                                }
+                                    
                                 
                                 Spacer()
                             }
-                                
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(geometry.size.height * 0.005)
+                            .shadow(radius: 5)
                             
-                            Spacer()
+                            VStack {
+                                HStack {
+                                    Text("Current User")
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .padding(.vertical, geometry.size.height * 0.01)
+                                    
+                                    Spacer()
+                                }
+                                    
+                                
+                                Spacer()
+                            }
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(geometry.size.height * 0.005)
+                            .shadow(radius: 5)
                         }
                         .frame(height: geometry.size.height * 0.4)
                         .padding()
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(geometry.size.height * 0.005)
-                        .shadow(radius: 5)
+                        
                     }
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
