@@ -471,7 +471,7 @@ struct StaticSim: View {
                         
                         VStack {
                             Button(action: {
-                                self.AppView = .SettingsSim
+                                self.currentView = .SettingsSim
                             }) {
                                 Image(systemName: "gear")
                                     .resizable()
