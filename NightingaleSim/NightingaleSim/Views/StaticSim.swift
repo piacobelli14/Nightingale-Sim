@@ -262,6 +262,21 @@ struct StaticSim: View {
                             .padding(.vertical, geometry.size.height * 0.005)
                             
                             Spacer()
+                            
+                            HStack(alignment: .center, spacing: 0) {
+                                Spacer()
+                                Circle()
+                                    .foregroundColor(batteryLevelColor(deviceBattery))
+                                    .frame(width: geometry.size.width * 0.02, height: geometry.size.height * 0.02)
+                                    .padding(.trailing, geometry.size.width * 0.02)
+                                
+                                Text("\(batteryLevelRisk(deviceBattery))")
+                                    .foregroundColor(batteryLevelColor(deviceBattery))
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    .padding(.trailing, geometry.size.width * 0.02)
+                            }
+                            .padding(.vertical, geometry.size.height * 0.005)
+                            
                         }
                         
                         Slider(value: $deviceBattery, in: 0...100, step: 1)
@@ -564,6 +579,26 @@ struct StaticSim: View {
             return "Elevated"
         case 18...20:
             return "Significantly Elevated"
+        default:
+            return "Normal"
+        }
+    }
+    private func batteryLevelColor(_ rate: Double) -> Color {
+        switch rate {
+        case 0...20:
+            return .red
+        case 21...100:
+            return .green
+        default:
+            return .black
+        }
+    }
+    private func batteryLevelRisk(_ rate: Double) -> String {
+        switch rate {
+        case 0...20:
+            return "Low"
+        case 21...100:
+            return "Charged"
         default:
             return "Normal"
         }
