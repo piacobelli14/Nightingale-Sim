@@ -252,7 +252,8 @@ struct SettingsSim: View {
                         
                         VStack {
                             Button(action: {
-                                
+                                self.authenticatedUsername = ""
+                                self.currentView = .LoginAuth
                             }) {
                                 Image(systemName: "lock")
                                     .resizable()

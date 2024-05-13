@@ -20,6 +20,7 @@ struct LoginAuth: View {
     @State private var errorMessage: String? = nil
     @State private var username: String = ""
     @State private var password: String = ""
+    @State private var isPasswordVisible: Bool = false
     @State private var isLoginSuccessful: Bool = false
     
     var body: some View {
@@ -124,24 +125,63 @@ struct LoginAuth: View {
                         }
                         
                         HStack {
-                            TextField("", text: $password)
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-                                .foregroundColor(.black)
-                                .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
-                                .multilineTextAlignment(.leading)
-                                .padding(.vertical, geometry.size.height * 0.016)
-                                .padding(.horizontal, geometry.size.width * 0.02)
-                                .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
-                                .cornerRadius(geometry.size.height * 0.01)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
-                                )
+                            ZStack {
+                                if isPasswordVisible {
+                                    TextField("", text: $password)
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
+                                        .foregroundColor(.black)
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.vertical, geometry.size.height * 0.016)
+                                        .padding(.horizontal, geometry.size.width * 0.02)
+                                        .background(Color(hex: 0xF5F5F5).opacity(0.9))
+                                        .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
+                                        .cornerRadius(geometry.size.height * 0.01)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
+                                                .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
+                                        )
+                                        .frame(width: geometry.size.width * 0.7)
+                                        .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
+                                        .padding(.top, geometry.size.height * -0.01)
+                                } else {
+                                    SecureField("", text: $password)
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
+                                        .foregroundColor(.black)
+                                        .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.vertical, geometry.size.height * 0.016)
+                                        .padding(.horizontal, geometry.size.width * 0.02)
+                                        .background(Color(hex: 0xF5F5F5).opacity(0.9))
+                                        .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
+                                        .cornerRadius(geometry.size.height * 0.01)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
+                                                .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
+                                        )
+                                        .frame(width: geometry.size.width * 0.7)
+                                        .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
+                                        .padding(.top, geometry.size.height * -0.01)
+                                }
+                                
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        isPasswordVisible.toggle()
+                                    }) {
+                                        Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: geometry.size.width * 0.016)
+                                            .frame(height: geometry.size.height * 0.016)
+                                            .foregroundColor(Color(hex: 0x828B8E))
+                                    }
+                                    .padding(.trailing, geometry.size.width * 0.03)
+                                }
                                 .frame(width: geometry.size.width * 0.7)
-                                .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
-                                .padding(.top, geometry.size.height * -0.01)
+                            }
                             
                             Spacer()
                         }
