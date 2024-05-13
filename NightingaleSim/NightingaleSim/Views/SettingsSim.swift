@@ -64,6 +64,29 @@ struct SettingsSim: View {
                                 
                                 Spacer()
                             }
+                            
+                            HStack {
+                                Text("Health Sensor")
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.6)
+                                    .padding(.horizontal, geometry.size.width * 0.01)
+                                
+                                Spacer()
+                                
+                                HStack {
+                                    Toggle("", isOn: $isHealth)
+                                        .tint(Color(hex: 0x2A0862))
+                                        .labelsHidden()
+                                    
+                                    Text("\(isHealth ? "On" : "Off")")
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
+                                        .foregroundColor(isMotion ? Color.green : Color.red)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                }
+                            }
+                            .padding(.top, geometry.size.height * 0.01)
                                 
                             HStack {
                                 Text("Motion Sensor")
@@ -71,7 +94,9 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .opacity(0.6)
                                     .padding(.horizontal, geometry.size.width * 0.01)
-                            
+                                
+                                Spacer()
+                                
                                 HStack {
                                     Toggle("", isOn: $isMotion)
                                         .tint(Color(hex: 0x2A0862))
@@ -83,8 +108,29 @@ struct SettingsSim: View {
                                         .opacity(0.8)
                                         .padding(.leading, geometry.size.width * 0.01)
                                 }
-                                .padding(.leading, geometry.size.width * 0.04)
+                            }
+                            .padding(.top, geometry.size.height * 0.01)
+                            
+                            HStack {
+                                Text("Geolocation")
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.6)
+                                    .padding(.horizontal, geometry.size.width * 0.01)
+                                
                                 Spacer()
+                                
+                                HStack {
+                                    Toggle("", isOn: $isGeolocation)
+                                        .tint(Color(hex: 0x2A0862))
+                                        .labelsHidden()
+                                    
+                                    Text("\(isGeolocation ? "On" : "Off")")
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
+                                        .foregroundColor(isMotion ? Color.green : Color.red)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                }
                             }
                             .padding(.top, geometry.size.height * 0.01)
                             Spacer()
