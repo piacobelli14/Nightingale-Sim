@@ -244,68 +244,37 @@ struct StaticSim: View {
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
                     
-                    HStack {
-                        VStack {
+                    VStack {
+                        HStack {
                             HStack {
-                                HStack {
-                                    Text("Device Battery")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .bold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                    
-                                    
-                                    Text("\(Int(deviceBattery))%")
-                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                }
-                                .padding(.vertical, geometry.size.height * 0.005)
-                                
-                                Spacer()
-                            }
-                            
-                            Slider(value: $deviceBattery, in: 0...100, step: 1)
-                                .accentColor(Color(hex: 0x2A0862))
-                        }
-                        .padding()
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(geometry.size.height * 0.005)
-                        .shadow(radius: 5)
-                        
-                        VStack {
-                            HStack {
-                                Text("Device Presence")
+                                Text("Device Battery")
                                     .font(.system(size: geometry.size.height * 0.02, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
-                                Spacer()
+                                
+                                Text("\(Int(deviceBattery))%")
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                    .foregroundColor(Color.white)
+                                    .opacity(0.8)
+                                    .padding(.leading, geometry.size.width * 0.01)
                             }
                             .padding(.vertical, geometry.size.height * 0.005)
                             
-                            HStack {
-                                HStack {
-                                    Toggle("", isOn: $isConnected)
-                                        .tint(Color(hex: 0x2A0862))
-                                        .labelsHidden()
-                                    
-                                    Text("\(isConnected ? "Connected" : "Disconnected")")
-                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                }
-                                Spacer()
-                            }
+                            Spacer()
                         }
-                        .padding()
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(geometry.size.height * 0.005)
-                        .shadow(radius: 5)
+                        
+                        Slider(value: $deviceBattery, in: 0...100, step: 1)
+                            .accentColor(Color(hex: 0x2A0862))
                     }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(geometry.size.height * 0.005)
+                    .shadow(radius: 5)
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
+                        
+                        
                     
                     HStack {
                         DynamicMapView(isRandom: $isRandom, isGeolocation: $isGeolocation, geometry: geometry)
