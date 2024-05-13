@@ -34,7 +34,7 @@ struct LoginAuth: View {
                     
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.leading, geometry.size.width * 0.06)
                 .padding(.vertical, 0)
                 
                 HStack {
@@ -46,7 +46,7 @@ struct LoginAuth: View {
                     
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.leading, geometry.size.width * 0.06)
                 .padding(.vertical, 0)
                 
                 HStack {
@@ -86,7 +86,7 @@ struct LoginAuth: View {
                     }
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.leading, geometry.size.width * 0.06)
                 .padding(.top, geometry.size.height * 0.04)
                 
                 HStack {
@@ -109,7 +109,7 @@ struct LoginAuth: View {
                     }
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.leading, geometry.size.width * 0.06)
                 
                 HStack {
                     VStack {
@@ -150,7 +150,7 @@ struct LoginAuth: View {
                     
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.leading, geometry.size.width * 0.06)
                 .padding(.top, geometry.size.height * 0.02)
                 
                 HStack {
@@ -181,7 +181,7 @@ struct LoginAuth: View {
                     
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.04)
+                .padding(.leading, geometry.size.width * 0.06)
                 .padding(.top, geometry.size.height * 0.1)
                 
                 
