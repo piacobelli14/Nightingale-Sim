@@ -87,6 +87,28 @@ struct LoginAuth: View {
                 .padding(.top, geometry.size.height * 0.04)
                 
                 HStack {
+                    Button(action: {
+                        
+                    }) {
+                        HStack {
+                            Text("Forgot password?")
+                                .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.9)
+                                .padding(0)
+                            
+                            Text("Click here to reset.")
+                                .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                .foregroundColor(Color(hex: 0xDA64ED))
+                                .padding(0)
+                            Spacer()
+                        }
+                    }
+                    Spacer()
+                }
+                .padding(.leading, geometry.size.width * 0.04)
+                
+                HStack {
                     VStack {
                         HStack {
                             Text("Password")
