@@ -68,7 +68,7 @@ struct LoginAuth: View {
                                 .foregroundColor(.black)
                                 .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
                                 .multilineTextAlignment(.leading)
-                                .padding(.vertical, geometry.size.height * 0.014)
+                                .padding(.vertical, geometry.size.height * 0.016)
                                 .padding(.horizontal, geometry.size.width * 0.02)
                                 .background(Color(hex: 0xF5F5F5).opacity(0.9))
                                 .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
@@ -130,7 +130,7 @@ struct LoginAuth: View {
                                 .foregroundColor(.black)
                                 .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
                                 .multilineTextAlignment(.leading)
-                                .padding(.vertical, geometry.size.height * 0.014)
+                                .padding(.vertical, geometry.size.height * 0.016)
                                 .padding(.horizontal, geometry.size.width * 0.02)
                                 .background(Color(hex: 0xF5F5F5).opacity(0.9))
                                 .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
@@ -151,16 +151,19 @@ struct LoginAuth: View {
                     Spacer()
                 }
                 .padding(.leading, geometry.size.width * 0.04)
-                .padding(.top, geometry.size.height * 0.01)
+                .padding(.top, geometry.size.height * 0.02)
                 
                 HStack {
                     Button(action: {
-                        
+                        self.authenticateUser()
                     }) {
                         HStack {
                             Text("Login")
-                                .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                .font(.system(size: geometry.size.height * 0.018, weight: .bold))
                                 .foregroundColor(Color.white)
+                                .padding(.leading, geometry.size.width * 0.02)
+                            
+                            Spacer()
                             
                             Image(systemName: "arrow.forward")
                                 .resizable()
@@ -168,13 +171,13 @@ struct LoginAuth: View {
                                 .frame(height: geometry.size.height * 0.016)
                                 .foregroundColor(Color.white)
                                 .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
-                                .padding(.trailing, geometry.size.width * 0.01)
+                                .padding(.trailing, geometry.size.width * 0.02)
                         }
                     }
                     .frame(width: geometry.size.width * 0.5)
-                    .padding()
+                    .padding(.vertical, geometry.size.height * 0.018)
                     .background(Color(hex: 0xDA64ED))
-                    .cornerRadius(geometry.size.height * 0.01)
+                    .cornerRadius(geometry.size.height * 0.005)
                     
                     Spacer()
                 }
@@ -187,6 +190,9 @@ struct LoginAuth: View {
             }
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
+            .onAppear {
+                self.authenticatedUsername = ""
+            }
         }
     }
     private func authenticateUser() {
@@ -196,7 +202,7 @@ struct LoginAuth: View {
             "password": password
         ]
 
-        let url = URL(string: "http://172.20.10.2:5000/authenticate-user")!
+        let url = URL(string: "http://172.20.10.2:5000/user-authentication")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

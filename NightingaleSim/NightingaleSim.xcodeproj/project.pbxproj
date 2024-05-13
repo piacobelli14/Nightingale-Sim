@@ -15,6 +15,7 @@
 		CB24F3F92BEE83B4006ABE5E /* StaticSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */; };
 		CB709DFF2BF18C660027EDAD /* SettingsSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB709DFE2BF18C660027EDAD /* SettingsSim.swift */; };
 		CB709E022BF275950027EDAD /* LoginAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB709E012BF275950027EDAD /* LoginAuth.swift */; };
+		CB709E042BF2A2600027EDAD /* ResetAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB709E032BF2A2600027EDAD /* ResetAuth.swift */; };
 		CBCE57712BF1477E00A6C84F /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCE57702BF1477D00A6C84F /* MapManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 		CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticSim.swift; sourceTree = "<group>"; };
 		CB709DFE2BF18C660027EDAD /* SettingsSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSim.swift; sourceTree = "<group>"; };
 		CB709E012BF275950027EDAD /* LoginAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAuth.swift; sourceTree = "<group>"; };
+		CB709E032BF2A2600027EDAD /* ResetAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetAuth.swift; sourceTree = "<group>"; };
 		CBCE57702BF1477D00A6C84F /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				CB709E012BF275950027EDAD /* LoginAuth.swift */,
+				CB709E032BF2A2600027EDAD /* ResetAuth.swift */,
 			);
 			path = SimAuth;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 				CB24F3E72BEE6D8E006ABE5E /* NightingaleSimApp.swift in Sources */,
 				CB24F3F92BEE83B4006ABE5E /* StaticSim.swift in Sources */,
 				CB709E022BF275950027EDAD /* LoginAuth.swift in Sources */,
+				CB709E042BF2A2600027EDAD /* ResetAuth.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
