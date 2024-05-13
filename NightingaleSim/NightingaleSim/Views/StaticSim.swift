@@ -308,7 +308,7 @@ struct StaticSim: View {
                     .padding(.top, geometry.size.height * 0.02)
                     
                     HStack {
-                        DynamicMapView(isRandom: $isRandom, geometry: geometry)
+                        DynamicMapView(isRandom: $isRandom, isGeolocation: $isGeolocation, geometry: geometry)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.02)
                     }
@@ -441,12 +441,22 @@ struct StaticSim: View {
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
                 .onAppear {
-                    startMotionDataCollection()
-                    startHealthDataCollection()
+                    if isMotion {
+                        startMotionDataCollection()
+                    }
+                    
+                    if isHealth {
+                        startHealthDataCollection()
+                    }
                 }
                 .onDisappear {
-                    motionTimer?.cancel()
-                    healthTimer?.cancel()
+                    if isMotion {
+                        motionTimer?.cancel()
+                    }
+                    
+                    if isHealth {
+                        healthTimer?.cancel()
+                    }
                 }
                 
                
@@ -493,7 +503,8 @@ struct StaticSim: View {
                         
                         VStack {
                             Button(action: {
-                                
+                                self.authenticatedUsername = ""
+                                self.currentView = .LoginAuth
                             }) {
                                 Image(systemName: "lock")
                                     .resizable()

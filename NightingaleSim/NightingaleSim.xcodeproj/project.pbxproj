@@ -14,6 +14,7 @@
 		CB24F3F72BEE8389006ABE5E /* ViewControlEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB24F3F62BEE8389006ABE5E /* ViewControlEnum.swift */; };
 		CB24F3F92BEE83B4006ABE5E /* StaticSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */; };
 		CB709DFF2BF18C660027EDAD /* SettingsSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB709DFE2BF18C660027EDAD /* SettingsSim.swift */; };
+		CB709E022BF275950027EDAD /* LoginAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB709E012BF275950027EDAD /* LoginAuth.swift */; };
 		CBCE57712BF1477E00A6C84F /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCE57702BF1477D00A6C84F /* MapManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		CB24F3F62BEE8389006ABE5E /* ViewControlEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControlEnum.swift; sourceTree = "<group>"; };
 		CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticSim.swift; sourceTree = "<group>"; };
 		CB709DFE2BF18C660027EDAD /* SettingsSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSim.swift; sourceTree = "<group>"; };
+		CB709E012BF275950027EDAD /* LoginAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAuth.swift; sourceTree = "<group>"; };
 		CBCE57702BF1477D00A6C84F /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,8 +61,8 @@
 		CB24F3E52BEE6D8E006ABE5E /* NightingaleSim */ = {
 			isa = PBXGroup;
 			children = (
-				CBCE576F2BF1476800A6C84F /* Managers */,
 				CB24F3F42BEE834B006ABE5E /* Protocols */,
+				CBCE576F2BF1476800A6C84F /* Managers */,
 				CB24F3F52BEE8359006ABE5E /* Views */,
 				CB24F3E62BEE6D8E006ABE5E /* NightingaleSimApp.swift */,
 				CB24F3E82BEE6D8E006ABE5E /* ContentView.swift */,
@@ -89,10 +91,19 @@
 		CB24F3F52BEE8359006ABE5E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CB709E002BF275720027EDAD /* SimAuth */,
 				CB24F3F82BEE83B4006ABE5E /* StaticSim.swift */,
 				CB709DFE2BF18C660027EDAD /* SettingsSim.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		CB709E002BF275720027EDAD /* SimAuth */ = {
+			isa = PBXGroup;
+			children = (
+				CB709E012BF275950027EDAD /* LoginAuth.swift */,
+			);
+			path = SimAuth;
 			sourceTree = "<group>";
 		};
 		CBCE576F2BF1476800A6C84F /* Managers */ = {
@@ -179,6 +190,7 @@
 				CB24F3E92BEE6D8E006ABE5E /* ContentView.swift in Sources */,
 				CB24F3E72BEE6D8E006ABE5E /* NightingaleSimApp.swift in Sources */,
 				CB24F3F92BEE83B4006ABE5E /* StaticSim.swift in Sources */,
+				CB709E022BF275950027EDAD /* LoginAuth.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

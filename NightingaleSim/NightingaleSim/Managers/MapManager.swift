@@ -26,6 +26,7 @@ struct DynamicMapView: View {
     @State private var altitude: Double = 0
     @State private var geolocationTimer: AnyCancellable?
     @Binding var isRandom: Bool
+    @Binding var isGeolocation: Bool
     let geometry: GeometryProxy
     
 
@@ -97,10 +98,14 @@ struct DynamicMapView: View {
         }
         .cornerRadius(geometry.size.height * 0.005)
         .onAppear {
-            startGeolocationUpdates()
+            if isGeolocation {
+                startGeolocationUpdates()
+            }
         }
         .onDisappear {
-            geolocationTimer?.cancel()
+            if isGeolocation {
+                geolocationTimer?.cancel()
+            }
         }
     }
 
