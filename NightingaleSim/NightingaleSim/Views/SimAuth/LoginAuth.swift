@@ -39,7 +39,7 @@ struct LoginAuth: View {
                         .font(.system(size: geometry.size.height * 0.07, weight: .bold))
                         .foregroundColor(Color.white)
                         .opacity(1.0)
-                        .shadow(color: .gray.opacity(0.3), radius: 0, x: 0, y: 2)
+                        .shadow(color: .gray.opacity(0.5), radius: 4, x: 0, y: 0)
                     
                     Spacer()
                 }
@@ -65,28 +65,26 @@ struct LoginAuth: View {
                                 .foregroundColor(.black)
                                 .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
                                 .multilineTextAlignment(.leading)
-                                .padding(.vertical, geometry.size.height * 0.016)
-                                .padding(.horizontal, geometry.size.width * 0.1)
-                                .background(Color.white)
-                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
+                                .padding(.vertical, geometry.size.height * 0.014)
+                                .padding(.horizontal, geometry.size.width * 0.02)
+                                .background(Color(hex: 0xF5F5F5).opacity(0.9))
+                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
                                 .cornerRadius(geometry.size.height * 0.01)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
+                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
                                 )
                                 .frame(width: geometry.size.width * 0.7)
-                                .shadow(color: .gray.opacity(0.3), radius: 3, x: 0, y: 0)
+                                .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
                                 .padding(.top, geometry.size.height * -0.01)
                             
                             Spacer()
                         }
                     }
-                    
-                    
                     Spacer()
                 }
                 .padding(.leading, geometry.size.width * 0.04)
-                .padding(.vertical, geometry.size.height * 0.01)
+                .padding(.top, geometry.size.height * 0.04)
                 
                 HStack {
                     VStack {
@@ -107,17 +105,17 @@ struct LoginAuth: View {
                                 .foregroundColor(.black)
                                 .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
                                 .multilineTextAlignment(.leading)
-                                .padding(.vertical, geometry.size.height * 0.016)
-                                .padding(.horizontal, geometry.size.width * 0.1)
-                                .background(Color.white)
-                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
+                                .padding(.vertical, geometry.size.height * 0.014)
+                                .padding(.horizontal, geometry.size.width * 0.02)
+                                .background(Color(hex: 0xF5F5F5).opacity(0.9))
+                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
                                 .cornerRadius(geometry.size.height * 0.01)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
+                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
                                 )
                                 .frame(width: geometry.size.width * 0.7)
-                                .shadow(color: .gray.opacity(0.3), radius: 3, x: 0, y: 0)
+                                .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
                                 .padding(.top, geometry.size.height * -0.01)
                             
                             Spacer()
@@ -128,7 +126,7 @@ struct LoginAuth: View {
                     Spacer()
                 }
                 .padding(.leading, geometry.size.width * 0.04)
-                .padding(.vertical, geometry.size.height * 0.01)
+                .padding(.top, geometry.size.height * 0.02)
                 
                 
                 
