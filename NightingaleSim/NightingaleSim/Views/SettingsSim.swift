@@ -187,16 +187,24 @@ struct SettingsSim: View {
                                     Spacer()
                                 }
                                 .padding(.top, geometry.size.height * 0.01)
-                            }
-                            
-                            HStack {
-                                Text("Current Device")
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .padding(.vertical, geometry.size.height * 0.01)
-                                    .padding(.leading, geometry.size.width * 0.01)
                                 
-                                Spacer()
+                                HStack {
+                                    Text("Device ID:")
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    
+                                    Text("awse-1SIM")
+
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.6)
+                                        .padding(.leading, geometry.size.width * 0.02)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.top, geometry.size.height * 0.01)
                             }
                             
                             Spacer()
