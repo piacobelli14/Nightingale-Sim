@@ -462,8 +462,7 @@ struct StaticSim: View {
                             .opacity(0.8)
                             .padding(.leading, geometry.size.width * 0.01)
                     }
-                    .padding(.top, geometry.size.height * 0.01)
-                    .padding(.bottom, geometry.size.height * 0.01)
+                    .padding(.leading, geometry.size.width * 0.01)
                     
                     Spacer()
                     

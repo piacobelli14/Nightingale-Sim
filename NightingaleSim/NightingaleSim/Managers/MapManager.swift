@@ -143,6 +143,7 @@ struct DynamicMapView: View {
         }.resume()
     }
 
+
     private func sendGeolocationData() {
         let latValue = getRandomizedValue(value: pin.location.latitude, range: 0.0001)
         let lonValue = getRandomizedValue(value: pin.location.longitude, range: 0.0001)
@@ -244,6 +245,14 @@ struct NominatimResult: Codable {
 struct ElevationResult: Codable {
     struct Result: Codable {
         let elevation: Double
+        let location: Location
     }
+
+    struct Location: Codable {
+        let lat: Double
+        let lon: Double
+    }
+
     let results: [Result]
 }
+

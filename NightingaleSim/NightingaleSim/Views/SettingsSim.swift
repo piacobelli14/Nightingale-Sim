@@ -63,7 +63,7 @@ struct SettingsSim: View {
                             Button(action: {
                                 self.currentView = .StaticSim
                             }) {
-                                Image(systemName: "hourglass.fill")
+                                Image(systemName: "hourglass")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(height: geometry.size.height * 0.022)
