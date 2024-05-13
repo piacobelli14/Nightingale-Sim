@@ -217,9 +217,6 @@ struct SettingsSim: View {
                     }
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
-                    
-                    
-                
                 }
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
