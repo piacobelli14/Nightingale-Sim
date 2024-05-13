@@ -23,6 +23,8 @@ struct ContentView: View {
             SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
         case .LoginAuth:
             LoginAuth(currentView: $currentView, authenticatedUsername: $authenticatedUsername)
+        case .ResetAuth:
+            ResetAuth(currentView: $currentView)
         }
     }
 }

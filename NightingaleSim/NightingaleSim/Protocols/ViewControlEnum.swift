@@ -12,4 +12,5 @@ enum AppView {
     case StaticSim
     case SettingsSim
     case LoginAuth
+    case ResetAuth
 }

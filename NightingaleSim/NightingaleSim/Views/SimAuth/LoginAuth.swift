@@ -91,7 +91,7 @@ struct LoginAuth: View {
                 
                 HStack {
                     Button(action: {
-                        
+                        self.currentView = .ResetAuth
                     }) {
                         HStack {
                             Text("Forgot password?")
