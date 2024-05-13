@@ -142,43 +142,59 @@ struct SettingsSim: View {
                         .shadow(radius: 5)
                         
                         VStack {
-                            VStack {
-                                HStack {
-                                    Text("Current User")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .bold))
-                                        .foregroundColor(Color.white)
-                                        .padding(.vertical, geometry.size.height * 0.01)
-                                    
-                                    Spacer()
-                                }
-                                    
+                            HStack {
+                                Text("Current User")
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .padding(.vertical, geometry.size.height * 0.01)
+                                    .padding(.leading, geometry.size.width * 0.01)
                                 
                                 Spacer()
                             }
-                            .background(Color.white.opacity(0.2))
-                            .cornerRadius(geometry.size.height * 0.005)
-                            .shadow(radius: 5)
                             
-                            VStack {
+                            VStack(alignment: .leading) {
                                 HStack {
-                                    Text("Current User")
-                                        .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    Text("Username:")
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                         .foregroundColor(Color.white)
-                                        .padding(.vertical, geometry.size.height * 0.01)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    
+                                    Text("@"+"piacobelli")
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.6)
+                                        .padding(.leading, geometry.size.width * 0.02)
                                     
                                     Spacer()
                                 }
-                                    
+                                .padding(.top, geometry.size.height * 0.01)
                                 
-                                Spacer()
+                                HStack {
+                                    Text("Organization ID:")
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    
+                                    Text("10000")
+
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.6)
+                                        .padding(.leading, geometry.size.width * 0.02)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.top, geometry.size.height * 0.01)
                             }
-                            .background(Color.white.opacity(0.2))
-                            .cornerRadius(geometry.size.height * 0.005)
-                            .shadow(radius: 5)
+                            Spacer()
                         }
                         .frame(height: geometry.size.height * 0.4)
                         .padding()
-                        
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(geometry.size.height * 0.005)
+                        .shadow(radius: 5)
                     }
                     .frame(width: geometry.size.width * 0.92)
                     .padding(.top, geometry.size.height * 0.02)
