@@ -60,16 +60,15 @@ struct SettingsSim: View {
                 
                 HStack(alignment: .center) {
                     
-                    
                     Spacer()
                     
                     HStack {
                         
                         VStack {
                             Button(action: {
-                                self.currentView = .SettingsSim
+                                self.currentView = .StaticSim
                             }) {
-                                Image(systemName: "gear")
+                                Image(systemName: "hourglass")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(height: geometry.size.height * 0.022)
@@ -78,7 +77,7 @@ struct SettingsSim: View {
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
                             
-                            Text("Settings")
+                            Text("Simulator")
                                 .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                 .foregroundColor(Color.white)
                                 .opacity(0.6)

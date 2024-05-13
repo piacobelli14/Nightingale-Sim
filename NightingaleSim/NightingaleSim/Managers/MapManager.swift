@@ -95,7 +95,7 @@ struct DynamicMapView: View {
                 }
             }
         }
-        .cornerRadius(10)
+        .cornerRadius(geometry.size.height * 0.005)
         .onAppear {
             startGeolocationUpdates()
         }
