@@ -17,7 +17,9 @@ struct SettingsSim: View {
         endPoint: .trailing
     )
     
-    @State private var isRandom: Bool = true
+    @State private var isMotion: Bool = true
+    @State private var isHealth: Bool = true
+    @State private var isGeolocation: Bool = true
     
     var body: some View {
         GeometryReader { geometry in
@@ -50,6 +52,85 @@ struct SettingsSim: View {
                 )
                 
                 ScrollView {
+                    
+                    HStack {
+                        VStack {
+                            HStack {
+                                Text("Configure Sensors")
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .padding(.vertical, geometry.size.height * 0.01)
+                                
+                                Spacer()
+                            }
+                                
+                            
+                            HStack {
+                                Text("Motion Sensor")
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .regular))
+                                    .foregroundColor(Color.white)
+                                    .padding(.trailing, geometry.size.width * 0.02)
+                                
+                                HStack {
+                                    Toggle("", isOn: $isMotion)
+                                        .tint(Color(hex: 0x2A0862))
+                                        .labelsHidden()
+                                    
+                                    Spacer()
+                                    
+                                    Text("\(isMotion ? "On" : "Off")")
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(geometry.size.height * 0.005)
+                        .shadow(radius: 5)
+                        
+                        VStack {
+                            HStack {
+                                Text("Configure Sensors")
+                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .padding(.vertical, geometry.size.height * 0.01)
+                                
+                                Spacer()
+                            }
+                                
+                            
+                            HStack {
+                                Text("Motion Sensor")
+                                    .font(.system(size: geometry.size.height * 0.018, weight: .regular))
+                                    .foregroundColor(Color.white)
+                                    .padding(.trailing, geometry.size.width * 0.02)
+                                
+                                HStack {
+                                    Toggle("", isOn: $isMotion)
+                                        .tint(Color(hex: 0x2A0862))
+                                        .labelsHidden()
+                                    
+                                    Spacer()
+                                    
+                                    Text("\(isMotion ? "On" : "Off")")
+                                        .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
+                                        .foregroundColor(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(geometry.size.height * 0.005)
+                        .shadow(radius: 5)
+                    }
+                    .frame(width: geometry.size.width * 0.92)
+                    .padding(.top, geometry.size.height * 0.02)
+                    
                     
                 
                 }
