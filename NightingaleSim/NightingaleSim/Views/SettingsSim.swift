@@ -17,6 +17,8 @@ struct SettingsSim: View {
         endPoint: .trailing
     )
     
+    @State private var isRandom: Bool = true
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -49,11 +51,15 @@ struct SettingsSim: View {
                 
                 ScrollView {
                     
+                
                 }
+                .frame(height: geometry.size.height * 0.82)
+                .frame(width: geometry.size.width * 1.0)
                 
                 Spacer()
                 
                 HStack(alignment: .center) {
+                    
                     
                     Spacer()
                     
@@ -61,9 +67,9 @@ struct SettingsSim: View {
                         
                         VStack {
                             Button(action: {
-                                self.currentView = .StaticSim
+                                self.currentView = .SettingsSim
                             }) {
-                                Image(systemName: "hourglass")
+                                Image(systemName: "gear")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(height: geometry.size.height * 0.022)
@@ -72,7 +78,7 @@ struct SettingsSim: View {
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
                             
-                            Text("Simulator")
+                            Text("Settings")
                                 .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                 .foregroundColor(Color.white)
                                 .opacity(0.6)
@@ -101,6 +107,7 @@ struct SettingsSim: View {
                     }
                     .padding(.top, geometry.size.height * 0.01)
                     .padding(.bottom, geometry.size.height * 0.01)
+                    
                     
                 }
                 .frame(width: geometry.size.width * 1.0)
