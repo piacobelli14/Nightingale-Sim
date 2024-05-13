@@ -58,7 +58,7 @@ struct SettingsSim: View {
                         VStack {
                             HStack {
                                 Text("Configure Sensors")
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .padding(.vertical, geometry.size.height * 0.01)
                                     .padding(.leading, geometry.size.width * 0.01)
@@ -145,7 +145,7 @@ struct SettingsSim: View {
                         VStack {
                             HStack {
                                 Text("Current User")
-                                    .font(.system(size: geometry.size.height * 0.02, weight: .bold))
+                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .padding(.vertical, geometry.size.height * 0.01)
                                     .padding(.leading, geometry.size.width * 0.01)
@@ -271,7 +271,7 @@ struct SettingsSim: View {
                         }
                         .padding(.trailing, geometry.size.width * 0.03)
                     }
-                    .padding(.top, geometry.size.height * 0.01)
+                    .padding(.top, geometry.size.height * 0.014)
                     .padding(.bottom, geometry.size.height * 0.01)
                     
                     
@@ -293,6 +293,9 @@ struct SettingsSim: View {
             .background(gradient)
             .onAppear {
                 self.getUserInfo()
+            }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
     }

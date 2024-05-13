@@ -72,11 +72,11 @@ struct LoginAuth: View {
                                 .padding(.vertical, geometry.size.height * 0.016)
                                 .padding(.horizontal, geometry.size.width * 0.02)
                                 .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
+                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
                                 .cornerRadius(geometry.size.height * 0.01)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
+                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
                                 )
                                 .frame(width: geometry.size.width * 0.7)
                                 .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
@@ -136,11 +136,11 @@ struct LoginAuth: View {
                                         .padding(.vertical, geometry.size.height * 0.016)
                                         .padding(.horizontal, geometry.size.width * 0.02)
                                         .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                        .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
+                                        .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
                                         .cornerRadius(geometry.size.height * 0.01)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                                .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
+                                                .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
                                         )
                                         .frame(width: geometry.size.width * 0.7)
                                         .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
@@ -155,11 +155,11 @@ struct LoginAuth: View {
                                         .padding(.vertical, geometry.size.height * 0.016)
                                         .padding(.horizontal, geometry.size.width * 0.02)
                                         .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                        .border(Color(hex: 0x504F51), width: geometry.size.width * 0.004)
+                                        .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
                                         .cornerRadius(geometry.size.height * 0.01)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                                .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.004)
+                                                .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
                                         )
                                         .frame(width: geometry.size.width * 0.7)
                                         .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
@@ -179,6 +179,7 @@ struct LoginAuth: View {
                                             .foregroundColor(Color(hex: 0x828B8E))
                                     }
                                     .padding(.trailing, geometry.size.width * 0.03)
+                                    .padding(.bottom, geometry.size.height * 0.01)
                                 }
                                 .frame(width: geometry.size.width * 0.7)
                             }
@@ -217,12 +218,13 @@ struct LoginAuth: View {
                     .frame(width: geometry.size.width * 0.5)
                     .padding(.vertical, geometry.size.height * 0.018)
                     .background(Color(hex: 0xDA64ED))
-                    .cornerRadius(geometry.size.height * 0.005)
+                    .cornerRadius(geometry.size.height * 0.01)
                     
                     Spacer()
                 }
                 .padding(.leading, geometry.size.width * 0.06)
-                .padding(.top, geometry.size.height * 0.1)
+                .padding(.top, geometry.size.height * 0.04)
+                .padding(.bottom, geometry.size.height * 0.01)
                 
                 
                 
@@ -232,6 +234,9 @@ struct LoginAuth: View {
             .background(gradient)
             .onAppear {
                 self.authenticatedUsername = ""
+            }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
     }

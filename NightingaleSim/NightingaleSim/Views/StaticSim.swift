@@ -154,6 +154,15 @@ struct StaticSim: View {
                 
                 ScrollView {
                     
+                    HStack {
+                        DynamicMapView(isRandom: $isRandom, isGeolocation: $isGeolocation, geometry: geometry)
+                            .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
+                            .padding(.top, geometry.size.height * 0.01)
+                    }
+                    .cornerRadius(geometry.size.height * 0.005)
+                    .shadow(radius: 5)
+                    .padding(.top, geometry.size.height * 0.01)
+                    
                     VStack {
                         HStack {
                             HStack {
@@ -196,7 +205,7 @@ struct StaticSim: View {
                     .cornerRadius(geometry.size.height * 0.005)
                     .shadow(radius: 5)
                     .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.005)
+                    .padding(.top, geometry.size.height * 0.01)
                     
                     VStack {
                         HStack {
@@ -242,7 +251,7 @@ struct StaticSim: View {
                     .cornerRadius(geometry.size.height * 0.005)
                     .shadow(radius: 5)
                     .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.005)
+                    .padding(.top, geometry.size.height * 0.01)
                     
                     VStack {
                         HStack {
@@ -287,17 +296,8 @@ struct StaticSim: View {
                     .cornerRadius(geometry.size.height * 0.005)
                     .shadow(radius: 5)
                     .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.005)
+                    .padding(.top, geometry.size.height * 0.01)
                         
-                        
-                    
-                    HStack {
-                        DynamicMapView(isRandom: $isRandom, isGeolocation: $isGeolocation, geometry: geometry)
-                            .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
-                            .padding(.top, geometry.size.height * 0.02)
-                    }
-                    .cornerRadius(geometry.size.height * 0.005)
-                    .shadow(radius: 5)
                     
                     HStack {
                         VStack {
@@ -420,7 +420,7 @@ struct StaticSim: View {
                         .shadow(radius: 5)
                     }
                     .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.005)
+                    .padding(.top, geometry.size.height * 0.01)
                 }
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
@@ -460,6 +460,8 @@ struct StaticSim: View {
                             .padding(.leading, geometry.size.width * 0.01)
                     }
                     .padding(.leading, geometry.size.width * 0.01)
+                    .padding(.top, geometry.size.height * 0.014)
+                    .padding(.bottom, geometry.size.height * 0.01)
                     
                     Spacer()
                     
@@ -506,7 +508,7 @@ struct StaticSim: View {
                         }
                         .padding(.trailing, geometry.size.width * 0.03)
                     }
-                    .padding(.top, geometry.size.height * 0.01)
+                    .padding(.top, geometry.size.height * 0.014)
                     .padding(.bottom, geometry.size.height * 0.01)
                     
                 }
@@ -525,6 +527,9 @@ struct StaticSim: View {
             }
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
     }
     private func heartRateColor(_ rate: Double) -> Color {
