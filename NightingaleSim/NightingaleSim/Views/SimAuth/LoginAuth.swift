@@ -7,9 +7,15 @@
 
 import SwiftUI
 
+struct LoginResponse: Codable {
+    let username: String
+    let orgID: String
+}
+
 struct LoginAuth: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
+    @Binding var authenticatedOrgID: String
     
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
@@ -246,7 +252,11 @@ struct LoginAuth: View {
             "password": password
         ]
 
-        let url = URL(string: "http://172.20.10.2:5000/user-authentication")!
+        guard let url = URL(string: "http://172.20.10.2:5000/user-authentication") else {
+            print("Invalid URL")
+            return
+        }
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -254,20 +264,26 @@ struct LoginAuth: View {
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                print("Login error: \(error)")
                 self.isLoginSuccessful = false
                 return
             }
 
-            guard let data = data, let response = response as? HTTPURLResponse else {
+            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
                 self.isLoginSuccessful = false
                 return
             }
 
-            if response.statusCode == 200 {
-                self.isLoginSuccessful = true
-                self.authenticatedUsername = username
-                self.currentView = .StaticSim
-            } else {
+            do {
+                let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
+                DispatchQueue.main.async {
+                    self.isLoginSuccessful = true
+                    self.authenticatedUsername = loginResponse.username
+                    self.authenticatedOrgID = loginResponse.orgID
+                    self.currentView = .StaticSim
+                }
+            } catch {
+                print("Decoding error: \(error)")
                 self.isLoginSuccessful = false
                 self.errorMessage = "That username or password is incorrect."
             }
