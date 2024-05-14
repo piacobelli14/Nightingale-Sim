@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var currentView: AppView = .SettingsSim
-    @State private var authenticatedUsername: String = "piacobelli"
+    @State private var authenticatedUsername: String = ""
+    @State private var authenticatedOrgID: String = ""
     @State private var isMotion: Bool = true
     @State private var isHealth: Bool = true
     @State private var isGeolocation: Bool = true
@@ -20,9 +21,9 @@ struct ContentView: View {
         case .StaticSim:
             StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
         case .SettingsSim:
-            SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
+            SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID,  isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
         case .LoginAuth:
-            LoginAuth(currentView: $currentView, authenticatedUsername: $authenticatedUsername)
+            LoginAuth(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID)
         case .ResetAuth:
             ResetAuth(currentView: $currentView)
         }

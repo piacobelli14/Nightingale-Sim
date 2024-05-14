@@ -241,7 +241,6 @@ struct LoginAuth: View {
         }
     }
     private func authenticateUser() {
-        
         let requestBody: [String: Any] = [
             "username": username,
             "password": password

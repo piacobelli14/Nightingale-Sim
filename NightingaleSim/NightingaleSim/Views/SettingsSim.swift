@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
+    @Binding var authenticatedOrgID: String
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
@@ -19,8 +20,6 @@ struct SettingsSim: View {
         startPoint: .leading,
         endPoint: .trailing
     )
-    
-    @State private var orgID: String = ""
     
     var body: some View {
         GeometryReader { geometry in
@@ -178,7 +177,7 @@ struct SettingsSim: View {
                                         .opacity(0.8)
                                         .padding(.leading, geometry.size.width * 0.01)
                                     
-                                    Text("\(orgID)")
+                                    Text("\(authenticatedOrgID)")
 
                                         .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                         .foregroundColor(Color.white)
@@ -291,66 +290,9 @@ struct SettingsSim: View {
             }
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
-            .onAppear {
-                self.getUserInfo()
-            }
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
     }
-    private func getUserInfo() {
-        let requestBody: [String: Any] = [
-            "username": authenticatedUsername
-        ]
-
-        guard let url = URL(string: "http://172.20.10.2:5000/get-user-information") else {
-            print("Invalid URL")
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-        } catch {
-            print("Error creating JSON body: \(error)")
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error making request: \(error.localizedDescription)")
-                return
-            }
-
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("Invalid response type.")
-                return
-            }
-
-            if httpResponse.statusCode == 200 {
-                guard let data = data else {
-                    print("No data received")
-                    return
-                }
-
-                do {
-                    if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        DispatchQueue.main.async {
-                            self.orgID = jsonResult["orgID"] as? String ?? ""
-                        }
-                    } else {
-                        print("Error: JSON structure did not match expected [String: Any]")
-                    }
-                } catch {
-                    print("Error parsing JSON: \(error.localizedDescription)")
-                }
-            } else {
-                print("Server returned status code: \(httpResponse.statusCode)")
-            }
-        }.resume()
-    }
-
 }
