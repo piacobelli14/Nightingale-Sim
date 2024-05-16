@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var currentView: AppView = .SettingsSim
+    @State private var currentView: AppView = .LoginAuth
     @State private var authenticatedUsername: String = ""
     @State private var authenticatedOrgID: String = ""
     @State private var isMotion: Bool = true
