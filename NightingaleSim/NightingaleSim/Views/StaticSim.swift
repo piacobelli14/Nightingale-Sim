@@ -82,6 +82,7 @@ struct ConfigArray {
 struct StaticSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
+    @Binding var authenticatedOrgID: String
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
@@ -618,6 +619,8 @@ struct StaticSim: View {
         }
     }
     private func collectMotionData() {
+        let timestamp = motionDataCollection.count + 1
+        
         let motionData: [String: Any] = [
             "accelerometer": [
                 "x": Double(accX),
@@ -634,7 +637,7 @@ struct StaticSim: View {
                 "y": Double(magY),
                 "z": Double(magZ)
             ],
-            "timestamp": ISO8601DateFormatter().string(from: Date())
+            "timestamp": timestamp
         ]
 
         motionDataCollection.append(motionData)
@@ -645,8 +648,14 @@ struct StaticSim: View {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
+        let payload: [String: Any] = [
+            "deviceID": "awse-1000",
+            "orgID": authenticatedOrgID,
+            "data": motionDataCollection
+        ]
+
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: ["data": motionDataCollection], options: [])
+            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
         } catch {
             print("Failed to serialize motion data: \(error)")
             return
@@ -672,6 +681,8 @@ struct StaticSim: View {
     }
     private func sendHealthData() {
         let healthData = [
+            "deviceID": "awse-10000",
+            "orgID": authenticatedOrgID,
             "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate - 6)...Double(heartRate + 6))),
             "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate - 2)...Double(respirationRate + 2))),
             "batteryLevel": deviceBattery / 100,

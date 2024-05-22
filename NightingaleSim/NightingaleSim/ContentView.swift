@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         switch currentView {
         case .StaticSim:
-            StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
+            StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
         case .SettingsSim:
             SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID,  isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation)
         case .LoginAuth:
