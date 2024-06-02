@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginResponse: Codable {
-    let userID: String
+    let username: String
     let orgID: String
 }
 
@@ -278,7 +278,7 @@ struct LoginAuth: View {
                 let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
                 DispatchQueue.main.async {
                     self.isLoginSuccessful = true
-                    self.authenticatedUsername = loginResponse.userID
+                    self.authenticatedUsername = loginResponse.username
                     self.authenticatedOrgID = loginResponse.orgID
                     self.currentView = .StaticSim
                 }
