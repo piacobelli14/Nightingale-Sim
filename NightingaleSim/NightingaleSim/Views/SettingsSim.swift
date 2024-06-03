@@ -139,6 +139,8 @@ struct SettingsSim: View {
                             .padding()
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
+                            .frame(height: geometry.size.height * 0.25)
+                            
                         }
                         .frame(height: geometry.size.height * 0.5)
                         .shadow(radius: 5)
