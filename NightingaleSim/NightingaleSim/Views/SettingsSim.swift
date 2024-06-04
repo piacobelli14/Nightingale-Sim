@@ -4,7 +4,6 @@
 //
 //  Created by Peter Iacobelli on 5/12/24.
 //
-
 import SwiftUI
 
 struct DeviceInfoResponse: Codable {
@@ -280,22 +279,20 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                 
-                                TextField("", text: Binding(
-                                    get: { self.healthFrequency },
-                                    set: { newValue in
-                                        if newValue.isEmpty {
-                                            self.healthFrequency = newValue
-                                        } else if let intValue = Int(newValue) {
-                                            self.healthFrequency = String(intValue)
-                                        }
-                                    }
-                                ))
-                                    .keyboardType(.numberPad)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(geometry.size.height * 0.005)
-                                    .shadow(radius: 2)
-                                    .padding(.top, geometry.size.height * 0.01)
+                                Stepper(
+                                    value: $healthFrequency,
+                                    in: 0...100,
+                                    step: 1
+                                ) {
+                                    Text("Current: \(healthFrequency))")
+                                        
+                                }
+                                .padding(10)
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(geometry.size.height * 0.005)
+                                .shadow(radius: 2)
+                                .padding(.top, geometry.size.height * 0.01)
                             }
                             .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
                             .background(Color.white.opacity(0.2))
@@ -451,7 +448,6 @@ struct SettingsSim: View {
             if response.statusCode == 200 {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    print("Received JSON: \(json)")
                     
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
