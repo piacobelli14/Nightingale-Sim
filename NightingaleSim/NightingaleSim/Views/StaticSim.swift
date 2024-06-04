@@ -626,7 +626,7 @@ struct StaticSim: View {
     private func startMotionDataCollection() {
         motionTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
             collectMotionData()
-            if motionDataCollection.count >= 10 {
+            if motionDataCollection.count >= motionFrequency {
                 sendMotionData()
                 motionDataCollection.removeAll()
             }
@@ -689,7 +689,7 @@ struct StaticSim: View {
         }.resume()
     }
     private func startHealthDataCollection() {
-        healthTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect().sink { _ in
+        healthTimer = Timer.publish(every: healthFrequency, on: .main, in: .common).autoconnect().sink { _ in
             sendHealthData()
         }
     }
@@ -697,8 +697,8 @@ struct StaticSim: View {
         let healthData = [
             "deviceID": "awse-10000",
             "orgID": authenticatedOrgID,
-            "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate - 6)...Double(heartRate + 6))),
-            "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate - 2)...Double(respirationRate + 2))),
+            "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))),
+            "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))),
             "batteryLevel": deviceBattery / 100,
             "timestamp": ISO8601DateFormatter().string(from: Date())
         ] as [String: Any]
