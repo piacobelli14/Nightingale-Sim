@@ -211,7 +211,7 @@ struct SettingsSim: View {
                                             .opacity(0.8)
                                             .padding(.leading, geometry.size.width * 0.01)
                                         
-                                        Text("awse-10000")
+                                        Text("awse-1000")
                                         
                                             .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                             .foregroundColor(Color.white)

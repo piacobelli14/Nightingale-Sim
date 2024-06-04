@@ -695,7 +695,7 @@ struct StaticSim: View {
     }
     private func sendHealthData() {
         let healthData = [
-            "deviceID": "awse-10000",
+            "deviceID": "awse-1000",
             "orgID": authenticatedOrgID,
             "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))),
             "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))),
