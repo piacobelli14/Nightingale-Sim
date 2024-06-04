@@ -135,15 +135,15 @@ struct DynamicMapView: View {
                 return
             }
 
-            // Log the raw JSON response for debugging
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Received JSON response: \(jsonString)")
-            }
-
             do {
                 let elevationResponse = try JSONDecoder().decode(OpenMeteoElevationResponse.self, from: data)
-                DispatchQueue.main.async {
-                    completion(elevationResponse.elevation)
+                if let elevation = elevationResponse.elevation.first {
+                    DispatchQueue.main.async {
+                        completion(elevation)
+                    }
+                } else {
+                    print("No elevation data found in response or elevation is null")
+                    completion(nil)
                 }
             } catch {
                 print("Failed to decode elevation data: \(error)")
@@ -182,7 +182,7 @@ struct DynamicMapView: View {
             }
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                print("Geolocation data sent successfully")
+                return
             } else {
                 print("Failed to send geolocation data, received non-200 response")
             }
@@ -251,5 +251,6 @@ struct NominatimResult: Codable {
 }
 
 struct OpenMeteoElevationResponse: Decodable {
-    let elevation: Double
+    let elevation: [Double]
 }
+
