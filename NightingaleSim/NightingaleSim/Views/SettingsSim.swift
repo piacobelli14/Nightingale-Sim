@@ -278,30 +278,23 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
+                                    .padding(.bottom, geometry.size.height * 0.04)
                                 
                                 VStack {
-                                    
-                                    
                                     Text("Send Frequency: \(healthFrequency)")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                         .foregroundColor(.white.opacity(0.6))
                                     
-                                    Stepper(value: $healthFrequency, in: 0...100) {
-                                        Text("Health Frequency: \(healthFrequency)")
+                                    Stepper(value: $healthFrequency, in: 0...1000) {
+                                        Text("")
                                     }
                                     .labelsHidden()
-                                    .tint(Color.white)
-                                    .background(Color.white)
-                                    .frame(width: geometry.size.width * 0.04)
-                                    .cornerRadius(geometry.size.height * 0.004)
+                                    .tint(Color.black)
+                                    .background(Color.white.opacity(0.6))
+                                    .cornerRadius(geometry.size.height * 0.008)
                                 }
-                                .padding()
-                                .frame(height: geometry.size.height * 0.2)
-                                
-                                
-                                
                             }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
                             .shadow(radius: 5)
@@ -312,8 +305,23 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
+                                    .padding(.bottom, geometry.size.height * 0.04)
+                                
+                                VStack {
+                                    Text("Send Frequency: \(motionFrequency) seconds")
+                                        .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
+                                        .foregroundColor(.white.opacity(0.6))
+                                    
+                                    Stepper(value: $motionFrequency, in: 0...1000) {
+                                        Text("")
+                                    }
+                                    .labelsHidden()
+                                    .tint(Color.black)
+                                    .background(Color.white.opacity(0.6))
+                                    .cornerRadius(geometry.size.height * 0.008)
+                                }
                             }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
                             .shadow(radius: 5)
@@ -324,8 +332,23 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
+                                    .padding(.bottom, geometry.size.height * 0.04)
+                                
+                                VStack {
+                                    Text("Send Frequency: \(geolocationFrequency) seconds")
+                                        .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
+                                        .foregroundColor(.white.opacity(0.6))
+                                    
+                                    Stepper(value: $geolocationFrequency, in: 0...1000) {
+                                        Text("")
+                                    }
+                                    .labelsHidden()
+                                    .tint(Color.black)
+                                    .background(Color.white.opacity(0.6))
+                                    .cornerRadius(geometry.size.height * 0.008)
+                                }
                             }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
                             .shadow(radius: 5)
