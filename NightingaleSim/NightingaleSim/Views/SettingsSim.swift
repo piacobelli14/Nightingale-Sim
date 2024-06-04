@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+struct DeviceInfo: Codable {
+    let devType: String
+    let devID: String
+    let assignedTo: String
+    let lastAssigned: String
+    let battery: String
+}
+
 struct SettingsSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
@@ -28,6 +36,9 @@ struct SettingsSim: View {
     @Binding var hrLowerBound: Double
     @Binding var respUpperBound: Double
     @Binding var respLowerBound: Double
+    
+    @State private var deviceInfo: [DeviceInfo] = []
+    @State private var availableDevIDs: [String] = []
 
     
     let gradient = LinearGradient(
@@ -204,33 +215,39 @@ struct SettingsSim: View {
                                     }
                                     .padding(.top, geometry.size.height * 0.01)
                                     
-                                    VStack {
+                                    VStack(alignment: .leading) {
                                         Text("Target Device:")
                                             .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.8)
                                             .padding(.leading, geometry.size.width * 0.01)
-                                    
                                         
-                                        TextField("awse-1000", text: $targetDevice)
-                                            .autocapitalization(.none)
-                                            .disableAutocorrection(true)
-                                            .foregroundColor(.black)
-                                            .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
-                                            .multilineTextAlignment(.leading)
-                                            .padding(.vertical, geometry.size.height * 0.016)
-                                            .padding(.horizontal, geometry.size.width * 0.02)
-                                            .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                            .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
-                                            .cornerRadius(geometry.size.height * 0.01)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                                    .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
-                                            )
-                                            .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
-                                        
-                                        
-                                        
+                                        Menu {
+                                            ForEach(availableDevIDs, id: \.self) { id in
+                                                Button(id) {
+                                                    targetDevice = id
+                                                }
+                                            }
+                                        } label: {
+                                            Text(targetDevice == "" ? "Select A Device" : targetDevice)
+                                                .autocapitalization(.none)
+                                                .disableAutocorrection(true)
+                                                .foregroundColor(.black)
+                                                .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
+                                                .multilineTextAlignment(.leading)
+                                                .padding(.vertical, geometry.size.height * 0.016)
+                                                .padding(.horizontal, geometry.size.width * 0.02)
+                                                .background(Color(hex: 0xF5F5F5).opacity(0.9))
+                                                .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
+                                                .cornerRadius(geometry.size.height * 0.01)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
+                                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
+                                                )
+                                                .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
+                                                
+                                        }
+                                        .accentColor(.black)
                                         Spacer()
                                     }
                                     .padding(.top, geometry.size.height * 0.01)
@@ -365,6 +382,65 @@ struct SettingsSim: View {
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
+            .onAppear {
+                self.getAvailableDevices()
+            }
         }
     }
+    private func getAvailableDevices() {
+        let url = URL(string: "http://172.20.10.2:5000/get-devices")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Network error: \(error.localizedDescription)"
+                    print(self.errorMessage)
+                }
+                return
+            }
+
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    self.errorMessage = "No data received from the server"
+                    print(self.errorMessage)
+                }
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Invalid response from the server"
+                    print(self.errorMessage)
+                }
+                return
+            }
+
+            if response.statusCode == 200 {
+                do {
+                    let decodedData = try JSONDecoder().decode([DeviceInfo].self, from: data)
+                    DispatchQueue.main.async {
+                        self.deviceInfo = decodedData
+                        self.availableDevIDs = decodedData.map { $0.devID }
+                        print(devIDs)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "JSON decoding error: \(error.localizedDescription)"
+                        print(self.errorMessage)
+                    }
+                }
+
+            } else {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Server error with status code: \(response.statusCode)"
+                    print(self.errorMessage)
+                }
+            }
+        }
+        .resume()
+    }
+
 }
