@@ -27,6 +27,7 @@ struct DynamicMapView: View {
     @State private var geolocationTimer: AnyCancellable?
     @Binding var isRandom: Bool
     @Binding var isGeolocation: Bool
+    @Binding var geolocationFrequency: Int
     let geometry: GeometryProxy
 
     var body: some View {
@@ -109,7 +110,7 @@ struct DynamicMapView: View {
     }
 
     private func startGeolocationUpdates() {
-        geolocationTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
+        geolocationTimer = Timer.publish(every: TimeInterval(geolocationFrequency), on: .main, in: .common).autoconnect().sink { _ in
             fetchAndSendGeolocationData()
         }
     }
