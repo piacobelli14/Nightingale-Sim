@@ -291,8 +291,9 @@ struct SettingsSim: View {
                                     }
                                     .labelsHidden()
                                     .tint(Color.white)
-                                    .foregroundColor(.white)
+                                    .background(Color.white)
                                     .frame(width: geometry.size.width * 0.04)
+                                    .cornerRadius(geometry.size.height * 0.004)
                                 }
                                 .padding()
                                 .frame(height: geometry.size.height * 0.2)
