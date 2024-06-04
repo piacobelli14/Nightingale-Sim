@@ -14,6 +14,21 @@ struct SettingsSim: View {
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
+    @Binding var motionFrequency: Int
+    @Binding var healthFrequency: Int
+    @Binding var geolocationFrequency: Int
+    @Binding var accUpperBound: CGFloat
+    @Binding var accLowerBound: CGFloat
+    @Binding var gyroUpperBound: CGFloat
+    @Binding var gyroLowerBound: CGFloat
+    @Binding var magUpperBound: CGFloat
+    @Binding var magLowerBound: CGFloat
+    @Binding var hrUpperBound: Int
+    @Binding var hrLowerBound: Int
+    @Binding var respUpperBound: Int
+    @Binding var respLowerBound: Int
+    
+
     
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
@@ -136,7 +151,7 @@ struct SettingsSim: View {
                                 .padding(.top, geometry.size.height * 0.01)
                                 Spacer()
                             }
-                            .frame(height: geometry.size.height * 0.5)
+                            .frame(height: geometry.size.height * 0.25)
                             .padding()
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
@@ -218,6 +233,15 @@ struct SettingsSim: View {
                         }
                         .frame(width: geometry.size.width * 0.92)
                         .padding(.top, geometry.size.height * 0.02)
+                        
+                        HStack {
+                            
+                        }
+                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.25)
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(geometry.size.height * 0.005)
+                        .shadow(radius: 5)
+                        .padding(.top, geometry.size.height * 0.01)
                     }
                 }
                 .frame(height: geometry.size.height * 0.82)

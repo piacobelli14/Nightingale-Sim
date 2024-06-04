@@ -86,6 +86,20 @@ struct StaticSim: View {
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
+    @Binding var motionFrequency: Int
+    @Binding var healthFrequency: Int
+    @Binding var geolocationFrequency: Int
+    @Binding var accUpperBound: CGFloat
+    @Binding var accLowerBound: CGFloat
+    @Binding var gyroUpperBound: CGFloat
+    @Binding var gyroLowerBound: CGFloat
+    @Binding var magUpperBound: CGFloat
+    @Binding var magLowerBound: CGFloat
+    @Binding var hrUpperBound: Int
+    @Binding var hrLowerBound: Int
+    @Binding var respUpperBound: Int
+    @Binding var respLowerBound: Int
+    
     @State private var motionTimer: AnyCancellable?
     @State private var healthTimer: AnyCancellable?
     @State private var motionDataCollection = [[String: Any]]()
