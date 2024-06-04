@@ -83,6 +83,7 @@ struct StaticSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
     @Binding var authenticatedOrgID: String
+    @Binding var targetDevice: String
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool

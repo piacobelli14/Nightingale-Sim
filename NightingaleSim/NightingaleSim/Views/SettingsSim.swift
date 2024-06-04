@@ -11,6 +11,7 @@ struct SettingsSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String
     @Binding var authenticatedOrgID: String
+    @Binding var targetDevice: String
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
@@ -27,7 +28,6 @@ struct SettingsSim: View {
     @Binding var hrLowerBound: Double
     @Binding var respUpperBound: Double
     @Binding var respLowerBound: Double
-    
 
     
     let gradient = LinearGradient(
@@ -205,18 +205,21 @@ struct SettingsSim: View {
                                     .padding(.top, geometry.size.height * 0.01)
                                     
                                     HStack {
-                                        Text("Device ID:")
+                                        Text("Target Device:")
                                             .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.8)
                                             .padding(.leading, geometry.size.width * 0.01)
+                                    
                                         
-                                        Text("awse-1000")
+                                        TextField("awse-1000", text: $targetDevice)
                                         
                                             .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.6)
                                             .padding(.leading, geometry.size.width * 0.02)
+                                        
+                                        
                                         
                                         Spacer()
                                     }
