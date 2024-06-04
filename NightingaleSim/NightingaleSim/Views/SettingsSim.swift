@@ -242,8 +242,11 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                             }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
-                            .background(Color.white.opacity(0.5))
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(geometry.size.height * 0.005)
+                            .shadow(radius: 5)
+                            .padding(.top, geometry.size.height * 0.002)
                             
                             VStack {
                                 Text("Motion Sensor")
@@ -251,8 +254,11 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                             }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
-                            .background(Color.white.opacity(0.5))
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(geometry.size.height * 0.005)
+                            .shadow(radius: 5)
+                            .padding(.top, geometry.size.height * 0.002)
                             
                             VStack {
                                 Text("Geolocation Sensor")
@@ -260,16 +266,15 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                             }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
-                            .background(Color.white.opacity(0.5))
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(geometry.size.height * 0.005)
+                            .shadow(radius: 5)
+                            .padding(.top, geometry.size.height * 0.002)
                             
                            Spacer()
                         }
-                        .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.25)
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(geometry.size.height * 0.005)
-                        .shadow(radius: 5)
-                        .padding(.top, geometry.size.height * 0.002)
+                        .frame(width: geometry.size.width * 0.92)
                     }
                 }
                 .frame(height: geometry.size.height * 0.82)
