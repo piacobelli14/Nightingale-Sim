@@ -240,18 +240,19 @@ struct SettingsSim: View {
                                                 .autocapitalization(.none)
                                                 .disableAutocorrection(true)
                                                 .foregroundColor(.black)
-                                                .font(.system(size: geometry.size.height * 0.016, weight: .light, design: .default))
+                                                .font(.system(size: geometry.size.height * 0.014, weight: .bold, design: .default))
                                                 .multilineTextAlignment(.leading)
                                                 .padding(.vertical, geometry.size.height * 0.016)
                                                 .padding(.horizontal, geometry.size.width * 0.02)
+                                                .frame(width: geometry.size.width * 0.2)
                                                 .background(Color(hex: 0xF5F5F5).opacity(0.9))
                                                 .border(Color(hex: 0x504F51), width: geometry.size.width * 0.002)
                                                 .cornerRadius(geometry.size.height * 0.01)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
-                                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.002)
+                                                        .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.006)
                                                 )
-                                                .shadow(color: .gray.opacity(0.3), radius: 1, x: 0, y: 0)
+                                                .shadow(color: .gray.opacity(0.3), radius: 4, x: 0, y: 0)
                                                 
                                         }
                                         .accentColor(.black)
@@ -278,6 +279,23 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
+                                
+                                TextField("", text: Binding(
+                                    get: { self.healthFrequency },
+                                    set: { newValue in
+                                        if newValue.isEmpty {
+                                            self.healthFrequency = newValue
+                                        } else if let intValue = Int(newValue) {
+                                            self.healthFrequency = String(intValue)
+                                        }
+                                    }
+                                ))
+                                    .keyboardType(.numberPad)
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(geometry.size.height * 0.005)
+                                    .shadow(radius: 2)
+                                    .padding(.top, geometry.size.height * 0.01)
                             }
                             .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
                             .background(Color.white.opacity(0.2))
