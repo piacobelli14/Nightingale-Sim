@@ -14,12 +14,6 @@ struct LocationPin: Identifiable {
     var location: CLLocationCoordinate2D
 }
 
-
-struct ElevationResult: Decodable {
-    let elevation: Double
-}
-
-
 struct DynamicMapView: View {
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 29.559684, longitude: -95.08374),
@@ -34,7 +28,6 @@ struct DynamicMapView: View {
     @Binding var isRandom: Bool
     @Binding var isGeolocation: Bool
     let geometry: GeometryProxy
-    
 
     var body: some View {
         VStack {
@@ -129,7 +122,7 @@ struct DynamicMapView: View {
     }
 
     private func fetchAltitude(for location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
-        let urlString = "https://api.opentopodata.org/v1/eudem25m?locations=\(location.latitude),\(location.longitude)"
+        let urlString = "https://api.open-meteo.com/v1/elevation?latitude=\(location.latitude)&longitude=\(location.longitude)&format=json"
         guard let url = URL(string: urlString) else {
             completion(nil)
             return
@@ -142,22 +135,22 @@ struct DynamicMapView: View {
                 return
             }
 
-            struct Response: Decodable {
-                let results: [ElevationResult]
+            // Log the raw JSON response for debugging
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Received JSON response: \(jsonString)")
             }
 
-            if let elevationResponse = try? JSONDecoder().decode(Response.self, from: data),
-               let elevation = elevationResponse.results.first?.elevation {
+            do {
+                let elevationResponse = try JSONDecoder().decode(OpenMeteoElevationResponse.self, from: data)
                 DispatchQueue.main.async {
-                    completion(elevation)
+                    completion(elevationResponse.elevation)
                 }
-            } else {
-                print("Failed to decode elevation data")
+            } catch {
+                print("Failed to decode elevation data: \(error)")
                 completion(nil)
             }
         }.resume()
     }
-
 
     private func sendGeolocationData() {
         let latValue = getRandomizedValue(value: pin.location.latitude, range: 0.0001)
@@ -257,3 +250,6 @@ struct NominatimResult: Codable {
     let lon: String
 }
 
+struct OpenMeteoElevationResponse: Decodable {
+    let elevation: Double
+}
