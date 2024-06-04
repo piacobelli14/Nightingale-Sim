@@ -7,12 +7,16 @@
 
 import SwiftUI
 
+struct DeviceInfoResponse: Codable {
+    let data: [DeviceInfo]
+}
+
 struct DeviceInfo: Codable {
     let devID: String
     let devType: String
     let orgID: String
-    let assignedTo: String
-    let lastAssgned: String
+    let assignedTo: String?
+    let lastAssigned: String
     let devBattery: String
 }
 
@@ -236,7 +240,7 @@ struct SettingsSim: View {
                                                 .autocapitalization(.none)
                                                 .disableAutocorrection(true)
                                                 .foregroundColor(.black)
-                                                .font(.system(size: geometry.size.height * 0.02, weight: .light, design: .default))
+                                                .font(.system(size: geometry.size.height * 0.016, weight: .light, design: .default))
                                                 .multilineTextAlignment(.leading)
                                                 .padding(.vertical, geometry.size.height * 0.016)
                                                 .padding(.horizontal, geometry.size.width * 0.02)
@@ -428,10 +432,13 @@ struct SettingsSim: View {
             
             if response.statusCode == 200 {
                 do {
-                    let decodedData = try JSONDecoder().decode([DeviceInfo].self, from: data)
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    print("Received JSON: \(json)")
+                    
+                    let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
-                        self.deviceInfo = decodedData
-                        self.availableDevIDs = decodedData.map { $0.devID }
+                        self.deviceInfo = decodedData.data
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
                     }
                 } catch {
                     DispatchQueue.main.async {
