@@ -39,6 +39,8 @@ struct SettingsSim: View {
     
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []
+    
+    @State private var errorMessage: String? = nil
 
     
     let gradient = LinearGradient(
@@ -396,7 +398,6 @@ struct SettingsSim: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
-                    self.errorMessage = "Network error: \(error.localizedDescription)"
                     print(self.errorMessage)
                 }
                 return
@@ -424,7 +425,6 @@ struct SettingsSim: View {
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData
                         self.availableDevIDs = decodedData.map { $0.devID }
-                        print(devIDs)
                     }
                 } catch {
                     DispatchQueue.main.async {
