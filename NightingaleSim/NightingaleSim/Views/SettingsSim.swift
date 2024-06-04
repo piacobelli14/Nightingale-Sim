@@ -235,13 +235,32 @@ struct SettingsSim: View {
                         .padding(.top, geometry.size.height * 0.02)
                         
                         HStack {
+                            Text("Health Sensor")
+                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .padding(.vertical, geometry.size.height * 0.01)
+                                .padding(.leading, geometry.size.width * 0.01)
+                            
+                            Text("Motion Sensor")
+                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .padding(.vertical, geometry.size.height * 0.01)
+                                .padding(.leading, geometry.size.width * 0.01)
+                            
+                            Text("Geolocation Sensor")
+                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                .foregroundColor(Color.white)
+                                .padding(.vertical, geometry.size.height * 0.01)
+                                .padding(.leading, geometry.size.width * 0.01)
+                            
+                            
                             
                         }
                         .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.25)
                         .background(Color.white.opacity(0.2))
                         .cornerRadius(geometry.size.height * 0.005)
                         .shadow(radius: 5)
-                        .padding(.top, geometry.size.height * 0.01)
+                        .padding(.top, geometry.size.height * 0.002)
                     }
                 }
                 .frame(height: geometry.size.height * 0.82)
