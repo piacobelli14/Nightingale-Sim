@@ -17,16 +17,16 @@ struct SettingsSim: View {
     @Binding var motionFrequency: Int
     @Binding var healthFrequency: Int
     @Binding var geolocationFrequency: Int
-    @Binding var accUpperBound: CGFloat
-    @Binding var accLowerBound: CGFloat
-    @Binding var gyroUpperBound: CGFloat
-    @Binding var gyroLowerBound: CGFloat
-    @Binding var magUpperBound: CGFloat
-    @Binding var magLowerBound: CGFloat
-    @Binding var hrUpperBound: Int
-    @Binding var hrLowerBound: Int
-    @Binding var respUpperBound: Int
-    @Binding var respLowerBound: Int
+    @Binding var accUpperBound: Double
+    @Binding var accLowerBound: Double
+    @Binding var gyroUpperBound: Double
+    @Binding var gyroLowerBound: Double
+    @Binding var magUpperBound: Double
+    @Binding var magLowerBound: Double
+    @Binding var hrUpperBound: Double
+    @Binding var hrLowerBound: Double
+    @Binding var respUpperBound: Double
+    @Binding var respLowerBound: Double
     
 
     

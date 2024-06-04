@@ -89,16 +89,16 @@ struct StaticSim: View {
     @Binding var motionFrequency: Int
     @Binding var healthFrequency: Int
     @Binding var geolocationFrequency: Int
-    @Binding var accUpperBound: CGFloat
-    @Binding var accLowerBound: CGFloat
-    @Binding var gyroUpperBound: CGFloat
-    @Binding var gyroLowerBound: CGFloat
-    @Binding var magUpperBound: CGFloat
-    @Binding var magLowerBound: CGFloat
-    @Binding var hrUpperBound: Int
-    @Binding var hrLowerBound: Int
-    @Binding var respUpperBound: Int
-    @Binding var respLowerBound: Int
+    @Binding var accUpperBound: Double
+    @Binding var accLowerBound: Double
+    @Binding var gyroUpperBound: Double
+    @Binding var gyroLowerBound: Double
+    @Binding var magUpperBound: Double
+    @Binding var magLowerBound: Double
+    @Binding var hrUpperBound: Double
+    @Binding var hrLowerBound: Double
+    @Binding var respUpperBound: Double
+    @Binding var respLowerBound: Double
     
     @State private var motionTimer: AnyCancellable?
     @State private var healthTimer: AnyCancellable?
@@ -638,18 +638,18 @@ struct StaticSim: View {
         let motionData: [String: Any] = [
             "accelerometer": [
                 "x": !isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound)),
-                "y": Double(accY),
-                "z": Double(accZ)
+                "y": !isRandom ? Double(accY) : Double.random(in: Double(accX + accLowerBound)...Double(accY + accUpperBound)),
+                "z":!isRandom ? Double(accZ) : Double.random(in: Double(accX + accLowerBound)...Double(accZ + accUpperBound))
             ],
             "gyroscope": [
-                "x": Double(gyroX),
-                "y": Double(gyroY),
-                "z": Double(gyroZ)
+                "x": !isRandom ? Double(gyroX) : Double.random(in: Double(gyroX + gyroLowerBound)...Double(gyroX + gyroUpperBound)),
+                "y": !isRandom ? Double(gyroY) : Double.random(in: Double(gyroY + gyroLowerBound)...Double(gyroY + gyroUpperBound)),
+                "z": !isRandom ? Double(gyroZ) : Double.random(in: Double(gyroZ + gyroLowerBound)...Double(gyroZ + gyroUpperBound))
             ],
             "magnetometer": [
-                "x": Double(magX),
-                "y": Double(magY),
-                "z": Double(magZ)
+                "x": !isRandom ? Double(magX) : Double.random(in: Double(magX + magLowerBound)...Double(magX + magUpperBound)),
+                "y": !isRandom ? Double(magY) : Double.random(in: Double(magY + magLowerBound)...Double(magY + magUpperBound)),
+                "z": !isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))
             ],
             "timestamp": timestamp
         ]
@@ -689,7 +689,7 @@ struct StaticSim: View {
         }.resume()
     }
     private func startHealthDataCollection() {
-        healthTimer = Timer.publish(every: healthFrequency, on: .main, in: .common).autoconnect().sink { _ in
+        healthTimer = Timer.publish(every: TimeInterval(healthFrequency), on: .main, in: .common).autoconnect().sink { _ in
             sendHealthData()
         }
     }

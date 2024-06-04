@@ -17,16 +17,16 @@ struct ContentView: View {
     @State private var motionFrequency: Int = 10
     @State private var healthFrequency: Int = 60
     @State private var geolocationFrequency: Int = 1
-    @State private var accUpperBound: CGFloat = 0.1
-    @State private var accLowerBound: CGFloat = -0.1
-    @State private var gyroUpperBound: CGFloat = 20.0
-    @State private var gyroLowerBound: CGFloat = -20.0
-    @State private var magUpperBound: CGFloat = 10.0
-    @State private var magLowerBound: CGFloat = -10.0
-    @State private var hrUpperBound: Int = 6
-    @State private var hrLowerBound: Int = -6
-    @State private var respUpperBound: Int = 3
-    @State private var respLowerBound: Int = -3
+    @State private var accUpperBound: Double = 0.1
+    @State private var accLowerBound: Double = -0.1
+    @State private var gyroUpperBound: Double = 20.0
+    @State private var gyroLowerBound: Double = -20.0
+    @State private var magUpperBound: Double = 10.0
+    @State private var magLowerBound: Double = -10.0
+    @State private var hrUpperBound: Double = 6
+    @State private var hrLowerBound: Double = -6
+    @State private var respUpperBound: Double = 3
+    @State private var respLowerBound: Double = -3
     
     
     
