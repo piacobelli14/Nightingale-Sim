@@ -235,7 +235,7 @@ struct SettingsSim: View {
                                                 }
                                             }
                                         } label: {
-                                            Text(targetDevice == "" ? "Select A Device" : targetDevice)
+                                            Text(targetDevice.isEmpty ? (availableDevIDs.first ?? "") : targetDevice)
                                                 .autocapitalization(.none)
                                                 .disableAutocorrection(true)
                                                 .foregroundColor(.black)
