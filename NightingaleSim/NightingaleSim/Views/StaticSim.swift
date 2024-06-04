@@ -637,7 +637,7 @@ struct StaticSim: View {
         
         let motionData: [String: Any] = [
             "accelerometer": [
-                "x": Double(accX),
+                "x": !isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound)),
                 "y": Double(accY),
                 "z": Double(accZ)
             ],
