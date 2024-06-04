@@ -278,19 +278,19 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
-                                    .padding(.bottom, geometry.size.height * 0.04)
+                                    .padding(.bottom, geometry.size.height * 0.02)
                                 
                                 VStack {
                                     Text("Send Frequency: \(healthFrequency)")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.6))
+                                        .foregroundColor(.white.opacity(0.8))
                                     
                                     Stepper(value: $healthFrequency, in: 0...1000) {
                                         Text("")
                                     }
                                     .labelsHidden()
                                     .tint(Color.black)
-                                    .background(Color.white.opacity(0.6))
+                                    .background(Color.white.opacity(0.8))
                                     .cornerRadius(geometry.size.height * 0.008)
                                 }
                             }
@@ -305,19 +305,19 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
-                                    .padding(.bottom, geometry.size.height * 0.04)
+                                    .padding(.bottom, geometry.size.height * 0.02)
                                 
                                 VStack {
                                     Text("Send Frequency: \(motionFrequency) seconds")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.6))
+                                        .foregroundColor(.white.opacity(0.8))
                                     
                                     Stepper(value: $motionFrequency, in: 0...1000) {
                                         Text("")
                                     }
                                     .labelsHidden()
                                     .tint(Color.black)
-                                    .background(Color.white.opacity(0.6))
+                                    .background(Color.white.opacity(0.8))
                                     .cornerRadius(geometry.size.height * 0.008)
                                 }
                             }
@@ -332,19 +332,19 @@ struct SettingsSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
-                                    .padding(.bottom, geometry.size.height * 0.04)
+                                    .padding(.bottom, geometry.size.height * 0.02)
                                 
                                 VStack {
                                     Text("Send Frequency: \(geolocationFrequency) seconds")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.6))
+                                        .foregroundColor(.white.opacity(0.8))
                                     
                                     Stepper(value: $geolocationFrequency, in: 0...1000) {
                                         Text("")
                                     }
                                     .labelsHidden()
                                     .tint(Color.black)
-                                    .background(Color.white.opacity(0.6))
+                                    .background(Color.white.opacity(0.8))
                                     .cornerRadius(geometry.size.height * 0.008)
                                 }
                             }
