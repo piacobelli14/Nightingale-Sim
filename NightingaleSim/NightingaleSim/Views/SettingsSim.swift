@@ -279,21 +279,21 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                 
-                                Picker("Health Frequency", selection: $healthFrequency) {
-                                    ForEach(Array(0...100), id: \.self) { option in
-                                        Text("\(option)").tag(option)
+                                HStack {
+                                    Picker("Health Frequency", selection: $healthFrequency) {
+                                        ForEach(Array(0...100), id: \.self) { option in
+                                            Text("\(option)").tag(option)
+                                        }
                                     }
+                                    .pickerStyle(WheelPickerStyle())
+                                    .labelsHidden()
+                                    
+                                    Text("Send Frequency: \(healthFrequency)")
                                 }
-                                .pickerStyle(InlinePickerStyle())
-                                .padding(10)
                                 .padding()
-                                .background(Color.white)
-                                .cornerRadius(geometry.size.height * 0.005)
-                                .shadow(radius: 2)
-                                .padding(.top, geometry.size.height * 0.01)
-                                .labelsHidden()
                                 
-                                Text("Send Frequency: \(healthFrequency)")
+                                
+                                
                             }
                             .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
                             .background(Color.white.opacity(0.2))
