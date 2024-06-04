@@ -281,7 +281,7 @@ struct SettingsSim: View {
                                     .padding(.bottom, geometry.size.height * 0.02)
                                 
                                 VStack {
-                                    Text("Send Frequency: \(healthFrequency)")
+                                    Text("Send Frequency: \(healthFrequency) seconds")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                         .foregroundColor(.white.opacity(0.8))
                                     
