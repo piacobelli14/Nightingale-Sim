@@ -171,7 +171,7 @@ struct StaticSim: View {
                 ScrollView {
                     
                     HStack {
-                        DynamicMapView(isRandom: $isRandom, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry)
+                        DynamicMapView(isRandom: $isRandom, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.01)
                     }
@@ -664,7 +664,7 @@ struct StaticSim: View {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let payload: [String: Any] = [
-            "deviceID": "awse-1000",
+            "deviceID": targetDevice,
             "orgID": authenticatedOrgID,
             "data": motionDataCollection
         ]
@@ -696,7 +696,7 @@ struct StaticSim: View {
     }
     private func sendHealthData() {
         let healthData = [
-            "deviceID": "awse-1000",
+            "deviceID": targetDevice,
             "orgID": authenticatedOrgID,
             "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))),
             "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))),

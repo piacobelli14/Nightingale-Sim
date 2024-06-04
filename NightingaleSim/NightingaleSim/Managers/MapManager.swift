@@ -26,6 +26,7 @@ struct DynamicMapView: View {
     @State private var altitude: Double = 0
     @State private var geolocationTimer: AnyCancellable?
     @Binding var isRandom: Bool
+    @Binding var targetDevice: String
     @Binding var isGeolocation: Bool
     @Binding var geolocationFrequency: Int
     let geometry: GeometryProxy
@@ -158,6 +159,7 @@ struct DynamicMapView: View {
         let lonValue = getRandomizedValue(value: pin.location.longitude, range: 0.0001)
         let altValue = getRandomizedValue(value: altitude, range: 5)
         let geolocationData = [
+            "deviceID": targetDevice,
             "lat": latValue,
             "lon": lonValue,
             "alt": altValue,
