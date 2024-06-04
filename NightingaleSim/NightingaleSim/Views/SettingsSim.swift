@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct DeviceInfo: Codable {
-    let devType: String
     let devID: String
+    let devType: String
+    let orgID: String
     let assignedTo: String
-    let lastAssigned: String
-    let battery: String
+    let lastAssgned: String
+    let devBattery: String
 }
 
 struct SettingsSim: View {
@@ -390,35 +391,41 @@ struct SettingsSim: View {
         }
     }
     private func getAvailableDevices() {
+        let requestBody: [String: Any] = [
+            "orgID": authenticatedOrgID
+        ]
+
         let url = URL(string: "http://172.20.10.2:5000/get-devices")!
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        request.httpBody = try? JSONSerialization.data(withJSONObject: requestBody)
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
-                    print(self.errorMessage)
+                    self.errorMessage = "Network error: \(error.localizedDescription)"
+                    print(self.errorMessage ?? "")
                 }
                 return
             }
-
+            
             guard let data = data else {
                 DispatchQueue.main.async {
                     self.errorMessage = "No data received from the server"
-                    print(self.errorMessage)
+                    print(self.errorMessage ?? "")
                 }
                 return
             }
-
+            
             guard let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Invalid response from the server"
-                    print(self.errorMessage)
+                    print(self.errorMessage ?? "")
                 }
                 return
             }
-
+            
             if response.statusCode == 200 {
                 do {
                     let decodedData = try JSONDecoder().decode([DeviceInfo].self, from: data)
@@ -442,5 +449,4 @@ struct SettingsSim: View {
         }
         .resume()
     }
-
 }
