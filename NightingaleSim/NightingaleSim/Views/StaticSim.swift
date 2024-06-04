@@ -682,7 +682,7 @@ struct StaticSim: View {
             }
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                print("Motion data sent successfully")
+                return
             } else {
                 print("Failed to send motion data, received non-200 response")
             }
@@ -722,7 +722,7 @@ struct StaticSim: View {
             }
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                print("Health data sent successfully")
+               return
             } else {
                 print("Failed to send health data, received non-200 response")
             }
