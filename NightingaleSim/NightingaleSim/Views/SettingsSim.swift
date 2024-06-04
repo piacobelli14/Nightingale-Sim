@@ -240,18 +240,21 @@ struct SettingsSim: View {
                                 .foregroundColor(Color.white)
                                 .padding(.vertical, geometry.size.height * 0.01)
                                 .padding(.leading, geometry.size.width * 0.01)
+                                .frame(width: geometry.size.width * 0.3)
                             
                             Text("Motion Sensor")
                                 .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                 .foregroundColor(Color.white)
                                 .padding(.vertical, geometry.size.height * 0.01)
                                 .padding(.leading, geometry.size.width * 0.01)
+                                .frame(width: geometry.size.width * 0.3)
                             
                             Text("Geolocation Sensor")
                                 .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                 .foregroundColor(Color.white)
                                 .padding(.vertical, geometry.size.height * 0.01)
                                 .padding(.leading, geometry.size.width * 0.01)
+                                .frame(width: geometry.size.width * 0.3)
                             
                             
                             
