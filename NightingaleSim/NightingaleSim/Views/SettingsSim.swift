@@ -235,29 +235,35 @@ struct SettingsSim: View {
                         .padding(.top, geometry.size.height * 0.02)
                         
                         HStack {
-                            Text("Health Sensor")
-                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .padding(.vertical, geometry.size.height * 0.01)
-                                .padding(.leading, geometry.size.width * 0.01)
-                                .frame(width: geometry.size.width * 0.3)
+                            Spacer()
+                            VStack {
+                                Text("Health Sensor")
+                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                            }
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
+                            .background(Color.white.opacity(0.5))
                             
-                            Text("Motion Sensor")
-                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .padding(.vertical, geometry.size.height * 0.01)
-                                .padding(.leading, geometry.size.width * 0.01)
-                                .frame(width: geometry.size.width * 0.3)
+                            VStack {
+                                Text("Motion Sensor")
+                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                            }
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
+                            .background(Color.white.opacity(0.5))
                             
-                            Text("Geolocation Sensor")
-                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                .foregroundColor(Color.white)
-                                .padding(.vertical, geometry.size.height * 0.01)
-                                .padding(.leading, geometry.size.width * 0.01)
-                                .frame(width: geometry.size.width * 0.3)
+                            VStack {
+                                Text("Geolocation Sensor")
+                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                            }
+                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
+                            .background(Color.white.opacity(0.5))
                             
-                            
-                            
+                           Spacer()
                         }
                         .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.25)
                         .background(Color.white.opacity(0.2))
