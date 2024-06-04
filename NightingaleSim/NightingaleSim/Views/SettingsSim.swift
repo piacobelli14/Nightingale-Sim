@@ -284,8 +284,6 @@ struct SettingsSim: View {
                                     in: 0...100,
                                     step: 1
                                 ) {
-                                    Text("Current: \(healthFrequency))")
-                                        
                                 }
                                 .padding(10)
                                 .padding()
@@ -293,6 +291,9 @@ struct SettingsSim: View {
                                 .cornerRadius(geometry.size.height * 0.005)
                                 .shadow(radius: 2)
                                 .padding(.top, geometry.size.height * 0.01)
+                                .labelsHidden()
+                                
+                                Text("Send Frequency: \(healthFrequency)")
                             }
                             .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.25)
                             .background(Color.white.opacity(0.2))

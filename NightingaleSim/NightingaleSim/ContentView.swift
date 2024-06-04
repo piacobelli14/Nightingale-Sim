@@ -16,7 +16,7 @@ struct ContentView: View {
     @State private var isHealth: Bool = true
     @State private var isGeolocation: Bool = true
     @State private var motionFrequency: Int = 10
-    @State private var healthFrequency: Int = 1
+    @State private var healthFrequency: Int = 30
     @State private var geolocationFrequency: Int = 30
     @State private var accUpperBound: Double = 0.1
     @State private var accLowerBound: Double = -0.1
