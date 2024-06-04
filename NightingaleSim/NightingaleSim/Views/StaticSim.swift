@@ -171,7 +171,7 @@ struct StaticSim: View {
                 ScrollView {
                     
                     HStack {
-                        DynamicMapView(isRandom: $isRandom, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry)
+                        DynamicMapView(isRandom: $isRandom, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.01)
                     }
