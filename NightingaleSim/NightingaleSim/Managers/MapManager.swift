@@ -14,6 +14,12 @@ struct LocationPin: Identifiable {
     var location: CLLocationCoordinate2D
 }
 
+
+struct ElevationResult: Decodable {
+    let elevation: Double
+}
+
+
 struct DynamicMapView: View {
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 29.559684, longitude: -95.08374),
@@ -123,7 +129,7 @@ struct DynamicMapView: View {
     }
 
     private func fetchAltitude(for location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
-        let urlString = "https://api.open-elevation.com/api/v1/lookup?locations=\(location.latitude),\(location.longitude)"
+        let urlString = "https://api.opentopodata.org/v1/eudem25m?locations=\(location.latitude),\(location.longitude)"
         guard let url = URL(string: urlString) else {
             completion(nil)
             return
@@ -136,7 +142,11 @@ struct DynamicMapView: View {
                 return
             }
 
-            if let elevationResponse = try? JSONDecoder().decode(ElevationResult.self, from: data),
+            struct Response: Decodable {
+                let results: [ElevationResult]
+            }
+
+            if let elevationResponse = try? JSONDecoder().decode(Response.self, from: data),
                let elevation = elevationResponse.results.first?.elevation {
                 DispatchQueue.main.async {
                     completion(elevation)
@@ -245,19 +255,5 @@ struct NominatimResult: Codable {
     let display_name: String
     let lat: String
     let lon: String
-}
-
-struct ElevationResult: Codable {
-    struct Result: Codable {
-        let elevation: Double
-        let location: Location
-    }
-
-    struct Location: Codable {
-        let lat: Double
-        let lon: Double
-    }
-
-    let results: [Result]
 }
 
