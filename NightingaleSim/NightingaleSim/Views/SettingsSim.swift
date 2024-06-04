@@ -279,12 +279,12 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                 
-                                Stepper(
-                                    value: $healthFrequency,
-                                    in: 0...100,
-                                    step: 1
-                                ) {
+                                Picker("Health Frequency", selection: $healthFrequency) {
+                                    ForEach(Array(0...100), id: \.self) { option in
+                                        Text("\(option)").tag(option)
+                                    }
                                 }
+                                .pickerStyle(InlinePickerStyle())
                                 .padding(10)
                                 .padding()
                                 .background(Color.white)
