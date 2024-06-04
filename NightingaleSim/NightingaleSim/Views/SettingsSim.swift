@@ -53,8 +53,8 @@ struct SettingsSim: View {
                 
                 ScrollView {
                     
-                    HStack {
-                        VStack {
+                    VStack {
+                        HStack {
                             VStack {
                                 HStack {
                                     Text("Configure Sensors")
@@ -136,91 +136,89 @@ struct SettingsSim: View {
                                 .padding(.top, geometry.size.height * 0.01)
                                 Spacer()
                             }
+                            .frame(height: geometry.size.height * 0.5)
                             .padding()
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
-                            .frame(height: geometry.size.height * 0.25)
+                            .shadow(radius: 5)
                             
-                        }
-                        .frame(height: geometry.size.height * 0.5)
-                        .shadow(radius: 5)
-                        
-                        VStack {
-                            HStack {
-                                Text("Current User")
-                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .padding(.vertical, geometry.size.height * 0.01)
-                                    .padding(.leading, geometry.size.width * 0.01)
+                            VStack {
+                                HStack {
+                                    Text("Current User")
+                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                        .foregroundColor(Color.white)
+                                        .padding(.vertical, geometry.size.height * 0.01)
+                                        .padding(.leading, geometry.size.width * 0.01)
+                                    
+                                    Spacer()
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Text("Username:")
+                                            .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                            .foregroundColor(Color.white)
+                                            .opacity(0.8)
+                                            .padding(.leading, geometry.size.width * 0.01)
+                                        
+                                        Text("@"+"\(authenticatedUsername)")
+                                            .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                            .foregroundColor(Color.white)
+                                            .opacity(0.6)
+                                            .padding(.leading, geometry.size.width * 0.02)
+                                        
+                                        Spacer()
+                                    }
+                                    .padding(.top, geometry.size.height * 0.01)
+                                    
+                                    HStack {
+                                        Text("Organization ID:")
+                                            .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                            .foregroundColor(Color.white)
+                                            .opacity(0.8)
+                                            .padding(.leading, geometry.size.width * 0.01)
+                                        
+                                        Text("\(authenticatedOrgID)")
+                                        
+                                            .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                            .foregroundColor(Color.white)
+                                            .opacity(0.6)
+                                            .padding(.leading, geometry.size.width * 0.02)
+                                        
+                                        Spacer()
+                                    }
+                                    .padding(.top, geometry.size.height * 0.01)
+                                    
+                                    HStack {
+                                        Text("Device ID:")
+                                            .font(.system(size: geometry.size.height * 0.016, weight: .bold))
+                                            .foregroundColor(Color.white)
+                                            .opacity(0.8)
+                                            .padding(.leading, geometry.size.width * 0.01)
+                                        
+                                        Text("awse-10000")
+                                        
+                                            .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                            .foregroundColor(Color.white)
+                                            .opacity(0.6)
+                                            .padding(.leading, geometry.size.width * 0.02)
+                                        
+                                        Spacer()
+                                    }
+                                    .padding(.top, geometry.size.height * 0.01)
+                                }
                                 
                                 Spacer()
                             }
-                            
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text("Username:")
-                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                    
-                                    Text("@"+"\(authenticatedUsername)")
-                                        .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.6)
-                                        .padding(.leading, geometry.size.width * 0.02)
-                                    
-                                    Spacer()
-                                }
-                                .padding(.top, geometry.size.height * 0.01)
-                                
-                                HStack {
-                                    Text("Organization ID:")
-                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                    
-                                    Text("\(authenticatedOrgID)")
-
-                                        .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.6)
-                                        .padding(.leading, geometry.size.width * 0.02)
-                                    
-                                    Spacer()
-                                }
-                                .padding(.top, geometry.size.height * 0.01)
-                                
-                                HStack {
-                                    Text("Device ID:")
-                                        .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.8)
-                                        .padding(.leading, geometry.size.width * 0.01)
-                                    
-                                    Text("awse-10000")
-
-                                        .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
-                                        .foregroundColor(Color.white)
-                                        .opacity(0.6)
-                                        .padding(.leading, geometry.size.width * 0.02)
-                                    
-                                    Spacer()
-                                }
-                                .padding(.top, geometry.size.height * 0.01)
-                            }
-                            
-                            Spacer()
+                            .frame(height: geometry.size.height * 0.25)
+                            .padding()
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(geometry.size.height * 0.005)
+                            .shadow(radius: 5)
                         }
-                        .frame(height: geometry.size.height * 0.25)
-                        .padding()
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(geometry.size.height * 0.005)
-                        .shadow(radius: 5)
+                        .frame(width: geometry.size.width * 0.92)
+                        .padding(.top, geometry.size.height * 0.02)
                     }
-                    .frame(width: geometry.size.width * 0.92)
-                    .padding(.top, geometry.size.height * 0.02)
                 }
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
