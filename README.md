@@ -37,14 +37,14 @@ These three sensors can be toggled on and off so you can stream only the simulat
 
 # Simulator Dashboard
 
-![Image](SimulatorDashboard)
+![Image](SimulatorDashboard.png)
 
 # Settings Dashboard
 
-![Image](SettingsDashboard)
+![Image](SettingsDashboard.png)
 
 # Authentication Page
 
-![Image](AuthenticationPage)
+![Image](AuthenticationPage.png)
 
 
