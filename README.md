@@ -34,3 +34,17 @@ Nightingale Sim offers the ability to stream simulated data in three distinct gr
   - Altitude (automatically gathered based on the selected coordinates)
 
 These three sensors can be toggled on and off so you can stream only the simulated data you need for development. In addition, the frequency (in seconds) at which batch data is sent to the Vektor API can be adjusted to fit your specific requirements. 
+
+# Simulator Dashboard
+
+![Image](SimulatorDashboard)
+
+# Settings Dashboard
+
+![Image](SettingsDashboard)
+
+# Authentication Page
+
+![Image](AuthenticationPage)
+
+
