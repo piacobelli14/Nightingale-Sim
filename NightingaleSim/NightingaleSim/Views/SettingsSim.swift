@@ -411,7 +411,7 @@ struct SettingsSim: View {
                         }
                         .padding(.trailing, geometry.size.width * 0.03)
                     }
-                    .padding(.top, geometry.size.height * 0.014)
+                    .padding(.top, geometry.size.height * 0.02)
                     .padding(.bottom, geometry.size.height * 0.01)
                     
                     

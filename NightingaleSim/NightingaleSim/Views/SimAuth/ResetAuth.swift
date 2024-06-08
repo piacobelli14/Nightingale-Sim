@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ResetAuth: View {
     @Binding var currentView: AppView
     
