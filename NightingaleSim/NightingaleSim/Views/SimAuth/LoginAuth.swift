@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-struct LoginResponse: Codable {
-    let username: String
-    let orgID: String
-}
-
 struct LoginAuth: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String

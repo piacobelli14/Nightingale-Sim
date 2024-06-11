@@ -6,19 +6,6 @@
 //
 import SwiftUI
 
-struct DeviceInfoResponse: Codable {
-    let data: [DeviceInfo]
-}
-
-struct DeviceInfo: Codable {
-    let devID: String
-    let devType: String
-    let orgID: String
-    let assignedTo: String?
-    let lastAssigned: String
-    let devBattery: String
-}
-
 struct SettingsSim: View {
     @Binding var currentView: AppView
     @Binding var authenticatedUsername: String

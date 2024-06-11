@@ -9,11 +9,6 @@ import SwiftUI
 import MapKit
 import Combine
 
-struct LocationPin: Identifiable {
-    let id = UUID()
-    var location: CLLocationCoordinate2D
-}
-
 struct DynamicMapView: View {
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 29.559684, longitude: -95.08374),
@@ -247,15 +242,5 @@ struct DynamicMapView: View {
             return Double(value)
         }
     }
-}
-
-struct NominatimResult: Codable {
-    let display_name: String
-    let lat: String
-    let lon: String
-}
-
-struct OpenMeteoElevationResponse: Decodable {
-    let elevation: [Double]
 }
 
