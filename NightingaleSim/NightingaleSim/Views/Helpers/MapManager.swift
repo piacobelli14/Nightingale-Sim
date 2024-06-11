@@ -128,7 +128,6 @@ struct DynamicMapView: View {
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
-                print("Error fetching elevation: \(error?.localizedDescription ?? "")")
                 completion(nil)
                 return
             }
@@ -140,11 +139,9 @@ struct DynamicMapView: View {
                         completion(elevation)
                     }
                 } else {
-                    print("No elevation data found in response or elevation is null")
                     completion(nil)
                 }
             } catch {
-                print("Failed to decode elevation data: \(error)")
                 completion(nil)
             }
         }.resume()
@@ -171,20 +168,18 @@ struct DynamicMapView: View {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: geolocationData, options: [])
         } catch {
-            print("Failed to serialize geolocation data: \(error)")
             return
         }
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error sending geolocation data: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 return
             } else {
-                print("Failed to send geolocation data, received non-200 response")
+                return
             }
         }.resume()
     }
@@ -195,7 +190,6 @@ struct DynamicMapView: View {
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
-                print("Error fetching geocode: \(error?.localizedDescription ?? "")")
                 return
             }
 
@@ -210,7 +204,7 @@ struct DynamicMapView: View {
                     }
                 }
             } else {
-                print("Failed to decode suggestions or convert coordinates")
+                return
             }
         }.resume()
     }
@@ -221,17 +215,15 @@ struct DynamicMapView: View {
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
-                print("Error fetching suggestions: \(error?.localizedDescription ?? "")")
                 return
             }
 
             if let results = try? JSONDecoder().decode([NominatimResult].self, from: data) {
                 DispatchQueue.main.async {
                     self.suggestions = results.map { $0.display_name }
-                    print(self.suggestions)
                 }
             } else {
-                print("Failed to decode suggestions")
+                return
             }
         }.resume()
     }

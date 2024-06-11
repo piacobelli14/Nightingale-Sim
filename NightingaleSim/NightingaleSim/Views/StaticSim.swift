@@ -670,20 +670,18 @@ struct StaticSim: View {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
         } catch {
-            print("Failed to serialize motion data: \(error)")
             return
         }
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error sending motion data: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 return
             } else {
-                print("Failed to send motion data, received non-200 response")
+                return
             }
         }.resume()
     }
@@ -710,20 +708,18 @@ struct StaticSim: View {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: healthData, options: [])
         } catch {
-            print("Failed to serialize health data: \(error)")
             return
         }
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error sending health data: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                return
             } else {
-                print("Failed to send health data, received non-200 response")
+                return
             }
         }.resume()
     }
@@ -754,7 +750,6 @@ struct StaticSim: View {
             if let error = error {
                 DispatchQueue.main.async {
                     self.errorMessage = "Network error: \(error.localizedDescription)"
-                    print(self.errorMessage ?? "")
                 }
                 return
             }
@@ -762,7 +757,6 @@ struct StaticSim: View {
             guard let data = data else {
                 DispatchQueue.main.async {
                     self.errorMessage = "No data received from the server"
-                    print(self.errorMessage ?? "")
                 }
                 return
             }
@@ -770,7 +764,6 @@ struct StaticSim: View {
             guard let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Invalid response from the server"
-                    print(self.errorMessage ?? "")
                 }
                 return
             }
@@ -788,14 +781,12 @@ struct StaticSim: View {
                 } catch {
                     DispatchQueue.main.async {
                         self.errorMessage = "JSON decoding error: \(error.localizedDescription)"
-                        print(self.errorMessage)
                     }
                 }
 
             } else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Server error with status code: \(response.statusCode)"
-                    print(self.errorMessage)
                 }
             }
         }

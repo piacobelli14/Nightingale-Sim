@@ -447,7 +447,6 @@ struct SettingsSim: View {
             if let error = error {
                 DispatchQueue.main.async {
                     self.errorMessage = "Network error: \(error.localizedDescription)"
-                    print(self.errorMessage ?? "")
                 }
                 return
             }
@@ -455,7 +454,6 @@ struct SettingsSim: View {
             guard let data = data else {
                 DispatchQueue.main.async {
                     self.errorMessage = "No data received from the server"
-                    print(self.errorMessage ?? "")
                 }
                 return
             }
@@ -463,7 +461,6 @@ struct SettingsSim: View {
             guard let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Invalid response from the server"
-                    print(self.errorMessage ?? "")
                 }
                 return
             }
@@ -481,14 +478,12 @@ struct SettingsSim: View {
                 } catch {
                     DispatchQueue.main.async {
                         self.errorMessage = "JSON decoding error: \(error.localizedDescription)"
-                        print(self.errorMessage)
                     }
                 }
 
             } else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Server error with status code: \(response.statusCode)"
-                    print(self.errorMessage)
                 }
             }
         }
