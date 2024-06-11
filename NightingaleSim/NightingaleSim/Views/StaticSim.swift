@@ -91,6 +91,9 @@ struct StaticSim: View {
     @Binding var respUpperBound: Double
     @Binding var respLowerBound: Double
     
+    @State private var deviceInfo: [DeviceInfo] = []
+    @State private var availableDevIDs: [String] = []
+    
     @State private var motionTimer: AnyCancellable?
     @State private var healthTimer: AnyCancellable?
     @State private var motionDataCollection = [[String: Any]]()
@@ -536,6 +539,9 @@ struct StaticSim: View {
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
+            .onAppear {
+                getAvailableDevices()
+            }
         }
     }
     private func heartRateColor(_ rate: Double) -> Color {
@@ -725,5 +731,72 @@ struct StaticSim: View {
         } else {
             return Double(value)
         }
+    }
+    private func getAvailableDevices() {
+        guard let token = loadTokenFromKeychain() else {
+            return
+        }
+        
+        let requestBody: [String: Any] = [
+            "organizationID": authenticatedOrgID
+        ]
+        
+        let url = URL(string: "http://172.20.10.2:5000/get-devices")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: requestBody)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Network error: \(error.localizedDescription)"
+                    print(self.errorMessage ?? "")
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    self.errorMessage = "No data received from the server"
+                    print(self.errorMessage ?? "")
+                }
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Invalid response from the server"
+                    print(self.errorMessage ?? "")
+                }
+                return
+            }
+            
+            if response.statusCode == 200 {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    
+                    let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        self.deviceInfo = decodedData.data
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
+                        self.targetDevice = availableDevIDs.first ?? ""
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "JSON decoding error: \(error.localizedDescription)"
+                        print(self.errorMessage)
+                    }
+                }
+
+            } else {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Server error with status code: \(response.statusCode)"
+                    print(self.errorMessage)
+                }
+            }
+        }
+        .resume()
     }
 }
