@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct LoginResponse: Codable {
     let userid: String
