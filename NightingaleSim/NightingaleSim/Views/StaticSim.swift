@@ -91,6 +91,8 @@ struct StaticSim: View {
     @Binding var respUpperBound: Double
     @Binding var respLowerBound: Double
     
+    @State private var errorMessage: String? = nil
+    
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []
     
