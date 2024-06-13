@@ -246,6 +246,10 @@ struct LoginAuth: View {
             "username": username,
             "password": password
         ]
+        
+        guard let url = URL(string: "http://172.20.10.2:5000/user-authentication") else {
+            return
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
