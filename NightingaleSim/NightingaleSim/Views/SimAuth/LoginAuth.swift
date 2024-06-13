@@ -30,7 +30,7 @@ struct LoginAuth: View {
                 Spacer()
                 HStack {
                     Text("Welcome to")
-                        .font(.system(size: geometry.size.height * 0.03, weight: .semibold))
+                        .font(.system(size: geometry.size.height * 0.035, weight: .semibold))
                         .foregroundColor(Color.white)
                         .opacity(0.8)
                     
