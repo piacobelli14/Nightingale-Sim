@@ -30,7 +30,7 @@ struct LoginAuth: View {
                 Spacer()
                 HStack {
                     Text("Welcome to")
-                        .font(.system(size: geometry.size.height * 0.04, weight: .semibold))
+                        .font(.system(size: geometry.size.height * 0.03, weight: .semibold))
                         .foregroundColor(Color.white)
                         .opacity(0.8)
                     
@@ -41,7 +41,7 @@ struct LoginAuth: View {
                 
                 HStack {
                     Text("Nightingale Sim")
-                        .font(.system(size: geometry.size.height * 0.07, weight: .bold))
+                        .font(.system(size: geometry.size.height * 0.05, weight: .bold))
                         .foregroundColor(Color.white)
                         .opacity(1.0)
                         .shadow(color: .gray.opacity(0.5), radius: 4, x: 0, y: 0)
