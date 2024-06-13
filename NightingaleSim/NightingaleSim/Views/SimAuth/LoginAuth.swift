@@ -36,12 +36,12 @@ struct LoginAuth: View {
                     
                     Spacer()
                 }
-                .padding(.leading, geometry.size.width * 0.07)
+                .padding(.leading, geometry.size.width * 0.06)
                 .padding(.vertical, 0)
                 
                 HStack {
                     Text("Nightingale Sim")
-                        .font(.system(size: geometry.size.height * 0.05, weight: .bold))
+                        .font(.system(size: geometry.size.height * 0.07, weight: .bold))
                         .foregroundColor(Color.white)
                         .opacity(1.0)
                         .shadow(color: .gray.opacity(0.5), radius: 4, x: 0, y: 0)
