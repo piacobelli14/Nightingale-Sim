@@ -482,6 +482,26 @@ struct StaticSim: View {
                             Button(action: {
                                 self.currentView = .SettingsSim
                             }) {
+                                Image(systemName: "coud.sun")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: geometry.size.height * 0.022)
+                                    .foregroundColor(Color.white)
+                                    .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
+                                    .padding(.leading, geometry.size.width * 0.01)
+                            }
+                            
+                            Text("Conditions")
+                                .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
+                                .foregroundColor(Color.white)
+                                .opacity(0.6)
+                        }
+                        .padding(.trailing, geometry.size.width * 0.01)
+                        
+                        VStack {
+                            Button(action: {
+                                self.currentView = .SettingsSim
+                            }) {
                                 Image(systemName: "gear")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
