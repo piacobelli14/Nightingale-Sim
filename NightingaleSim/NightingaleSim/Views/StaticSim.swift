@@ -1,12 +1,6 @@
-//
-//  StaticSim.swift
-//  NightingaleSim
-//
-//  Created by Peter Iacobelli on 5/10/24.
-//
-
 import SwiftUI
 import Combine
+import CoreLocation
 
 struct MotionSensorGauge: View {
     @Binding var motionValue: CGFloat
@@ -90,12 +84,13 @@ struct StaticSim: View {
     @Binding var hrLowerBound: Double
     @Binding var respUpperBound: Double
     @Binding var respLowerBound: Double
-    
+
+    @State private var locationData = LocationData(latitude: 29.559684, longitude: -95.08374, altitude: 0)
     @State private var errorMessage: String? = nil
-    
+
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []
-    
+
     @State private var motionTimer: AnyCancellable?
     @State private var healthTimer: AnyCancellable?
     @State private var motionDataCollection = [[String: Any]]()
@@ -105,10 +100,10 @@ struct StaticSim: View {
         startPoint: .leading,
         endPoint: .trailing
     )
-    
+
     @State private var isRandom: Bool = false
     @State private var showInfoPopover = false
-    
+
     @State private var heartRate: Double = 70
     @State private var respirationRate: Double = 12
     @State private var deviceBattery: Double = 85
@@ -122,7 +117,7 @@ struct StaticSim: View {
     @State private var magX: CGFloat = 100.0
     @State private var magY: CGFloat = 100.0
     @State private var magZ: CGFloat = 100.0
-    
+
     let configAccX = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
     let configAccY = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
     let configAccZ = ConfigArray(minimumValue: -2.0, maximumValue: 2.0, totalValue: 20.0, step: 0.1, knobRadius: 15.0, radius: 125.0)
@@ -132,7 +127,7 @@ struct StaticSim: View {
     var configMagX = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
     var configMagY = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
     var configMagZ = ConfigArray(minimumValue: -100.0, maximumValue: 100.0, totalValue: 200.0, step: 1.0,  knobRadius: 15.0, radius: 125.0)
-   
+
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -166,7 +161,7 @@ struct StaticSim: View {
                 ScrollView {
                     
                     HStack {
-                        DynamicMapView(isRandom: $isRandom, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry)
+                        DynamicMapView(isRandom: $isRandom, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry, locationData: $locationData)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.01)
                     }
@@ -436,23 +431,15 @@ struct StaticSim: View {
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
                 .onAppear {
-                    if isMotion {
-                        startMotionDataCollection()
-                    }
-                    
-                    if isHealth {
-                        startHealthDataCollection()
-                    }
+                   if isMotion {
+                       startMotionDataCollection()
+                   }
                 }
                 .onDisappear {
-                    if isMotion {
-                        motionTimer?.cancel()
-                    }
-                    
-                    if isHealth {
-                        healthTimer?.cancel()
-                    }
-                }
+                   if isMotion {
+                       motionTimer?.cancel()
+                   }
+               }
                 
                
                 Spacer()
@@ -542,9 +529,11 @@ struct StaticSim: View {
             }
             .onAppear {
                 getAvailableDevices()
+                fetchInitialAltitude()
             }
         }
     }
+    
     private func heartRateColor(_ rate: Double) -> Color {
         switch rate {
         case 20...60:
@@ -559,6 +548,7 @@ struct StaticSim: View {
             return .black
         }
     }
+    
     private func heartRateRisk(_ rate: Double) -> String {
         switch rate {
         case 20...60:
@@ -573,6 +563,7 @@ struct StaticSim: View {
             return "Normal"
         }
     }
+    
     private func respirationRateColor(_ rate: Double) -> Color {
         switch rate {
         case 0...8:
@@ -587,6 +578,7 @@ struct StaticSim: View {
             return .black
         }
     }
+    
     private func respirationRateRisk(_ rate: Double) -> String {
         switch rate {
         case 0...8:
@@ -601,6 +593,7 @@ struct StaticSim: View {
             return "Normal"
         }
     }
+    
     private func batteryLevelColor(_ rate: Double) -> Color {
         switch rate {
         case 0...20:
@@ -611,6 +604,7 @@ struct StaticSim: View {
             return .black
         }
     }
+    
     private func batteryLevelRisk(_ rate: Double) -> String {
         switch rate {
         case 0...20:
@@ -621,50 +615,62 @@ struct StaticSim: View {
             return "Normal"
         }
     }
+    
     private func startMotionDataCollection() {
-        motionTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect().sink { _ in
-            collectMotionData()
+        motionTimer = Timer.publish(every: TimeInterval(motionFrequency), on: .main, in: .common).autoconnect().sink { _ in
+            collectAndSendData()
             if motionDataCollection.count >= motionFrequency {
-                sendMotionData()
                 motionDataCollection.removeAll()
             }
         }
     }
-    private func collectMotionData() {
+    
+    private func collectAndSendData() {
         let timestamp = motionDataCollection.count + 1
-        
-        let motionData: [String: Any] = [
+
+        let singleMotionData: [String: Any] = [
             "accelerometer": [
-                "x": !isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound)),
-                "y": !isRandom ? Double(accY) : Double.random(in: Double(accX + accLowerBound)...Double(accY + accUpperBound)),
-                "z":!isRandom ? Double(accZ) : Double.random(in: Double(accX + accLowerBound)...Double(accZ + accUpperBound))
+                "x": isMotion ? (!isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound))) : Double(0),
+                "y": isMotion ? (!isRandom ? Double(accY) : Double.random(in: Double(accY + accLowerBound)...Double(accY + accUpperBound))) : Double(0),
+                "z": isMotion ? (!isRandom ? Double(accZ) : Double.random(in: Double(accZ + accLowerBound)...Double(accZ + accUpperBound))) : Double(0)
             ],
             "gyroscope": [
-                "x": !isRandom ? Double(gyroX) : Double.random(in: Double(gyroX + gyroLowerBound)...Double(gyroX + gyroUpperBound)),
-                "y": !isRandom ? Double(gyroY) : Double.random(in: Double(gyroY + gyroLowerBound)...Double(gyroY + gyroUpperBound)),
-                "z": !isRandom ? Double(gyroZ) : Double.random(in: Double(gyroZ + gyroLowerBound)...Double(gyroZ + gyroUpperBound))
+                "x": isMotion ? (!isRandom ? Double(gyroX) : Double.random(in: Double(gyroX + gyroLowerBound)...Double(gyroX + gyroUpperBound))) : Double(0),
+                "y": isMotion ? (!isRandom ? Double(gyroY) : Double.random(in: Double(gyroY + gyroLowerBound)...Double(gyroY + gyroUpperBound))) : Double(0),
+                "z": isMotion ? (!isRandom ? Double(gyroZ) : Double.random(in: Double(gyroZ + gyroLowerBound)...Double(gyroZ + gyroUpperBound))) : Double(0)
             ],
             "magnetometer": [
-                "x": !isRandom ? Double(magX) : Double.random(in: Double(magX + magLowerBound)...Double(magX + magUpperBound)),
-                "y": !isRandom ? Double(magY) : Double.random(in: Double(magY + magLowerBound)...Double(magY + magUpperBound)),
-                "z": !isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))
+                "x": isMotion ? (!isRandom ? Double(magX) : Double.random(in: Double(magX + magLowerBound)...Double(magX + magUpperBound))) : Double(0),
+                "y": isMotion ? (!isRandom ? Double(magY) : Double.random(in: Double(magY + magLowerBound)...Double(magY + magUpperBound))) : Double(0),
+                "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
             ],
-            "timestamp": timestamp
+            "heartRate": isHealth ? (!isRandom ? heartRate : Int(Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound)))) : 0,
+            "respirationRate": isHealth ? (!isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound)))) : 0,
+            "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
+            "lat": isGeolocation ? locationData.latitude : 0,
+            "lon": isGeolocation ? locationData.longitude : 0,
+            "alt": isGeolocation ? locationData.altitude : 0,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
         ]
 
-        motionDataCollection.append(motionData)
-    }
-    private func sendMotionData() {
-        guard let url = URL(string: "http://172.20.10.2:5000/motion-data") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        motionDataCollection.append(singleMotionData)
 
         let payload: [String: Any] = [
             "deviceID": targetDevice,
             "orgID": authenticatedOrgID,
             "data": motionDataCollection
         ]
+        
+        print(payload)
+
+        sendPayloadToServer(payload: payload)
+    }
+
+    private func sendPayloadToServer(payload: [String: Any]) {
+        guard let url = URL(string: "http://172.20.10.2:5000/rt-data") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
@@ -684,67 +690,23 @@ struct StaticSim: View {
             }
         }.resume()
     }
-    private func startHealthDataCollection() {
-        healthTimer = Timer.publish(every: TimeInterval(healthFrequency), on: .main, in: .common).autoconnect().sink { _ in
-            sendHealthData()
-        }
-    }
-    private func sendHealthData() {
-        let healthData = [
-            "deviceID": targetDevice,
-            "orgID": authenticatedOrgID,
-            "heartRate": !isRandom ? heartRate : Int(Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))),
-            "respirationRate": !isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))),
-            "batteryLevel": deviceBattery / 100,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ] as [String: Any]
 
-        guard let url = URL(string: "http://172.20.10.2:5000/health-data") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: healthData, options: [])
-        } catch {
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                return
-            }
-
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-               return
-            } else {
-                return
-            }
-        }.resume()
-    }
-    private func getRandomizedValue(value: CGFloat, range: CGFloat) -> Double {
-        if isRandom {
-            return Double.random(in: (value - range)...(value + range))
-        } else {
-            return Double(value)
-        }
-    }
     private func getAvailableDevices() {
         guard let token = loadTokenFromKeychain() else {
             return
         }
-        
+
         let requestBody: [String: Any] = [
             "organizationID": authenticatedOrgID
         ]
-        
+
         let url = URL(string: "http://172.20.10.2:5000/get-devices")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = try? JSONSerialization.data(withJSONObject: requestBody)
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
@@ -752,29 +714,29 @@ struct StaticSim: View {
                 }
                 return
             }
-            
+
             guard let data = data else {
                 DispatchQueue.main.async {
                     self.errorMessage = "No data received from the server"
                 }
                 return
             }
-            
+
             guard let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Invalid response from the server"
                 }
                 return
             }
-            
+
             if response.statusCode == 200 {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    
+
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
-                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
                         self.targetDevice = availableDevIDs.first ?? ""
                     }
                 } catch {
@@ -790,5 +752,41 @@ struct StaticSim: View {
             }
         }
         .resume()
+    }
+
+    private func fetchInitialAltitude() {
+        fetchAltitude(for: CLLocationCoordinate2D(latitude: locationData.latitude, longitude: locationData.longitude)) { altitude in
+            DispatchQueue.main.async {
+                self.locationData.altitude = altitude ?? 0
+            }
+        }
+    }
+
+    private func fetchAltitude(for location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
+        let urlString = "https://api.open-meteo.com/v1/elevation?latitude=\(location.latitude)&longitude=\(location.longitude)&format=json"
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+
+            do {
+                let elevationResponse = try JSONDecoder().decode(OpenMeteoElevationResponse.self, from: data)
+                if let elevation = elevationResponse.elevation.first {
+                    DispatchQueue.main.async {
+                        completion(elevation)
+                    }
+                } else {
+                    completion(nil)
+                }
+            } catch {
+                completion(nil)
+            }
+        }.resume()
     }
 }

@@ -259,9 +259,8 @@ struct SettingsSim: View {
                         .padding(.top, geometry.size.height * 0.02)
                         
                         HStack {
-                            Spacer()
                             VStack {
-                                Text("Health Sensor")
+                                Text("Data Frequency")
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
@@ -287,59 +286,8 @@ struct SettingsSim: View {
                             .shadow(radius: 5)
                             .padding(.top, geometry.size.height * 0.002)
                             
-                            VStack {
-                                Text("Motion Sensor")
-                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.bottom, geometry.size.height * 0.02)
-                                
-                                VStack {
-                                    Text("Send Frequency: \(motionFrequency) seconds")
-                                        .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.8))
-                                    
-                                    Stepper(value: $motionFrequency, in: 0...1000) {
-                                        Text("")
-                                    }
-                                    .labelsHidden()
-                                    .tint(Color.black)
-                                    .background(Color.white.opacity(0.8))
-                                    .cornerRadius(geometry.size.height * 0.008)
-                                }
-                            }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
-                            .background(Color.white.opacity(0.2))
-                            .cornerRadius(geometry.size.height * 0.005)
-                            .shadow(radius: 5)
-                            .padding(.top, geometry.size.height * 0.002)
                             
-                            VStack {
-                                Text("Geolocation Sensor")
-                                    .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.bottom, geometry.size.height * 0.02)
-                                
-                                VStack {
-                                    Text("Send Frequency: \(geolocationFrequency) seconds")
-                                        .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.8))
-                                    
-                                    Stepper(value: $geolocationFrequency, in: 0...1000) {
-                                        Text("")
-                                    }
-                                    .labelsHidden()
-                                    .tint(Color.black)
-                                    .background(Color.white.opacity(0.8))
-                                    .cornerRadius(geometry.size.height * 0.008)
-                                }
-                            }
-                            .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.2)
-                            .background(Color.white.opacity(0.2))
-                            .cornerRadius(geometry.size.height * 0.005)
-                            .shadow(radius: 5)
-                            .padding(.top, geometry.size.height * 0.002)
+                            
                             
                            Spacer()
                         }

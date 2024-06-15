@@ -36,6 +36,12 @@ struct DeviceInfoResponse: Codable {
     let data: [DeviceInfo]
 }
 
+struct LocationData {
+    var latitude: Double
+    var longitude: Double
+    var altitude: Double
+}
+
 struct LocationPin: Identifiable {
     let id = UUID()
     var location: CLLocationCoordinate2D

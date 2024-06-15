@@ -29,9 +29,7 @@ struct ContentView: View {
     @State private var respUpperBound: Double = 3
     @State private var respLowerBound: Double = -3
     @State private var isLoggedOut: Bool = false
-    
-    
-    
+
     var body: some View {
         Group {
             switch currentView {
@@ -41,7 +39,6 @@ struct ContentView: View {
                         deleteTokenFromKeychain()
                         authenticatedUsername = ""
                         authenticatedOrgID = ""
-                        targetDevice = ""
                     }
             case .ResetAuth:
                 ResetAuth(currentView: $currentView)
@@ -58,6 +55,7 @@ struct ContentView: View {
             checkToken()
         }
     }
+
     func checkToken() {
         if let token = loadTokenFromKeychain() {
             if isTokenExpired(token: token) {
@@ -70,7 +68,7 @@ struct ContentView: View {
             currentView = .LoginAuth
         }
     }
-    
+
     func initializeView() {
         if let token = loadTokenFromKeychain(), !isTokenExpired(token: token) {
             currentView = .StaticSim
@@ -79,7 +77,3 @@ struct ContentView: View {
         }
     }
 }
-
-
-
-

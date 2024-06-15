@@ -1,10 +1,3 @@
-//
-//  MapManager.swift
-//  NightingaleSim
-//
-//  Created by Peter Iacobelli on 5/12/24.
-//
-
 import SwiftUI
 import MapKit
 import Combine
@@ -18,7 +11,6 @@ struct DynamicMapView: View {
     @State private var searchText = ""
     @State private var suggestions: [String] = []
     @State private var showSuggestions = false
-    @State private var altitude: Double = 0
     @State private var geolocationTimer: AnyCancellable?
     @Binding var isRandom: Bool
     @Binding var authenticatedOrgID: String
@@ -26,6 +18,7 @@ struct DynamicMapView: View {
     @Binding var isGeolocation: Bool
     @Binding var geolocationFrequency: Int
     let geometry: GeometryProxy
+    @Binding var locationData: LocationData
 
     var body: some View {
         VStack {
@@ -113,9 +106,18 @@ struct DynamicMapView: View {
     }
 
     private func fetchAndSendGeolocationData() {
-        fetchAltitude(for: pin.location) { altitude in
-            self.altitude = altitude ?? 0
-            self.sendGeolocationData()
+        let newLatitude = getRandomizedValue(value: pin.location.latitude, range: 0.001)
+        let newLongitude = getRandomizedValue(value: pin.location.longitude, range: 0.001)
+
+        fetchAltitude(for: CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude)) { altitude in
+            DispatchQueue.main.async {
+                self.locationData.latitude = newLatitude
+                self.locationData.longitude = newLongitude
+                self.locationData.altitude = altitude ?? 0
+
+                print("Updated Location Data: \(self.locationData)")
+                sendGeolocationData()
+            }
         }
     }
 
@@ -148,40 +150,7 @@ struct DynamicMapView: View {
     }
 
     private func sendGeolocationData() {
-        let latValue = getRandomizedValue(value: pin.location.latitude, range: 0.0001)
-        let lonValue = getRandomizedValue(value: pin.location.longitude, range: 0.0001)
-        let altValue = getRandomizedValue(value: altitude, range: 5)
-        let geolocationData = [
-            "deviceID": targetDevice,
-            "orgID": authenticatedOrgID,
-            "lat": latValue,
-            "lon": lonValue,
-            "alt": altValue,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
-        ] as [String : Any]
-
-        guard let url = URL(string: "http://172.20.10.2:5000/geolocation-data") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: geolocationData, options: [])
-        } catch {
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                return
-            }
-
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                return
-            } else {
-                return
-            }
-        }.resume()
+        // No need to send geolocation data separately, it's included in the main payload
     }
 
     private func geocodeAddressString(_ address: String) {
@@ -227,6 +196,7 @@ struct DynamicMapView: View {
             }
         }.resume()
     }
+
     private func getRandomizedValue(value: CGFloat, range: CGFloat) -> Double {
         if isRandom {
             return Double.random(in: (value - range)...(value + range))
@@ -235,4 +205,3 @@ struct DynamicMapView: View {
         }
     }
 }
-
