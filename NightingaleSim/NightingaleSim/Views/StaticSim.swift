@@ -734,7 +734,7 @@ struct StaticSim: View {
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
-                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
                         self.targetDevice = availableDevIDs.first ?? ""
                     }
                 } catch {
