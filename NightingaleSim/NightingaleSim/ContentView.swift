@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var currentView: AppView = .LoginAuth
+    @State private var currentView: AppView = .StaticSim
     @State private var authenticatedUsername: String = ""
     @State private var authenticatedOrgID: String = ""
     @State private var targetDevice: String = ""
@@ -42,10 +42,13 @@ struct ContentView: View {
                     }
             case .ResetAuth:
                 ResetAuth(currentView: $currentView)
+                    .onAppear { checkToken() }
             case .StaticSim:
                 StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, motionFrequency: $motionFrequency, healthFrequency: $healthFrequency, geolocationFrequency: $geolocationFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
+                    .onAppear { checkToken() }
             case .SettingsSim:
                 SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, motionFrequency: $motionFrequency, healthFrequency: $healthFrequency, geolocationFrequency: $geolocationFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
+                    .onAppear { checkToken() }
             }
         }
         .onAppear {
