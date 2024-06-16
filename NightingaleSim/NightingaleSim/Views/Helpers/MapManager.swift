@@ -125,7 +125,7 @@ struct DynamicMapView: View {
                 self.locationData.longitude = newLongitude
                 self.locationData.altitude = altitude ?? 0
 
-                print("Updated Location Data: \(self.locationData)")
+               
                 sendGeolocationData()
             }
         }

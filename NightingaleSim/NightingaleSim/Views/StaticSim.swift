@@ -661,8 +661,6 @@ struct StaticSim: View {
             "data": motionDataCollection
         ]
         
-        print(payload)
-
         sendPayloadToServer(payload: payload)
     }
 
