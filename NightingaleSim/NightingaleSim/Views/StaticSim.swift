@@ -644,8 +644,8 @@ struct StaticSim: View {
                 "y": isMotion ? (!isRandom ? Double(magY) : Double.random(in: Double(magY + magLowerBound)...Double(magY + magUpperBound))) : Double(0),
                 "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
             ],
-            "heartRate": isHealth ? (!isRandom ? heartRate : Int(Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound)))) : 0,
-            "respirationRate": isHealth ? (!isRandom ? respirationRate : Int(Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound)))) : 0,
+            "heartRate": isHealth ? (!isRandom ? Double(heartRate) : Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))) : 0,
+                   "respirationRate": isHealth ? (!isRandom ? Double(respirationRate) : Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))) : 0,
             "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
             "lat": isGeolocation ? locationData.latitude : 0,
             "lon": isGeolocation ? locationData.longitude : 0,

@@ -89,12 +89,22 @@ struct DynamicMapView: View {
         .cornerRadius(geometry.size.height * 0.005)
         .onAppear {
             if isGeolocation {
+                fetchInitialAltitude()
                 startGeolocationUpdates()
             }
         }
         .onDisappear {
             if isGeolocation {
                 geolocationTimer?.cancel()
+            }
+        }
+    }
+
+    private func fetchInitialAltitude() {
+        let initialLocation = pin.location
+        fetchAltitude(for: initialLocation) { altitude in
+            DispatchQueue.main.async {
+                self.locationData.altitude = altitude ?? 0
             }
         }
     }
