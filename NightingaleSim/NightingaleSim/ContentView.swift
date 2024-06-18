@@ -15,7 +15,7 @@ struct ContentView: View {
     @State private var isMotion: Bool = true
     @State private var isHealth: Bool = true
     @State private var isGeolocation: Bool = true
-    @State private var motionFrequency: Int = 1
+    @State private var dataFrequency: Int = 1
     @State private var accUpperBound: Double = 0.1
     @State private var accLowerBound: Double = -0.1
     @State private var gyroUpperBound: Double = 20.0
@@ -42,10 +42,10 @@ struct ContentView: View {
                 ResetAuth(currentView: $currentView)
                     .onAppear { checkToken() }
             case .StaticSim:
-                StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, motionFrequency: $motionFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
+                StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, dataFrequency: $dataFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
                     .onAppear { checkToken() }
             case .SettingsSim:
-                SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, motionFrequency: $motionFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
+                SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, dataFrequency: $dataFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
                     .onAppear { checkToken() }
             }
         }

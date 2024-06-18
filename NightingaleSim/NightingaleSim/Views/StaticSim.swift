@@ -98,7 +98,7 @@ struct StaticSim: View {
         endPoint: .trailing
     )
 
-    @State private var isRandom: Bool = false
+    @State private var isRandom: Bool = true
     @State private var showInfoPopover = false
 
     @State private var heartRate: Double = 70
@@ -444,6 +444,9 @@ struct StaticSim: View {
                             .tint(Color(hex: 0x2A0862))
                             .labelsHidden()
                             .padding(.leading, geometry.size.width * 0.01)
+                            .onTapGesture {
+                                print(isRandom)
+                            }
                         
                         Text("\(isRandom ? "Randomized Values" : "Constant Values")")
                             .font(.system(size: geometry.size.height * 0.014, weight: .semibold))
