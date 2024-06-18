@@ -71,9 +71,7 @@ struct StaticSim: View {
     @Binding var isMotion: Bool
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
-    @Binding var motionFrequency: Int
-    @Binding var healthFrequency: Int
-    @Binding var geolocationFrequency: Int
+    @Binding var dataFrequency: Int
     @Binding var accUpperBound: Double
     @Binding var accLowerBound: Double
     @Binding var gyroUpperBound: Double
@@ -91,9 +89,8 @@ struct StaticSim: View {
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []
 
-    @State private var motionTimer: AnyCancellable?
-    @State private var healthTimer: AnyCancellable?
-    @State private var motionDataCollection = [[String: Any]]()
+    @State private var dataTimer: AnyCancellable?
+    @State private var dataCollection = [[String: Any]]()
 
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
@@ -161,7 +158,7 @@ struct StaticSim: View {
                 ScrollView {
                     
                     HStack {
-                        DynamicMapView(isRandom: $isRandom, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geolocationFrequency: $geolocationFrequency, geometry: geometry, locationData: $locationData)
+                        DynamicMapView(isRandom: $isRandom, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isGeolocation: $isGeolocation, geometry: geometry, locationData: $locationData)
                             .frame(width: geometry.size.width * 0.92, height: geometry.size.height * 0.3)
                             .padding(.top, geometry.size.height * 0.01)
                     }
@@ -431,14 +428,11 @@ struct StaticSim: View {
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
                 .onAppear {
-                   if isMotion {
-                       startMotionDataCollection()
-                   }
+                    startDataCollection()
+                   
                 }
                 .onDisappear {
-                   if isMotion {
-                       motionTimer?.cancel()
-                   }
+                    dataTimer?.cancel()
                }
                 
                
@@ -616,17 +610,14 @@ struct StaticSim: View {
         }
     }
     
-    private func startMotionDataCollection() {
-        motionTimer = Timer.publish(every: TimeInterval(motionFrequency), on: .main, in: .common).autoconnect().sink { _ in
+    private func startDataCollection() {
+        dataTimer = Timer.publish(every: TimeInterval(dataFrequency), on: .main, in: .common).autoconnect().sink { _ in
             collectAndSendData()
-            if motionDataCollection.count >= motionFrequency {
-                motionDataCollection.removeAll()
-            }
         }
     }
-    
+
     private func collectAndSendData() {
-        let timestamp = motionDataCollection.count + 1
+        let timestamp = Date().timeIntervalSince1970
 
         let singleMotionData: [String: Any] = [
             "accelerometer": [
@@ -645,20 +636,18 @@ struct StaticSim: View {
                 "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
             ],
             "heartRate": isHealth ? (!isRandom ? Double(heartRate) : Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))) : 0,
-                   "respirationRate": isHealth ? (!isRandom ? Double(respirationRate) : Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))) : 0,
+            "respirationRate": isHealth ? (!isRandom ? Double(respirationRate) : Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))) : 0,
             "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
             "lat": isGeolocation ? locationData.latitude : 0,
             "lon": isGeolocation ? locationData.longitude : 0,
             "alt": isGeolocation ? locationData.altitude : 0,
-            "timestamp": ISO8601DateFormatter().string(from: Date())
+            "timestamp": timestamp
         ]
-
-        motionDataCollection.append(singleMotionData)
 
         let payload: [String: Any] = [
             "deviceID": targetDevice,
             "orgID": authenticatedOrgID,
-            "data": motionDataCollection
+            "data": singleMotionData
         ]
         
         sendPayloadToServer(payload: payload)
@@ -666,27 +655,28 @@ struct StaticSim: View {
 
     private func sendPayloadToServer(payload: [String: Any]) {
         guard let url = URL(string: "http://172.20.10.2:5000/rt-data") else { return }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+        
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
+            let jsonData = try JSONSerialization.data(withJSONObject: payload, options: [])
+            request.httpBody = jsonData
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    return
+                }
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    return
+                }
+            }
+            
+            task.resume()
         } catch {
             return
         }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                return
-            }
-
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                return
-            } else {
-                return
-            }
-        }.resume()
     }
 
     private func getAvailableDevices() {
@@ -734,7 +724,7 @@ struct StaticSim: View {
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
-                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
                         self.targetDevice = availableDevIDs.first ?? ""
                     }
                 } catch {

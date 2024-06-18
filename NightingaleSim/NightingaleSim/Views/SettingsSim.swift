@@ -15,8 +15,6 @@ struct SettingsSim: View {
     @Binding var isHealth: Bool
     @Binding var isGeolocation: Bool
     @Binding var motionFrequency: Int
-    @Binding var healthFrequency: Int
-    @Binding var geolocationFrequency: Int
     @Binding var accUpperBound: Double
     @Binding var accLowerBound: Double
     @Binding var gyroUpperBound: Double
@@ -267,11 +265,11 @@ struct SettingsSim: View {
                                     .padding(.bottom, geometry.size.height * 0.02)
                                 
                                 VStack {
-                                    Text("Send Frequency: \(healthFrequency) seconds")
+                                    Text("Send Frequency: \(motionFrequency) seconds")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                         .foregroundColor(.white.opacity(0.8))
                                     
-                                    Stepper(value: $healthFrequency, in: 0...1000) {
+                                    Stepper(value: $motionFrequency, in: 0...1000) {
                                         Text("")
                                     }
                                     .labelsHidden()
@@ -420,7 +418,7 @@ struct SettingsSim: View {
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
-                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
                         self.targetDevice = availableDevIDs.first ?? ""
                     }
                 } catch {

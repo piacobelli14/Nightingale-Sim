@@ -16,7 +16,6 @@ struct DynamicMapView: View {
     @Binding var authenticatedOrgID: String
     @Binding var targetDevice: String
     @Binding var isGeolocation: Bool
-    @Binding var geolocationFrequency: Int
     let geometry: GeometryProxy
     @Binding var locationData: LocationData
 
@@ -110,7 +109,7 @@ struct DynamicMapView: View {
     }
 
     private func startGeolocationUpdates() {
-        geolocationTimer = Timer.publish(every: TimeInterval(geolocationFrequency), on: .main, in: .common).autoconnect().sink { _ in
+        geolocationTimer = Timer.publish(every: TimeInterval(1), on: .main, in: .common).autoconnect().sink { _ in
             fetchAndSendGeolocationData()
         }
     }
