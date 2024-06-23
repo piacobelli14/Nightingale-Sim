@@ -657,7 +657,7 @@ struct StaticSim: View {
     }
 
     private func sendPayloadToServer(payload: [String: Any]) {
-        guard let url = URL(string: "http://172.20.10.2:5000/rt-data") else { return }
+        guard let url = URL(string: "https://vektor-api.vercel.app/api/rt-data") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -691,7 +691,7 @@ struct StaticSim: View {
             "organizationID": authenticatedOrgID
         ]
 
-        let url = URL(string: "http://172.20.10.2:5000/get-devices")!
+        let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/get-devices")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -727,7 +727,7 @@ struct StaticSim: View {
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
-                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo == "None" }.map { $0.devID }
+                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
                         self.targetDevice = availableDevIDs.first ?? ""
                     }
                 } catch {
