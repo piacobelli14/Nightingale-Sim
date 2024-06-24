@@ -33,28 +33,28 @@ struct ContentView: View {
             switch currentView {
             case .LoginAuth:
                 LoginAuth(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID)
-                    /*.onAppear {
+                    .onAppear {
                         deleteTokenFromKeychain()
                         authenticatedUsername = ""
                         authenticatedOrgID = ""
-                    }*/
+                    }
             case .ResetAuth:
                 ResetAuth(currentView: $currentView)
-                    //.onAppear { checkToken() }
+                    .onAppear { checkToken() }
             case .StaticSim:
                 StaticSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, dataFrequency: $dataFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
-                    //.onAppear { checkToken() }
+                    .onAppear { checkToken() }
             case .SettingsSim:
                 SettingsSim(currentView: $currentView, authenticatedUsername: $authenticatedUsername, authenticatedOrgID: $authenticatedOrgID, targetDevice: $targetDevice, isMotion: $isMotion, isHealth: $isHealth, isGeolocation: $isGeolocation, dataFrequency: $dataFrequency, accUpperBound: $accUpperBound, accLowerBound: $accLowerBound, gyroUpperBound: $gyroUpperBound, gyroLowerBound: $gyroLowerBound, magUpperBound: $magUpperBound, magLowerBound: $magLowerBound, hrUpperBound: $hrUpperBound, hrLowerBound: $hrLowerBound, respUpperBound: $respUpperBound, respLowerBound: $respLowerBound)
-                    //.onAppear { checkToken() }
+                    .onAppear { checkToken() }
             }
         }
-        /*.onAppear {
+        .onAppear {
             initializeView()
         }
         .onChange(of: currentView) { newView in
             checkToken()
-        }*/
+        }
     }
 
     func checkToken() {

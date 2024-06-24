@@ -53,8 +53,12 @@ func isTokenExpired(token: String) -> Bool {
     let parts = token.split(separator: ".")
     if parts.count > 1 {
         let payload = parts[1]
-        let decodedData = Data(base64Encoded: String(payload) + "==")
-        if let json = try? JSONSerialization.jsonObject(with: decodedData!, options: []),
+        var base64String = String(payload)
+        while base64String.count % 4 != 0 {
+            base64String.append("=")
+        }
+        if let decodedData = Data(base64Encoded: base64String),
+           let json = try? JSONSerialization.jsonObject(with: decodedData, options: []),
            let dict = json as? [String: Any],
            let exp = dict["exp"] as? TimeInterval {
             let expirationDate = Date(timeIntervalSince1970: exp)
