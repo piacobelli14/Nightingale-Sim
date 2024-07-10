@@ -11,7 +11,7 @@ to all Nightinagle Health users.
 Because this software does not currently exist as a directly downloadable application from the Apple app store, you will have to install XCode to download it to your devices. The only thing you will have to change is the code signature for the build target in the project file. Steps will be taken in the future to make the download process more user friendly.  
 
 # Data Stream and Authentication
-After installing to your device with an XCode editor, you can sign in with your Nightingale Health credentials. The app will access your device registry and give you a list of your unassigned devices to choose as the 'target device'. On the server side, it will appear as though the simulated data is being streamed from hthe device. If you don't have any devices available, you can simply register a fake device from the device manager in the Nightingale Health web platform to use for simulator specific tasks. 
+After installing to your device with an XCode editor, you can sign in with your Nightingale Health credentials. The app will access your device registry and give you a list of your unassigned devices to choose as the 'target device'. On the server side, it will appear as though the simulated data is being streamed from the device. If you don't have any devices available, you can simply register a fake device from the device manager in the Nightingale Health web platform to use for simulator specific tasks. 
 
 # Sensor Data
 Nightingale Sim offers the ability to stream simulated data in three distinct groups. 
