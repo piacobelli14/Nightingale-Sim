@@ -85,10 +85,9 @@ struct StaticSim: View {
 
     @State private var locationData = LocationData(latitude: 29.559684, longitude: -95.08374, altitude: 0)
     @State private var errorMessage: String? = nil
-
+    
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []
-
     @State private var dataTimer: AnyCancellable?
     @State private var dataCollection = [[String: Any]]()
 
@@ -100,7 +99,6 @@ struct StaticSim: View {
 
     @State private var isRandom: Bool = true
     @State private var showInfoPopover = false
-
     @State private var heartRate: Double = 70
     @State private var respirationRate: Double = 12
     @State private var deviceBattery: Double = 85
