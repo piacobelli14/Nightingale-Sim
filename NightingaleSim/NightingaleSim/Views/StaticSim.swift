@@ -100,7 +100,7 @@ struct StaticSim: View {
     @State private var isRandom: Bool = true
     @State private var showInfoPopover = false
     @State private var heartRate: Double = 70
-    @State private var respirationRate: Double = 12
+    @State private var spo2: Double = 95
     @State private var deviceBattery: Double = 85
     @State private var isConnected: Bool = true
     @State private var accX: CGFloat = 2.0
@@ -211,13 +211,13 @@ struct StaticSim: View {
                     VStack {
                         HStack {
                             HStack {
-                                Text("Respiration Rate")
+                                Text("SpO2 Level")
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
                                 
-                                Text("\(Int(respirationRate)) BrPM")
+                                Text("\(Int(spo2)) %")
                                     .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
@@ -230,12 +230,12 @@ struct StaticSim: View {
                             HStack(alignment: .center, spacing: 0) {
                                 Spacer()
                                 Circle()
-                                    .foregroundColor(respirationRateColor(respirationRate))
+                                    .foregroundColor(spo2Color(spo2))
                                     .frame(width: geometry.size.width * 0.018, height: geometry.size.height * 0.018)
                                     .padding(.trailing, geometry.size.width * 0.02)
                                 
-                                Text("\(respirationRateRisk(respirationRate))")
-                                    .foregroundColor(respirationRateColor(respirationRate))
+                                Text("\(spo2Risk(spo2))")
+                                    .foregroundColor(spo2Color(spo2))
                                     .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                     .padding(.trailing, geometry.size.width * 0.02)
                             }
@@ -244,7 +244,7 @@ struct StaticSim: View {
                             Spacer()
                         }
                         
-                        Slider(value: $respirationRate, in: 0...20, step: 1)
+                        Slider(value: $spo2, in: 90...100, step: 1)
                             .accentColor(Color(hex: 0x2A0862))
                     }
                     .padding()
@@ -559,33 +559,29 @@ struct StaticSim: View {
         }
     }
     
-    private func respirationRateColor(_ rate: Double) -> Color {
-        switch rate {
-        case 0...8:
-            return .blue
-        case 9...14:
-            return .green
-        case 15...17:
-            return .yellow
-        case 18...20:
+    private func spo2Color(_ level: Double) -> Color {
+        switch level {
+        case 90...92:
             return .red
+        case 93...94:
+            return .yellow
+        case 95...100:
+            return .green
         default:
             return .black
         }
     }
     
-    private func respirationRateRisk(_ rate: Double) -> String {
-        switch rate {
-        case 0...8:
+    private func spo2Risk(_ level: Double) -> String {
+        switch level {
+        case 90...92:
             return "Low"
-        case 9...14:
+        case 93...94:
+            return "Slightly Low"
+        case 95...100:
             return "Normal"
-        case 15...17:
-            return "Elevated"
-        case 18...20:
-            return "Significantly Elevated"
         default:
-            return "Normal"
+            return "Unknown"
         }
     }
     
@@ -637,7 +633,7 @@ struct StaticSim: View {
                 "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
             ],
             "heartRate": isHealth ? (!isRandom ? Double(heartRate) : Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))) : 0,
-            "respirationRate": isHealth ? (!isRandom ? Double(respirationRate) : Double.random(in: Double(respirationRate + spo2LowerBound)...Double(respirationRate + spo2UpperBound))) : 0,
+            "spo2": isHealth ? (!isRandom ? Double(spo2) : Double.random(in: Double(spo2 + spo2LowerBound)...Double(spo2 + spo2UpperBound))) : 0,
             "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
             "lat": isGeolocation ? locationData.latitude : 0,
             "lon": isGeolocation ? locationData.longitude : 0,
