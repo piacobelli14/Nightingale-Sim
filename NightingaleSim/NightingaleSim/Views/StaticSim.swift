@@ -638,6 +638,8 @@ struct StaticSim: View {
             "lat": isGeolocation ? locationData.latitude : 0,
             "lon": isGeolocation ? locationData.longitude : 0,
             "alt": isGeolocation ? locationData.altitude : 0,
+            "bar": 0,
+            "temp": 0,
             "timestamp": timestamp
         ]
 
