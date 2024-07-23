@@ -23,8 +23,8 @@ struct SettingsSim: View {
     @Binding var magLowerBound: Double
     @Binding var hrUpperBound: Double
     @Binding var hrLowerBound: Double
-    @Binding var respUpperBound: Double
-    @Binding var respLowerBound: Double
+    @Binding var spo2UpperBound: Double
+    @Binding var spo2LowerBound: Double
     
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []

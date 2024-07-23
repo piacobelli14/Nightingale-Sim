@@ -80,8 +80,8 @@ struct StaticSim: View {
     @Binding var magLowerBound: Double
     @Binding var hrUpperBound: Double
     @Binding var hrLowerBound: Double
-    @Binding var respUpperBound: Double
-    @Binding var respLowerBound: Double
+    @Binding var spo2UpperBound: Double
+    @Binding var spo2LowerBound: Double
 
     @State private var locationData = LocationData(latitude: 29.559684, longitude: -95.08374, altitude: 0)
     @State private var errorMessage: String? = nil
@@ -637,7 +637,7 @@ struct StaticSim: View {
                 "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
             ],
             "heartRate": isHealth ? (!isRandom ? Double(heartRate) : Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))) : 0,
-            "respirationRate": isHealth ? (!isRandom ? Double(respirationRate) : Double.random(in: Double(respirationRate + respLowerBound)...Double(respirationRate + respUpperBound))) : 0,
+            "respirationRate": isHealth ? (!isRandom ? Double(respirationRate) : Double.random(in: Double(respirationRate + spo2LowerBound)...Double(respirationRate + spo2UpperBound))) : 0,
             "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
             "lat": isGeolocation ? locationData.latitude : 0,
             "lon": isGeolocation ? locationData.longitude : 0,
