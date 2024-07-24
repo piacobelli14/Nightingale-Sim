@@ -1,3 +1,9 @@
+//
+//  SettingsSim.swift
+//  NightingaleSim
+//
+//  Created by Peter Iacobelli on 5/12/24.
+//
 import SwiftUI
 
 struct SettingsSim: View {
@@ -19,18 +25,19 @@ struct SettingsSim: View {
     @Binding var hrLowerBound: Double
     @Binding var spo2UpperBound: Double
     @Binding var spo2LowerBound: Double
-
+    
     @State private var deviceInfo: [DeviceInfo] = []
     @State private var availableDevIDs: [String] = []
-
+    
     @State private var errorMessage: String? = nil
 
+    
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
         startPoint: .leading,
         endPoint: .trailing
     )
-
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -41,12 +48,12 @@ struct SettingsSim: View {
                         .frame(height: geometry.size.height * 0.07)
                         .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
                         .padding(.leading, geometry.size.width * 0.01)
-
-                    Text("Nightingale Sim")
+                    
+                    Text("Nightinagle Sim")
                         .font(.system(size: geometry.size.height * 0.03, weight: .bold))
                         .foregroundColor(.white)
                         .shadow(color: .gray.opacity(0.3), radius: 0, x: 0, y: 2)
-
+                    
                     Spacer()
                 }
                 .frame(width: geometry.size.width * 1.0)
@@ -60,8 +67,9 @@ struct SettingsSim: View {
                             .foregroundColor(.gray)
                     }
                 )
-
+                
                 ScrollView {
+                    
                     VStack {
                         HStack {
                             VStack {
@@ -71,24 +79,24 @@ struct SettingsSim: View {
                                         .foregroundColor(Color.white)
                                         .padding(.vertical, geometry.size.height * 0.01)
                                         .padding(.leading, geometry.size.width * 0.01)
-
+                                    
                                     Spacer()
                                 }
-
+                                
                                 HStack {
                                     Text("Health Sensor")
                                         .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.6)
                                         .padding(.horizontal, geometry.size.width * 0.01)
-
+                                    
                                     Spacer()
-
+                                    
                                     HStack {
                                         Toggle("", isOn: $isHealth)
                                             .tint(Color(hex: 0x2A0862))
                                             .labelsHidden()
-
+                                        
                                         Text("\(isHealth ? "On" : "Off")")
                                             .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
                                             .foregroundColor(isHealth ? Color.green : Color.red)
@@ -97,21 +105,21 @@ struct SettingsSim: View {
                                     }
                                 }
                                 .padding(.top, geometry.size.height * 0.01)
-
+                                
                                 HStack {
                                     Text("Motion Sensor")
                                         .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.6)
                                         .padding(.horizontal, geometry.size.width * 0.01)
-
+                                    
                                     Spacer()
-
+                                    
                                     HStack {
                                         Toggle("", isOn: $isMotion)
                                             .tint(Color(hex: 0x2A0862))
                                             .labelsHidden()
-
+                                        
                                         Text("\(isMotion ? "On" : "Off")")
                                             .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
                                             .foregroundColor(isMotion ? Color.green : Color.red)
@@ -120,21 +128,21 @@ struct SettingsSim: View {
                                     }
                                 }
                                 .padding(.top, geometry.size.height * 0.01)
-
+                                
                                 HStack {
                                     Text("Geolocation Sensor")
                                         .font(.system(size: geometry.size.height * 0.018, weight: .semibold))
                                         .foregroundColor(Color.white)
                                         .opacity(0.6)
                                         .padding(.horizontal, geometry.size.width * 0.01)
-
+                                    
                                     Spacer()
-
+                                    
                                     HStack {
                                         Toggle("", isOn: $isGeolocation)
                                             .tint(Color(hex: 0x2A0862))
                                             .labelsHidden()
-
+                                        
                                         Text("\(isGeolocation ? "On" : "Off")")
                                             .font(.system(size: geometry.size.height * 0.018, weight: .heavy))
                                             .foregroundColor(isGeolocation ? Color.green : Color.red)
@@ -150,7 +158,7 @@ struct SettingsSim: View {
                             .background(Color.white.opacity(0.2))
                             .cornerRadius(geometry.size.height * 0.005)
                             .shadow(radius: 5)
-
+                            
                             VStack {
                                 HStack {
                                     Text("Current User")
@@ -158,10 +166,10 @@ struct SettingsSim: View {
                                         .foregroundColor(Color.white)
                                         .padding(.vertical, geometry.size.height * 0.01)
                                         .padding(.leading, geometry.size.width * 0.01)
-
+                                    
                                     Spacer()
                                 }
-
+                                
                                 VStack(alignment: .leading) {
                                     HStack {
                                         Text("Username:")
@@ -169,46 +177,46 @@ struct SettingsSim: View {
                                             .foregroundColor(Color.white)
                                             .opacity(0.8)
                                             .padding(.leading, geometry.size.width * 0.01)
-
-                                        Text("@" + "\(authenticatedUsername)")
+                                        
+                                        Text("@"+"\(authenticatedUsername)")
                                             .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.6)
                                             .padding(.leading, geometry.size.width * 0.02)
-
+                                        
                                         Spacer()
                                     }
                                     .padding(.top, geometry.size.height * 0.01)
-
+                                    
                                     HStack {
                                         Text("Organization ID:")
                                             .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.8)
                                             .padding(.leading, geometry.size.width * 0.01)
-
+                                        
                                         Text("\(authenticatedOrgID)")
+                                        
                                             .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.6)
                                             .padding(.leading, geometry.size.width * 0.02)
-
+                                        
                                         Spacer()
                                     }
                                     .padding(.top, geometry.size.height * 0.01)
-
+                                    
                                     VStack(alignment: .leading) {
                                         Text("Target Device:")
                                             .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                             .foregroundColor(Color.white)
                                             .opacity(0.8)
                                             .padding(.leading, geometry.size.width * 0.01)
-
+                                        
                                         Menu {
                                             ForEach(availableDevIDs, id: \.self) { id in
                                                 Button(id) {
                                                     targetDevice = id
-                                                    saveTargetDevice(id)
                                                 }
                                             }
                                         } label: {
@@ -229,14 +237,14 @@ struct SettingsSim: View {
                                                         .stroke(Color(hex: 0x504F51), lineWidth: geometry.size.width * 0.006)
                                                 )
                                                 .shadow(color: .gray.opacity(0.3), radius: 4, x: 0, y: 0)
-
+                                                
                                         }
                                         .accentColor(.black)
                                         Spacer()
                                     }
                                     .padding(.top, geometry.size.height * 0.01)
                                 }
-
+                                
                                 Spacer()
                             }
                             .frame(height: geometry.size.height * 0.25)
@@ -247,7 +255,7 @@ struct SettingsSim: View {
                         }
                         .frame(width: geometry.size.width * 0.92)
                         .padding(.top, geometry.size.height * 0.02)
-
+                        
                         HStack {
                             VStack {
                                 Text("Data Frequency")
@@ -255,12 +263,12 @@ struct SettingsSim: View {
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                     .padding(.bottom, geometry.size.height * 0.02)
-
+                                
                                 VStack {
                                     Text("Send Frequency: \(dataFrequency) seconds")
                                         .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                         .foregroundColor(.white.opacity(0.8))
-
+                                    
                                     Stepper(value: $dataFrequency, in: 0...1000) {
                                         Text("")
                                     }
@@ -275,23 +283,26 @@ struct SettingsSim: View {
                             .cornerRadius(geometry.size.height * 0.005)
                             .shadow(radius: 5)
                             .padding(.top, geometry.size.height * 0.002)
-
-                            Spacer()
+                            
+                            
+                            
+                            
+                           Spacer()
                         }
                         .frame(width: geometry.size.width * 0.92)
                     }
                 }
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
-
+                
                 Spacer()
-
+                
                 HStack(alignment: .center) {
-
+                    
                     Spacer()
-
+                    
                     HStack {
-
+                        
                         VStack {
                             Button(action: {
                                 self.currentView = .StaticSim
@@ -304,14 +315,14 @@ struct SettingsSim: View {
                                     .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
-
+                            
                             Text("Simulator")
                                 .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                 .foregroundColor(Color.white)
                                 .opacity(0.6)
                         }
                         .padding(.trailing, geometry.size.width * 0.01)
-
+                        
                         VStack {
                             Button(action: {
                                 self.authenticatedUsername = ""
@@ -325,7 +336,7 @@ struct SettingsSim: View {
                                     .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 0)
                                     .padding(.leading, geometry.size.width * 0.01)
                             }
-
+                            
                             Text("Logout")
                                 .font(.system(size: geometry.size.height * 0.012, weight: .semibold))
                                 .foregroundColor(Color.white)
@@ -335,7 +346,8 @@ struct SettingsSim: View {
                     }
                     .padding(.top, geometry.size.height * 0.02)
                     .padding(.bottom, geometry.size.height * 0.01)
-
+                    
+                    
                 }
                 .frame(width: geometry.size.width * 1.0)
                 .edgesIgnoringSafeArea(.all)
@@ -348,6 +360,7 @@ struct SettingsSim: View {
                         Spacer()
                     }
                 )
+                
             }
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
@@ -356,37 +369,26 @@ struct SettingsSim: View {
             }
             .onAppear {
                 self.getAvailableDevices()
-                self.loadTargetDevice()
             }
         }
     }
-
-    private func saveTargetDevice(_ device: String) {
-        UserDefaults.standard.set(device, forKey: "targetDevice")
-    }
-
-    private func loadTargetDevice() {
-        if let savedDevice = UserDefaults.standard.string(forKey: "targetDevice") {
-            targetDevice = savedDevice
-        }
-    }
-
     private func getAvailableDevices() {
         guard let token = loadTokenFromKeychain() else {
+          
             return
         }
-
+        
         let requestBody: [String: Any] = [
             "organizationID": authenticatedOrgID
         ]
-
+        
         let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/get-devices")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = try? JSONSerialization.data(withJSONObject: requestBody)
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
@@ -394,30 +396,32 @@ struct SettingsSim: View {
                 }
                 return
             }
-
+            
             guard let data = data else {
                 DispatchQueue.main.async {
                     self.errorMessage = "No data received from the server"
                 }
                 return
             }
-
+            
             guard let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Invalid response from the server"
                 }
                 return
             }
-
+            
             if response.statusCode == 200 {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
-
+                    
                     let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
                         self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
-                        self.saveTargetDevice(self.targetDevice)
+                        if targetDevice == "" {
+                            self.targetDevice = availableDevIDs.first ?? ""
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {

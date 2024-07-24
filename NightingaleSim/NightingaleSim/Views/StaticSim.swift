@@ -615,7 +615,7 @@ struct StaticSim: View {
 
     private func collectAndSendData() {
         let timestamp = Date().timeIntervalSince1970
-
+        
         let singleMotionData: [String: Any] = [
             "accelerometer": [
                 "x": isMotion ? (!isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound))) : Double(0),
@@ -724,6 +724,9 @@ struct StaticSim: View {
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
                         self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
+                        if targetDevice == {
+                            self.targetDevice = availableDevIDs.first ?? ""
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {
