@@ -615,7 +615,7 @@ struct StaticSim: View {
 
     private func collectAndSendData() {
         let timestamp = Date().timeIntervalSince1970
-
+        
         let singleMotionData: [String: Any] = [
             "accelerometer": [
                 "x": isMotion ? (!isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound))) : Double(0),
