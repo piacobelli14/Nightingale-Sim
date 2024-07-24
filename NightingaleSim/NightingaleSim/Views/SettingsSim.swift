@@ -419,7 +419,7 @@ struct SettingsSim: View {
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
                         self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
-                        if targetDevice == "" {
+                        if (targetDevice == "") {
                             self.targetDevice = availableDevIDs.first ?? ""
                         }
                     }
