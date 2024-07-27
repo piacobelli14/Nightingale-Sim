@@ -177,12 +177,11 @@ struct LoginAuth: View {
                                         Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                            .frame(width: geometry.size.width * 0.016)
-                                            .frame(height: geometry.size.height * 0.016)
+                                            .frame(height: geometry.size.height * 0.018)
                                             .foregroundColor(Color(hex: 0x828B8E))
+                                            .padding(.bottom, geometry.size.height * 0.008)
                                     }
                                     .padding(.trailing, geometry.size.width * 0.03)
-                                    .padding(.bottom, geometry.size.height * 0.01)
                                 }
                                 .frame(width: geometry.size.width * 0.7)
                             }
@@ -220,6 +219,7 @@ struct LoginAuth: View {
                     }
                     .frame(width: geometry.size.width * 0.5)
                     .padding(.vertical, geometry.size.height * 0.018)
+                    .padding(.horizontal,  geometry.size.width * 0.01)
                     .background(Color(hex: 0xDA64ED))
                     .cornerRadius(geometry.size.height * 0.01)
                     
