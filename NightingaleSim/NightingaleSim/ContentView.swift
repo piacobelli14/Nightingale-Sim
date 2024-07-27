@@ -63,18 +63,57 @@ struct ContentView: View {
                 deleteTokenFromKeychain()
                 isLoggedOut = true
                 currentView = .LoginAuth
+            } else {
+                decodeToken(token: token)
             }
         } else {
             isLoggedOut = true
             currentView = .LoginAuth
         }
     }
-
+    
     func initializeView() {
         if let token = loadTokenFromKeychain(), !isTokenExpired(token: token) {
+            decodeToken(token: token)
             currentView = .StaticSim
         } else {
             currentView = .LoginAuth
+        }
+    }
+
+    func decodeToken(token: String) {
+        let parts = token.split(separator: ".")
+        guard parts.count == 3 else {
+            return
+        }
+
+        let payload = parts[1]
+        var base64String = String(payload)
+        
+        while base64String.count % 4 != 0 {
+            base64String.append("=")
+        }
+
+        guard let decodedData = Data(base64Encoded: base64String) else {
+            return
+        }
+
+        guard let json = try? JSONSerialization.jsonObject(with: decodedData, options: []),
+              let dict = json as? [String: Any] else {
+            return
+        }
+
+        if let username = dict["username"] as? String {
+            authenticatedUsername = username
+        }
+
+        if let orgID = dict["orgid"] as? String {
+            authenticatedOrgID = orgID
+        }
+
+        if let exp = dict["exp"] as? TimeInterval {
+            let expirationDate = Date(timeIntervalSince1970: exp)
+            let isExpired = Date() > expirationDate
         }
     }
 }
