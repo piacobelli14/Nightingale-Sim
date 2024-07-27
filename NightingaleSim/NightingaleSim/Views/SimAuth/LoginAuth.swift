@@ -246,7 +246,7 @@ struct LoginAuth: View {
             "username": username,
             "password": password
         ]
-        
+
         guard let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/user-authentication") else {
             return
         }
@@ -259,28 +259,62 @@ struct LoginAuth: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 self.isLoginSuccessful = false
+                self.errorMessage = "An error occurred. Please try again."
                 return
             }
 
             guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
                 self.isLoginSuccessful = false
+                self.errorMessage = "That username or password is incorrect."
                 return
             }
 
             do {
                 let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
                 saveTokenToKeychain(token: loginResponse.token)
-                
-                DispatchQueue.main.async {
-                    self.isLoginSuccessful = true
-                    self.authenticatedUsername = loginResponse.userid
-                    self.authenticatedOrgID = loginResponse.orgid
-                    self.currentView = .StaticSim
+
+                if let decodedToken = decodeJWT(token: loginResponse.token) {
+                    DispatchQueue.main.async {
+                        self.isLoginSuccessful = true
+                        self.authenticatedUsername = decodedToken.userId
+                        self.authenticatedOrgID = decodedToken.orgid
+                        self.currentView = .StaticSim
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.isLoginSuccessful = false
+                        self.errorMessage = "Failed to decode token."
+                    }
                 }
             } catch {
                 self.isLoginSuccessful = false
                 self.errorMessage = "That username or password is incorrect."
             }
         }.resume()
+    }
+    private func decodeJWT(token: String) -> (userId: String, orgid: String)? {
+        let parts = token.split(separator: ".")
+        guard parts.count == 3 else {
+            return nil
+        }
+
+        let payload = parts[1]
+        var base64String = String(payload)
+        while base64String.count % 4 != 0 {
+            base64String.append("=")
+        }
+
+        guard let decodedData = Data(base64Encoded: base64String) else {
+            return nil
+        }
+
+        guard let json = try? JSONSerialization.jsonObject(with: decodedData, options: []),
+              let dict = json as? [String: Any],
+              let userId = dict["userId"] as? String,
+              let orgid = dict["orgid"] as? String else {
+            return nil
+        }
+
+        return (userId, orgid)
     }
 }
