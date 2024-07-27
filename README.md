@@ -19,8 +19,8 @@ Nightingale Sim offers the ability to stream simulated data in three distinct gr
 - Biometric Data
   - Heart Rate
     - Range: 0-220 BPM
-  - Breathing Rate
-    - Range: 0-20 BrPM 
+  - Blood Oxygen Level
+    - Range: 90-100 %
 - Motion Data
   - 3 Vector Accelerometer
     - Range: -2.0-2.0 g
