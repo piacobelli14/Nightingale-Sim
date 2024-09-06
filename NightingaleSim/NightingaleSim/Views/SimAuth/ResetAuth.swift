@@ -323,7 +323,7 @@ struct ResetAuth: View {
         }
     }
     private func initiatePasswordReset() {
-        guard let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/reset-password") else {
+        guard let url = URL(string: "https://nightingale-health.duckdns.org/nightingale/api/reset-password") else {
             return
         }
 
@@ -399,7 +399,7 @@ struct ResetAuth: View {
             "email": resetEmail
         ]
         
-        let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/change-password")!
+        let url = URL(string: "https://nightingale-health.duckdns.org/nightingale/api/change-password")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

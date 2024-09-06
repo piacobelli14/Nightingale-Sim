@@ -249,7 +249,7 @@ struct LoginAuth: View {
             "password": password
         ]
 
-        guard let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/user-authentication") else {
+        guard let url = URL(string: "https://nightingale-health.duckdns.org/nightingale/api/user-authentication") else {
             return
         }
 

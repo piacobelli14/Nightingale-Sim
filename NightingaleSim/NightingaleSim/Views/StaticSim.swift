@@ -684,7 +684,7 @@ struct StaticSim: View {
             "organizationID": authenticatedOrgID
         ]
 
-        let url = URL(string: "https://nightingale-web-api.vercel.app/nightingale/api/get-devices")!
+        let url = URL(string: "https://nightingale-health.duckdns.org/nightingale/api/get-devices")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
