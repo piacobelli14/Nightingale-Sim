@@ -176,7 +176,7 @@ struct LoginAuth: View {
                                     }) {
                                         Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                                             .resizable()
-                                            .aspectRatio(contentMode: .fill)
+                                            .aspectRatio(contentMode: .fit)
                                             .frame(height: geometry.size.height * 0.018)
                                             .foregroundColor(Color(hex: 0x828B8E))
                                             .padding(.bottom, geometry.size.height * 0.008)
