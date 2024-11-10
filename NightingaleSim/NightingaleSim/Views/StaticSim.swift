@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 import CoreLocation
+import Network
 
 struct MotionSensorGauge: View {
     @Binding var motionValue: CGFloat
@@ -90,7 +91,13 @@ struct StaticSim: View {
     @State private var availableDevIDs: [String] = []
     @State private var dataTimer: AnyCancellable?
     @State private var dataCollection = [[String: Any]]()
-
+    
+    @State private var socket: NWConnection?
+    @State private var isConnected: Bool = false
+    @State private var authKey: String = "G7k2L9pQ4sT1aD6fH3jK8mN5bV0xY2zW" // Replace with your actual API key
+    @State private var host: NWEndpoint.Host = "0.0.0.0"
+    @State private var port: NWEndpoint.Port = 9094
+    
     let gradient = LinearGradient(
         gradient: Gradient(colors: [Color(hex: 0x381A68), Color(hex: 0x5B4D72)]),
         startPoint: .leading,
@@ -102,7 +109,6 @@ struct StaticSim: View {
     @State private var heartRate: Double = 70
     @State private var spo2: Double = 95
     @State private var deviceBattery: Double = 85
-    @State private var isConnected: Bool = true
     @State private var accX: CGFloat = 2.0
     @State private var accY: CGFloat = 2.0
     @State private var accZ: CGFloat = 2.0
@@ -172,7 +178,6 @@ struct StaticSim: View {
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
                                 
-                                
                                 Text("\(Int(heartRate)) BPM")
                                     .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
                                     .foregroundColor(Color.white)
@@ -215,7 +220,6 @@ struct StaticSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
-                                
                                 
                                 Text("\(Int(spo2)) %")
                                     .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
@@ -261,7 +265,6 @@ struct StaticSim: View {
                                     .font(.system(size: geometry.size.height * 0.016, weight: .bold))
                                     .foregroundColor(Color.white)
                                     .opacity(0.8)
-                                
                                 
                                 Text("\(Int(deviceBattery))%")
                                     .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
@@ -426,11 +429,12 @@ struct StaticSim: View {
                 .frame(height: geometry.size.height * 0.82)
                 .frame(width: geometry.size.width * 1.0)
                 .onAppear {
+                    connectSocket()
                     startDataCollection()
-                   
                 }
                 .onDisappear {
                     dataTimer?.cancel()
+                    disconnectSocket()
                }
                 
                
@@ -526,6 +530,156 @@ struct StaticSim: View {
         }
     }
     
+    // MARK: - Socket Connection Methods
+    
+    private func connectSocket() {
+        let parameters = NWParameters.tcp
+        socket = NWConnection(host: host, port: port, using: parameters)
+        
+        socket?.stateUpdateHandler = { newState in
+            switch newState {
+            case .ready:
+                print("Socket connected")
+                self.isConnected = true
+                authenticateSocket()
+            case .failed(let error):
+                print("Socket failed with error: \(error)")
+                self.isConnected = false
+            case .cancelled:
+                print("Socket connection cancelled")
+                self.isConnected = false
+            default:
+                break
+            }
+        }
+        
+        receiveMessages()
+        socket?.start(queue: .main)
+    }
+    
+    private func disconnectSocket() {
+        socket?.cancel()
+        socket = nil
+        isConnected = false
+        print("Socket disconnected")
+    }
+    
+    private func authenticateSocket() {
+        let authMessage = "PRODUCER_AUTH \(authKey)\n"
+        send(text: authMessage)
+        print("Sent authentication: \(authMessage.trimmingCharacters(in: .whitespacesAndNewlines))")
+    }
+    
+    private func receiveMessages() {
+        socket?.receive(minimumIncompleteLength: 1, maximumLength: 1024) { data, _, isComplete, error in
+            if let data = data, !data.isEmpty {
+                if let response = String(data: data, encoding: .utf8) {
+                    handleSocketResponse(response)
+                }
+            }
+            if isComplete {
+                print("Socket connection closed by remote")
+                self.isConnected = false
+                return
+            }
+            if let error = error {
+                print("Error receiving data: \(error)")
+                self.isConnected = false
+                return
+            }
+            self.receiveMessages()
+        }
+    }
+    
+    private func handleSocketResponse(_ response: String) {
+        print("Received from server: \(response)")
+        let trimmedResponse = response.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedResponse == "AUTH_SUCCESS" {
+            print("Authentication successful. Ready to send data.")
+        } else {
+            print("Authentication failed or received unknown response.")
+            // Handle authentication failure if needed
+        }
+    }
+    
+    private func send(text: String) {
+        guard let socket = socket else { return }
+        let data = text.data(using: .utf8) ?? Data()
+        socket.send(content: data, completion: .contentProcessed({ error in
+            if let error = error {
+                print("Error sending data: \(error)")
+            }
+        }))
+    }
+    
+    // MARK: - Data Collection and Sending
+    
+    private func startDataCollection() {
+        dataTimer = Timer.publish(every: TimeInterval(dataFrequency), on: .main, in: .common).autoconnect().sink { _ in
+            collectAndSendData()
+        }
+    }
+
+    private func collectAndSendData() {
+        let timestamp = Date().timeIntervalSince1970
+        
+        let singleMotionData: [String: Any] = [
+            "accelerometer": [
+                "x": isMotion ? (!isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound))) : Double(0),
+                "y": isMotion ? (!isRandom ? Double(accY) : Double.random(in: Double(accY + accLowerBound)...Double(accY + accUpperBound))) : Double(0),
+                "z": isMotion ? (!isRandom ? Double(accZ) : Double.random(in: Double(accZ + accLowerBound)...Double(accZ + accUpperBound))) : Double(0)
+            ],
+            "gyroscope": [
+                "x": isMotion ? (!isRandom ? Double(gyroX) : Double.random(in: Double(gyroX + gyroLowerBound)...Double(gyroX + gyroUpperBound))) : Double(0),
+                "y": isMotion ? (!isRandom ? Double(gyroY) : Double.random(in: Double(gyroY + gyroLowerBound)...Double(gyroY + gyroUpperBound))) : Double(0),
+                "z": isMotion ? (!isRandom ? Double(gyroZ) : Double.random(in: Double(gyroZ + gyroLowerBound)...Double(gyroZ + gyroUpperBound))) : Double(0)
+            ],
+            "magnetometer": [
+                "x": isMotion ? (!isRandom ? Double(magX) : Double.random(in: Double(magX + magLowerBound)...Double(magX + magUpperBound))) : Double(0),
+                "y": isMotion ? (!isRandom ? Double(magY) : Double.random(in: Double(magY + magLowerBound)...Double(magY + magUpperBound))) : Double(0),
+                "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
+            ],
+            "heartRate": isHealth ? (!isRandom ? Double(heartRate) : Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))) : 0,
+            "spo2": isHealth ? (!isRandom ? Double(spo2) : Double.random(in: Double(spo2 + spo2LowerBound)...Double(spo2 + spo2UpperBound))) : 0,
+            "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
+            "lat": isGeolocation ? locationData.latitude : 0,
+            "lon": isGeolocation ? locationData.longitude : 0,
+            "alt": isGeolocation ? locationData.altitude : 0,
+            "bar": 0,
+            "temp": 0,
+            "timestamp": timestamp,
+            "presence": true
+        ]
+
+        let payload: [String: Any] = [
+            "deviceID": targetDevice,
+            "orgID": authenticatedOrgID,
+            "data": singleMotionData
+        ]
+        
+        sendPayloadToSocket(payload: payload)
+    }
+
+    private func sendPayloadToSocket(payload: [String: Any]) {
+        guard isConnected, let socket = socket else {
+            print("Not connected to socket. Cannot send data.")
+            return
+        }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: payload, options: [])
+            if var jsonString = String(data: jsonData, encoding: .utf8) {
+                jsonString += "\n" // Add newline to indicate end of message
+                send(text: jsonString)
+                print("Sent data to broker: \(jsonString.trimmingCharacters(in: .whitespacesAndNewlines))")
+            }
+        } catch {
+            print("Error serializing JSON: \(error)")
+        }
+    }
+
+    // MARK: - Helper Methods
+
     private func heartRateColor(_ rate: Double) -> Color {
         switch rate {
         case 20...60:
@@ -604,77 +758,6 @@ struct StaticSim: View {
         }
     }
     
-    private func startDataCollection() {
-        dataTimer = Timer.publish(every: TimeInterval(dataFrequency), on: .main, in: .common).autoconnect().sink { _ in
-            collectAndSendData()
-        }
-    }
-
-    private func collectAndSendData() {
-        let timestamp = Date().timeIntervalSince1970
-        
-        let singleMotionData: [String: Any] = [
-            "accelerometer": [
-                "x": isMotion ? (!isRandom ? Double(accX) : Double.random(in: Double(accX + accLowerBound)...Double(accX + accUpperBound))) : Double(0),
-                "y": isMotion ? (!isRandom ? Double(accY) : Double.random(in: Double(accY + accLowerBound)...Double(accY + accUpperBound))) : Double(0),
-                "z": isMotion ? (!isRandom ? Double(accZ) : Double.random(in: Double(accZ + accLowerBound)...Double(accZ + accUpperBound))) : Double(0)
-            ],
-            "gyroscope": [
-                "x": isMotion ? (!isRandom ? Double(gyroX) : Double.random(in: Double(gyroX + gyroLowerBound)...Double(gyroX + gyroUpperBound))) : Double(0),
-                "y": isMotion ? (!isRandom ? Double(gyroY) : Double.random(in: Double(gyroY + gyroLowerBound)...Double(gyroY + gyroUpperBound))) : Double(0),
-                "z": isMotion ? (!isRandom ? Double(gyroZ) : Double.random(in: Double(gyroZ + gyroLowerBound)...Double(gyroZ + gyroUpperBound))) : Double(0)
-            ],
-            "magnetometer": [
-                "x": isMotion ? (!isRandom ? Double(magX) : Double.random(in: Double(magX + magLowerBound)...Double(magX + magUpperBound))) : Double(0),
-                "y": isMotion ? (!isRandom ? Double(magY) : Double.random(in: Double(magY + magLowerBound)...Double(magY + magUpperBound))) : Double(0),
-                "z": isMotion ? (!isRandom ? Double(magZ) : Double.random(in: Double(magZ + magLowerBound)...Double(magZ + magUpperBound))) : Double(0)
-            ],
-            "heartRate": isHealth ? (!isRandom ? Double(heartRate) : Double.random(in: Double(heartRate + hrLowerBound)...Double(heartRate + hrUpperBound))) : 0,
-            "spo2": isHealth ? (!isRandom ? Double(spo2) : Double.random(in: Double(spo2 + spo2LowerBound)...Double(spo2 + spo2UpperBound))) : 0,
-            "batteryLevel": isHealth ? (deviceBattery / 100) : 0,
-            "lat": isGeolocation ? locationData.latitude : 0,
-            "lon": isGeolocation ? locationData.longitude : 0,
-            "alt": isGeolocation ? locationData.altitude : 0,
-            "bar": 0,
-            "temp": 0,
-            "timestamp": timestamp
-        ]
-
-        let payload: [String: Any] = [
-            "deviceID": targetDevice,
-            "orgID": authenticatedOrgID,
-            "data": singleMotionData
-        ]
-        
-        sendPayloadToServer(payload: payload)
-    }
-
-    private func sendPayloadToServer(payload: [String: Any]) {
-        guard let url = URL(string: "https://vektor-api.vercel.app/api/rt-data") else { return }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: payload, options: [])
-            request.httpBody = jsonData
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    return
-                }
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                    return
-                }
-            }
-            
-            task.resume()
-        } catch {
-            return
-        }
-    }
-
     private func getAvailableDevices() {
         guard let token = loadTokenFromKeychain() else {
             return
