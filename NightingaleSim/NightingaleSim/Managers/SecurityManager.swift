@@ -75,4 +75,3 @@ func isTokenExpired(token: String) -> Bool {
     let isExpired = Date() > expirationDate
     return isExpired
 }
-    

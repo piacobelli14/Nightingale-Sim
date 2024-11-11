@@ -30,7 +30,7 @@ struct LoginAuth: View {
                 Spacer()
                 HStack {
                     Text("Welcome to")
-                        .font(.system(size: geometry.size.height * 0.03, weight: .semibold))
+                        .font(.system(size: geometry.size.height * 0.025, weight: .semibold))
                         .foregroundColor(Color.white)
                         .opacity(0.8)
                     
@@ -41,7 +41,7 @@ struct LoginAuth: View {
                 
                 HStack {
                     Text("Nightingale Sim")
-                        .font(.system(size: geometry.size.height * 0.07, weight: .bold))
+                        .font(.system(size: geometry.size.height * 0.06, weight: .bold))
                         .foregroundColor(Color.white)
                         .opacity(1.0)
                         .shadow(color: .gray.opacity(0.5), radius: 4, x: 0, y: 0)
@@ -50,7 +50,7 @@ struct LoginAuth: View {
                 }
                 .padding(.leading, geometry.size.width * 0.06)
                 .padding(.vertical, 0)
-                
+            
                 HStack {
                     VStack {
                         HStack {
@@ -74,7 +74,6 @@ struct LoginAuth: View {
                                 .padding(.vertical, geometry.size.height * 0.016)
                                 .padding(.horizontal, geometry.size.width * 0.02)
                                 .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                .border(Color.black.opacity(0.4), width: geometry.size.width * 0.004)
                                 .cornerRadius(geometry.size.height * 0.01)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
@@ -98,14 +97,14 @@ struct LoginAuth: View {
                     }) {
                         HStack {
                             Text("Forgot password?")
-                                .font(.system(size: geometry.size.height * 0.016, weight: .semibold))
+                                .font(.system(size: geometry.size.height * 0.014, weight: .semibold))
                                 .foregroundColor(Color.white)
-                                .opacity(0.8)
+                                .opacity(0.7)
                                 .padding(.leading, geometry.size.width * 0.005)
                             
                             Text("Click here to reset.")
-                                .font(.system(size: geometry.size.height * 0.016, weight: .bold))
-                                .foregroundColor(Color(hex: 0xDA64ED))
+                                .font(.system(size: geometry.size.height * 0.014, weight: .bold))
+                                .foregroundColor(Color(hex: 0xE44DD5))
                                 .padding(0)
                             Spacer()
                         }
@@ -139,7 +138,6 @@ struct LoginAuth: View {
                                         .padding(.vertical, geometry.size.height * 0.016)
                                         .padding(.horizontal, geometry.size.width * 0.02)
                                         .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                        .border(Color.black.opacity(0.4), width: geometry.size.width * 0.004)
                                         .cornerRadius(geometry.size.height * 0.01)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
@@ -158,7 +156,6 @@ struct LoginAuth: View {
                                         .padding(.vertical, geometry.size.height * 0.016)
                                         .padding(.horizontal, geometry.size.width * 0.02)
                                         .background(Color(hex: 0xF5F5F5).opacity(0.9))
-                                        .border(Color.black.opacity(0.4), width: geometry.size.width * 0.004)
                                         .cornerRadius(geometry.size.height * 0.01)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: geometry.size.height * 0.01)
@@ -220,7 +217,7 @@ struct LoginAuth: View {
                     .frame(width: geometry.size.width * 0.5)
                     .padding(.vertical, geometry.size.height * 0.018)
                     .padding(.horizontal,  geometry.size.width * 0.01)
-                    .background(Color(hex: 0xDA64ED))
+                    .background(Color(hex: 0xE44DD5))
                     .cornerRadius(geometry.size.height * 0.01)
                     
                     Spacer()
@@ -236,7 +233,15 @@ struct LoginAuth: View {
             .frame(width: geometry.size.width * 1.0, height: geometry.size.height * 1.0)
             .background(gradient)
             .onAppear {
-                self.authenticatedUsername = ""
+                if let token = loadTokenFromKeychain() {
+                    if let decodedToken = decodeJWT(token: token) {
+                        self.authenticatedUsername = decodedToken.userid
+                        self.authenticatedOrgID = decodedToken.orgid
+                        self.currentView = .StaticSim
+                    }
+                } else {
+                    self.authenticatedUsername = ""
+                }
             }
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -248,7 +253,7 @@ struct LoginAuth: View {
             "username": username,
             "password": password
         ]
-
+        
         guard let url = URL(string: "https://nightingale-health.duckdns.org/nightingale/api/user-authentication") else {
             return
         }
@@ -278,7 +283,7 @@ struct LoginAuth: View {
                 if let decodedToken = decodeJWT(token: loginResponse.token) {
                     DispatchQueue.main.async {
                         self.isLoginSuccessful = true
-                        self.authenticatedUsername = decodedToken.userId
+                        self.authenticatedUsername = decodedToken.userid
                         self.authenticatedOrgID = decodedToken.orgid
                         self.currentView = .StaticSim
                     }
@@ -294,7 +299,7 @@ struct LoginAuth: View {
             }
         }.resume()
     }
-    private func decodeJWT(token: String) -> (userId: String, orgid: String)? {
+    private func decodeJWT(token: String) -> (userid: String, orgid: String)? {
         let parts = token.split(separator: ".")
         guard parts.count == 3 else {
             return nil
@@ -312,11 +317,16 @@ struct LoginAuth: View {
 
         guard let json = try? JSONSerialization.jsonObject(with: decodedData, options: []),
               let dict = json as? [String: Any],
-              let userId = dict["userId"] as? String,
+              let userid = dict["userid"] as? String,
               let orgid = dict["orgid"] as? String else {
             return nil
         }
 
-        return (userId, orgid)
+        return (userid, orgid)
     }
 }
+
+
+
+
+
