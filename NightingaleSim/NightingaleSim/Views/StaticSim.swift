@@ -767,7 +767,13 @@ struct StaticSim: View {
             "organizationID": authenticatedOrgID
         ]
 
-        let url = URL(string: "https://nightingale-health.duckdns.org/nightingale/api/get-devices")!
+        guard let url = URL(string: "https://www.nightingale-health.org/vektor/vektor-web-api/get-devices") else {
+            DispatchQueue.main.async {
+                self.errorMessage = "Invalid URL."
+            }
+            return
+        }
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -784,28 +790,32 @@ struct StaticSim: View {
 
             guard let data = data else {
                 DispatchQueue.main.async {
-                    self.errorMessage = "No data received from the server"
+                    self.errorMessage = "No data received from the server."
                 }
                 return
             }
 
             guard let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
-                    self.errorMessage = "Invalid response from the server"
+                    self.errorMessage = "Invalid response from the server."
                 }
                 return
             }
 
             if response.statusCode == 200 {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
 
-                    let decodedData = try JSONDecoder().decode(DeviceInfoResponse.self, from: data)
+                    let decodedData = try decoder.decode(DeviceResponse.self, from: data)
                     DispatchQueue.main.async {
                         self.deviceInfo = decodedData.data
-                        self.availableDevIDs = decodedData.data.filter { $0.assignedTo != "None" }.map { $0.devID }
-                        if (targetDevice == ""){
-                            self.targetDevice = availableDevIDs.first ?? ""
+                        self.availableDevIDs = decodedData.data
+                            .filter { $0.assignedTo != "None" }
+                            .map { $0.devID }
+                        
+                        if self.targetDevice.isEmpty {
+                            self.targetDevice = self.availableDevIDs.first ?? ""
                         }
                     }
                 } catch {
@@ -813,7 +823,6 @@ struct StaticSim: View {
                         self.errorMessage = "JSON decoding error: \(error.localizedDescription)"
                     }
                 }
-
             } else {
                 DispatchQueue.main.async {
                     self.errorMessage = "Server error with status code: \(response.statusCode)"
@@ -822,6 +831,7 @@ struct StaticSim: View {
         }
         .resume()
     }
+
 
     private func fetchInitialAltitude() {
         fetchAltitude(for: CLLocationCoordinate2D(latitude: locationData.latitude, longitude: locationData.longitude)) { altitude in

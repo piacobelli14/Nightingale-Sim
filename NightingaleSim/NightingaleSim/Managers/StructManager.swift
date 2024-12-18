@@ -23,17 +23,22 @@ struct ConfigArray {
     let radius: CGFloat
 }
 
-struct DeviceInfo: Codable {
+struct DeviceInfo: Decodable {
+    let assignedTo: String
+    let devBattery: Int
     let devID: String
     let devType: String
+    let lastAssigned: Date
     let orgID: String
-    let assignedTo: String?
-    let lastAssigned: String
-    let devBattery: String
+    let devCPUUsage: Double?
+    let devNetworkUsage: Double?
+
+    
 }
 
-struct DeviceInfoResponse: Codable {
+struct DeviceResponse: Decodable {
     let data: [DeviceInfo]
+    let message: String
 }
 
 struct LocationData {
